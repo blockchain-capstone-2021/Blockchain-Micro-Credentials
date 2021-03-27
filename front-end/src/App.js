@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
+import users from './apis/users';
 import './App.css';
 
 class App extends Component {
   state = {users: []}
 
-  componentDidMount() {
-    fetch('/users')
-      .then(res => {
-        res.json()
-      })
-      .then(users => this.setState({ users }));
-      
+  componentDidMount = async () => {
+    const {data} = await users.get('/users')
+    this.setState({users: data});
   }
 
   render() {
