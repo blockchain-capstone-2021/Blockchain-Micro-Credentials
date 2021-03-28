@@ -1,29 +1,39 @@
 import React, { Component } from 'react';
-import users from '../apis/users';
+import marks from '../apis/marks';
 import Mark from './templates/Mark';
 
 class App extends Component {
-  state = {users: [], name:"", age: 0}
-
-  componentDidMount = async () => {
-    const {data} = await users.get('/users')
-    this.setState({users: data});
+  state = {}
+  onMarkSubmit = async (name, age) => {
+    await this.setState({name, age});
+    const {data} = await marks.post('/', {
+      name: this.state.name,
+      age: this.state.age
+    })
+    this.setState({"url":data.url})
   }
 
-  onMarkSubmit = (name, age) => {
-    this.setState({name: name, age:age});
+  onGetFile = async () => {
+    const {data} = await marks.get('/get', {
+      params: {
+        fileUrl: this.state.url
+      }
+    })
+    this.setState({'IPFSOutput': data})
   }
 
   render() {
     return (
       <div className="ui container">
-        <h1>Users</h1>
-        {this.state.users.map(user =>
-          <div key={user.id}>{user.username}</div>
-        )}
         <Mark onFormSubmit={this.onMarkSubmit} />
         Name: {this.state.name} <br></br>
-        Age: {this.state.age}
+        Age: {this.state.age} <br></br>
+        URL: <a href={`https://ipfs.infura.io/ipfs/${this.state.url}`} target="_blank" rel="noreferrer">{this.state.url}</a> <br/>
+        GET Data: <button className="ui button" onClick={this.onGetFile}>Get Data</button> <br/>
+        <div>
+          This data was read from IPFS: <br/>
+          {JSON.stringify(this.state.IPFSOutput)}
+        </div>
       </div>
     );
   }
