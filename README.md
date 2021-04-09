@@ -53,7 +53,7 @@ The folder is further divided into the below sub-directories:
 - `/contracts`
     - Holds all the solidity smart contracts.
 - `/migrations`
-- Holds all the migrations for the smart contracts.
+    - Holds all the migrations for the smart contracts.
 
 Any truffle configrations can be made in `/backend/truffle-config.js`
 
