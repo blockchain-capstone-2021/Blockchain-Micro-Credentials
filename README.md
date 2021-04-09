@@ -14,7 +14,7 @@ Express will be set up as an API for the blockchain microcredential platform wit
 
 ### Database integration
 
-The application uses postgres to store application data used for basic operation.
+The application uses Microsoft SQL Server to store application data used for basic operation.
 Sequelize ORM is used to interact with the database from the backend to perform CRUD operations on all resources.
 
 Database files can be found in `/backend/db`:
@@ -29,9 +29,31 @@ Database files can be found in `/backend/db`:
 - `/seeders`
     - Holds any seed files that will generate mock data for the database
 
+### Object Models 
+
+This folder holds the object models that will be used for serialization and deserialization. These models will be used in storing data to IPFS and creating the keys for our mappings in the tracker contracts 
+
+The folder is further divided into the below sub-directories:
+- `/ipfs`
+    - Holds all object models for IPFS storage configuration variables
+- `/blockchain`
+    - Holds all object models for the mapping keys.
+
+### Controllers 
+
+This directory holds all the controllers needed to pursue the Model-View-Framework our application. These controllers will be called from the express route file, which are triggered from the views.
+
 ### Blockchain
 
 Blockchain specific files such as contract and build files will be stored here.
+
+The folder is further divided into the below sub-directories:
+- `/builds`
+    - Holds all the compiled JSON artifacts of the smart contracts 
+- `/contracts`
+    - Holds all the solidity smart contracts.
+- `/migrations`
+    - Holds all the migrations for the smart contracts.
 
 Any truffle configrations can be made in `/backend/truffle-config.js`
 
@@ -40,7 +62,6 @@ Any truffle configrations can be made in `/backend/truffle-config.js`
 Any logic making calls to third party libraries or apis should be stored here. This is done to provide some abstraction between application logic and the server's routing methods.
 
 These files are stored in `/backend/middleware`.
-
 
 
 ### Routes
@@ -77,7 +98,9 @@ Any template files to be used repeatedly (i.e. headers and footers) will:
 │   ├── bin
 │   ├── blockchain
 │   │   ├── build
-│   │   └── contracts
+│   │   ├── contracts
+│   │   └── migrations
+│   ├── controllers
 │   ├── db
 │   │   ├── config
 │   │   ├── controllers
@@ -85,6 +108,9 @@ Any template files to be used repeatedly (i.e. headers and footers) will:
 │   │   ├── models
 │   │   └── seeders
 │   ├── middleware
+│   ├── object_models
+│   │   ├── blockchain
+│   │   └── ipfs
 │   └── routes
 └── frontend
     ├── public
