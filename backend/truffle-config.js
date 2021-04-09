@@ -1,14 +1,24 @@
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 const path = require("path");
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
-  contracts_build_directory: path.join(__dirname, "/build"),
+  contracts_build_directory: path.join(__dirname, "/blockchain/build"),
   networks: {
-    development: {
-      host: "127.0.0.1",
-      port: 7545,
-      network_id: "*" //Match any network id
+    staging: {
+      network_id: 1617247087085,
+      provider: function() {
+        return new HDWalletProvider(
+          process.env.GANACHE_MNEMONIC, 
+          process.env.GANACHE_URL,
+          0,
+          10,
+          false
+        );
+      }
     }
   },
   compilers: {
