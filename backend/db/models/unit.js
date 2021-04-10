@@ -1,8 +1,7 @@
-"use strict";
-const { Model } = require("sequelize");
-const Staff = require("./staff");
-const Module = require("./module");
-const Enrolment = require("./enrolment");
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Unit extends Model {
     /**
@@ -11,47 +10,21 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-        Unit.belongsTo(Staff)
-        Unit.hasMany(Module)
-        Unit.hasMany(Enrolment)
+      Unit.belongsTo(Staff)
+      Unit.hasMany(Module)
+      Unit.hasMany(Enrolment)
     }
-  }
-  Unit.init(
-    {
-        untiId: {
-            type: DataTypes.STRING,
-            primaryKey: true,
-            allowNull: false
-        },
-        staffId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Staff,
-                key: 'staffId'
-            }
-        },
-        unitName: {
-           type: DataTypes.STRING,
-           allowNull: false
-        },
-        noOfModules: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        unitPassMark: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        unitCreditPoints: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        }
-    },
-    {
-      sequelize,
-      modelName: "Unit",
-    }
-  );
-
+  };
+  Unit.init({
+    unitId: DataTypes.STRING,
+    staffId: DataTypes.STRING,
+    unitName: DataTypes.STRING,
+    noOfModules: DataTypes.INTEGER,
+    unitPassMark: DataTypes.INTEGER,
+    unitCreditPoints: DataTypes.INTEGER
+  }, {
+    sequelize,
+    modelName: 'Unit',
+  });
   return Unit;
 };
