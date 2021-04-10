@@ -1,8 +1,7 @@
-"use strict";
-const { Model } = require("sequelize");
-const Degree = require("./degree");
-const Enrolment = require("./enrolment");
-const StudentLogin = require("./studentLogin");
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Student extends Model {
     /**
@@ -11,43 +10,20 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-        Student.belongsTo(Degree)
-        Student.hasMany(Enrolment)
-        Student.hasOne(StudentLogin)
+      Student.belongsTo(Degree)
+      Student.hasMany(Enrolment)
     }
-  }
-  Student.init(
-    {
-        studentId: {
-            type: DataTypes.STRING,
-            primaryKey: true,
-            allowNull: false
-        },
-        degreeId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Degree,
-                key: 'degreeId'
-            }
-        },
-        studentName: {
-           type: DataTypes.STRING,
-           allowNull: false
-        },
-        studentEmail: {
-          type: DataTypes.STRING,
-          allowNull: false
-       },
-        studentCreditPoints: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        }
-    },
-    {
-      sequelize,
-      modelName: "Student",
-    }
-  );
-
+  };
+  Student.init({
+    studentId: DataTypes.STRING,
+    degreeId: DataTypes.INTEGER,
+    studentName: DataTypes.STRING,
+    studentEmail: DataTypes.STRING,
+    passwordHash: DataTypes.STRING,
+    studentCreditPoints: DataTypes.INTEGER
+  }, {
+    sequelize,
+    modelName: 'Student',
+  });
   return Student;
 };
