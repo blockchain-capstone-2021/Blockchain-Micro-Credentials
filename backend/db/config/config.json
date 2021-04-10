@@ -7,7 +7,7 @@
     "password": "DATABASE_PASSWORD",
     "database": "MicrocredentialDB",
     "host": "127.0.0.1",
-    "port": "8080",
+    "port": 8080,
     "dialect": "mysql"
   },
   "production": {
@@ -15,7 +15,7 @@
     "password": "DATABASE_PASSWORD",
     "database": "MicrocredentialDB",
     "host": "127.0.0.1",
-    "port": "8080",
+    "port": 8080,
     "dialect": "mysql"
   }
 }
