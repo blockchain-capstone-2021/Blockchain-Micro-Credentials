@@ -1,7 +1,4 @@
 {
-  "development": {
-    "use_env_variable": "DATABASE_URL"
-  },
   "test": {
     "username": "DATABASE_USER",
     "password": "DATABASE_PASSWORD",
@@ -9,6 +6,9 @@
     "host": "127.0.0.1",
     "port": 8080,
     "dialect": "mysql"
+  },
+  "development": {
+    "use_env_variable": "DATABASE_URL"
   },
   "production": {
     "username": "DATABASE_USER",
