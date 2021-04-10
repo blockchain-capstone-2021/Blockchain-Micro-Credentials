@@ -3,6 +3,13 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const questionModel = require('./question')
+const answerModel = require('./answer')
+const degreeModel = require('./degree')
+const enrolmentModel = require('./enrolment')
+const moduleModel = require('./module')
+const staffModel = require('./staff')
+const studentModel = require('./student')
+const unitModel = require('./unit')
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
@@ -17,6 +24,13 @@ sequelize = new Sequelize(process.env[config.database], process.env[config.usern
 
 const models = {
   Question: questionModel(sequelize, Sequelize.DataTypes)
+  Answer: answerModel(sequelize, Sequelize.DataTypes)
+  Degree: degreeModel(sequelize, Sequelize.DataTypes)
+  Enrolment: enrolmentModel(sequelize, Sequelize.DataTypes)
+  Module: moduleModel(sequelize, Sequelize.DataTypes)
+  Staff: staffModel(sequelize, Sequelize.DataTypes)
+  Student: studentModel(sequelize, Sequelize.DataTypes)
+  Unit: unitModel(sequelize, Sequelize.DataTypes)
 }
 
 
