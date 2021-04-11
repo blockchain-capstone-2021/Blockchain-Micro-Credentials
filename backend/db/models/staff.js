@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Staff.init({
     staffId: DataTypes.STRING,
-    name: DataTypes.STRING,
+    staffName: DataTypes.STRING,
     passwordHash: DataTypes.STRING
   }, {
     sequelize,
