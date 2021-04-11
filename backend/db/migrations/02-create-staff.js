@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false
       },
       passwordHash: {
-        type: Sequelize.DataType.STRING,
+        type: Sequelize.DataTypes.STRING,
         allowNull: false
       }
     });
