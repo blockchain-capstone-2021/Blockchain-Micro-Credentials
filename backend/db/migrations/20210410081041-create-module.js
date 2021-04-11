@@ -1,4 +1,5 @@
 'use strict';
+const Unit = require("./unit");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Modules', {

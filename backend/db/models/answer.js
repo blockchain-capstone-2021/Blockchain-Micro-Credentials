@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const Question = require("./question");
 module.exports = (sequelize, DataTypes) => {
   class Answer extends Model {
     /**
