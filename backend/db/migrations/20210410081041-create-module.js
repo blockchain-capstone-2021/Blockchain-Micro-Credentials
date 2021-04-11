@@ -3,28 +3,28 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Modules', {
       moduleId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
         autoIncrement: true
       },
       unitId: {
-          type: DataTypes.INTEGER,
+          type: Sequelize.DataTypes.INTEGER,
           references: {
               model: Unit,
               key: 'unitId'
           }
       },
       moduleName: {
-        type: DataTypes.STRING,
+        type: Sequelize.DataTypes.STRING,
         allowNull: false
       },
       moduleNo: {
-          type: DataTypes.INT,
+          type: Sequelize.DataTypes.INTEGER,
           allowNull: false
       },
       noOfQuestions: {
-          type: DataTypes.INT,
+          type: Sequelize.DataTypes.INTEGER,
           allowNull: false
       }
     });

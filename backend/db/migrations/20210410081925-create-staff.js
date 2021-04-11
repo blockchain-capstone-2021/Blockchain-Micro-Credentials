@@ -3,16 +3,16 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Staffs', {
       staffId: {
-        type: DataTypes.STRING,
+        type: Sequelize.DataTypes.STRING,
         primaryKey: true,
         allowNull: false
       },
       staffName: {
-        type: DataTypes.String,
+        type: Sequelize.DataTypes.STRING,
         allowNull: false
       },
       passwordHash: {
-        type: Sequelize.STRING
+        type: Sequelize.DataType.STRING
       }
     });
   },

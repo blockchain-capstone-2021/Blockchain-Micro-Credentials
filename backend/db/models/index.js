@@ -1,6 +1,10 @@
-require('dotenv').config()
-const fs = require('fs');
 const path = require('path');
+require('dotenv').config({
+  path: path.join(__dirname, '../../.env'),
+  debug: process.env.DEBUG
+})
+
+const fs = require('fs');
 const Sequelize = require('sequelize');
 const questionModel = require('./question')
 const answerModel = require('./answer')
@@ -20,7 +24,7 @@ let sequelize;
 // } else {
 //   sequelize = new Sequelize(config.database, config.username, config.password, config);
 // }
-sequelize = new Sequelize(process.env[config.database], process.env[config.username], process.env[config.password], config);
+sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 const models = {
   Question: questionModel(sequelize, Sequelize.DataTypes)
