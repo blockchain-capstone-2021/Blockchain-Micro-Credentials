@@ -5,7 +5,8 @@ module.exports = {
       staffId: {
         type: Sequelize.DataTypes.STRING,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        validate:{isUppercase: true}
       },
       staffName: {
         type: Sequelize.DataTypes.STRING,

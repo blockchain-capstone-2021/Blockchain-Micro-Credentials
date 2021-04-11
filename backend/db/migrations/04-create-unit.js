@@ -5,10 +5,12 @@ module.exports = {
       unitId: {
         type: Sequelize.DataTypes.STRING,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        validate:{isUppercase: true}
       },
       staffId: {
           type: Sequelize.DataTypes.STRING,
+          allowNull: false,
           references: {
               model: {
             tableName: 'Staff'

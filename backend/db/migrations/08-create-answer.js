@@ -10,6 +10,7 @@ module.exports = {
       },
       questionId: {
           type: Sequelize.DataTypes.INTEGER,
+          allowNull: false,
           references: {
               model: {
             tableName: 'Questions'

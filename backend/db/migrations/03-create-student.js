@@ -5,10 +5,12 @@ module.exports = {
       studentId: {
         type: Sequelize.DataTypes.STRING,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        validate:{isLowercase: true}
       },
       degreeId: {
           type: Sequelize.DataTypes.STRING,
+          allowNull: false,
           references: {
           model: {
             tableName: 'Degrees'
