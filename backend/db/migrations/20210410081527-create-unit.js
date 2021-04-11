@@ -1,5 +1,5 @@
 'use strict';
-const Staff = require("./staff");
+const Staff = require("../models/staff");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Units', {
