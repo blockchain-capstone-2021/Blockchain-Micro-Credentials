@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     degreeId: DataTypes.INTEGER,
     studentName: DataTypes.STRING,
     studentEmail: DataTypes.STRING,
-    passwordHash: DataTypes.STRING,
-    studentCreditPoints: DataTypes.INTEGER
+    studentCreditPoints: DataTypes.INTEGER,
+    passwordHash: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Student',

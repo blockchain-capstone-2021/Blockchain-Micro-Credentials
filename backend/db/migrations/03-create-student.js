@@ -3,7 +3,7 @@ const Degree = require("../models/degree");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Students', {
-      itudentId: {
+      studentId: {
         type: Sequelize.DataTypes.STRING,
         primaryKey: true,
         allowNull: false
@@ -29,7 +29,8 @@ module.exports = {
           allowNull: false
       },
       passwordHash: {
-        type: Sequelize.DataTypes.STRING
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false
       }
     });
   },
