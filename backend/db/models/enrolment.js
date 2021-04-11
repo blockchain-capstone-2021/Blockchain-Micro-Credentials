@@ -1,5 +1,7 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const {
+  Model
+} = require('sequelize');
 const Unit = require("./unit");
 const Student = require("./student");
 module.exports = (sequelize, DataTypes) => {
@@ -10,42 +12,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-        Enrolment.belongsTo(Unit)
-        Enrolment.belongsTo(Student)
+      Enrolment.belongsTo(Unit)
+      Enrolment.belongsTo(Student)
     }
-  }
-  Enrolment.init(
-    {
-        enrolmentId: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            allowNull: false,
-            autoIncrement: true
-        },
-        studentId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Student,
-                key: 'studentId'
-            }
-        },
-        unitId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Unit,
-                key: 'unitId'
-            }
-        },
-        semOfEnrolment: {
-           type: DataTypes.STRING,
-           allowNull: false
-        }
-    },
-    {
-      sequelize,
-      modelName: "Enrolment",
-    }
-  );
-
+  };
+  Enrolment.init({
+    enrolmentId: DataTypes.INTEGER,
+    studentId: DataTypes.STRING,
+    unitId: DataTypes.STRING,
+    semOfEnrolment: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'Enrolment',
+  });
   return Enrolment;
 };
