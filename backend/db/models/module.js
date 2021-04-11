@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Module.init({
     moduleId: DataTypes.INTEGER,
-    unitId: DataTypes.INTEGER,
+    unitId: DataTypes.STRING,
     moduleName: DataTypes.STRING,
     moduleNo: DataTypes.INTEGER,
     noOfQuestions: DataTypes.INTEGER

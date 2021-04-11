@@ -1,5 +1,4 @@
 'use strict';
-const Degree = require("../models/degree");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Students', {
@@ -9,9 +8,11 @@ module.exports = {
         allowNull: false
       },
       degreeId: {
-          type: Sequelize.DataTypes.INTEGER,
+          type: Sequelize.DataTypes.STRING,
           references: {
-              model: Degree,
+          model: {
+            tableName: 'Degrees'
+          },
               key: 'degreeId'
           }
       },

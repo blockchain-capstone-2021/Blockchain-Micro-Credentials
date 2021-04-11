@@ -1,5 +1,4 @@
 'use strict';
-const Unit = require("../models/unit");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Modules', {
@@ -10,9 +9,11 @@ module.exports = {
         autoIncrement: true
       },
       unitId: {
-          type: Sequelize.DataTypes.INTEGER,
+          type: Sequelize.DataTypes.STRING,
           references: {
-              model: Unit,
+              model: {
+            tableName: 'Units'
+          },
               key: 'unitId'
           }
       },

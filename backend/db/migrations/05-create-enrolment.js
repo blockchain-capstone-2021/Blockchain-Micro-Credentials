@@ -1,6 +1,4 @@
 'use strict';
-const Student = require("../models/student");
-const Unit = require("../models/unit");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Enrolments', {
@@ -11,16 +9,20 @@ module.exports = {
         autoIncrement: true
       },
       studentId: {
-          type: Sequelize.DataTypes.INTEGER,
+          type: Sequelize.DataTypes.STRING,
           references: {
-              model: Student,
+              model: {
+            tableName: 'Students'
+          },
               key: 'studentId'
           }
       },
       unitId: {
-          type: Sequelize.DataTypes.INTEGER,
+          type: Sequelize.DataTypes.STRING,
           references: {
-              model: Unit,
+              model: {
+            tableName: 'Units'
+          },
               key: 'unitId'
           }
       },
