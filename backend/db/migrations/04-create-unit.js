@@ -1,17 +1,18 @@
 'use strict';
-const Staff = require("../models/staff");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Units', {
-      untiId: {
+      unitId: {
         type: Sequelize.DataTypes.STRING,
         primaryKey: true,
         allowNull: false
       },
       staffId: {
-          type: Sequelize.DataTypes.INTEGER,
+          type: Sequelize.DataTypes.STRING,
           references: {
-              model: Staff,
+              model: {
+            tableName: 'Staff'
+          },
               key: 'staffId'
           }
       },

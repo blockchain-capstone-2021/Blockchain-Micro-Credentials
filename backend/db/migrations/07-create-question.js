@@ -1,5 +1,4 @@
 'use strict';
-const Module = require("../models/module");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Questions', {
@@ -12,7 +11,9 @@ module.exports = {
       moduleId: {
           type: Sequelize.DataTypes.INTEGER,
           references: {
-              model: Module,
+              model: {
+            tableName: 'Modules'
+          },
               key: 'moduleId'
           }
       },
