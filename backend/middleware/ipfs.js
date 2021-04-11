@@ -1,31 +1,29 @@
-const IPFSClient  = require('ipfs-http-client')
-const ipfs = IPFSClient({
-    host: 'ipfs.infura.io',
-    port: '5001',
-    protocol: 'https'
-})
+const IPFS = require('ipfs-mini')
+const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' })
 
-const storeData = async (arg) => {
-    data = {name: arg.name, age: arg.age}
-    const buffer = Buffer.from(JSON.stringify)
-    const { path } = await ipfs.add(buffer);
-    return path
+//retrieve and return JSON or string data from IPFS using hash
+async function ipfsGetData (hash) {
+    return new Promise((resolve, reject) => {
+        ipfs.catJSON(hash, (err, result) => {
+            if (err) reject(new Error(err))
+            resolve(result)
+        })
+    })
 }
-
-const retrieveData = async (hash) => {
-    data = {}
-    for await (const file of ipfs.get(hash)) {  
-        if (!file.content) continue;
-        const content = []
-        for await (const chunk of file.content) {
-          content.push(chunk)
-        }
-        data = await JSON.parse(content[0].toString())
-      }
-      return data
+  
+//store JSON or string on IPFS and return hash
+async function ipfsStoreData (obj) {
+    const CID = await new Promise((resolve, reject) => {
+        ipfs.addJSON(obj, (err, result) => {
+            if (err) reject(new Error(err))
+            resolve(result)
+        })
+    })
+    console.log('CID:', CID, '\n')
+    return CID
 }
 
 module.exports = {
-    storeData,
-    retrieveData
+    ipfsStoreData,
+    ipfsGetData
 }
