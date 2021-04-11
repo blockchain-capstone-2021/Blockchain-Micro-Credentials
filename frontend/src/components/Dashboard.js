@@ -1,4 +1,5 @@
 import React from 'react'
+import Module from './modules/Module'
 
 const Dashboard = () => {
     return (
@@ -9,6 +10,7 @@ const Dashboard = () => {
           </div>
           <section className="mb-5">
           <h2>Section title</h2>
+          <Module />
           </section>
 
           <section>
