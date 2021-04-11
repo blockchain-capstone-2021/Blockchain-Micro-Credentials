@@ -27,13 +27,13 @@ let sequelize;
 sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 const models = {
-  Question: questionModel(sequelize, Sequelize.DataTypes)
-  Answer: answerModel(sequelize, Sequelize.DataTypes)
-  Degree: degreeModel(sequelize, Sequelize.DataTypes)
-  Enrolment: enrolmentModel(sequelize, Sequelize.DataTypes)
-  Module: moduleModel(sequelize, Sequelize.DataTypes)
-  Staff: staffModel(sequelize, Sequelize.DataTypes)
-  Student: studentModel(sequelize, Sequelize.DataTypes)
+  Question: questionModel(sequelize, Sequelize.DataTypes),
+  Answer: answerModel(sequelize, Sequelize.DataTypes),
+  Degree: degreeModel(sequelize, Sequelize.DataTypes),
+  Enrolment: enrolmentModel(sequelize, Sequelize.DataTypes),
+  Module: moduleModel(sequelize, Sequelize.DataTypes),
+  Staff: staffModel(sequelize, Sequelize.DataTypes),
+  Student: studentModel(sequelize, Sequelize.DataTypes),
   Unit: unitModel(sequelize, Sequelize.DataTypes)
 }
 
