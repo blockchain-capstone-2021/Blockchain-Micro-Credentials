@@ -5,7 +5,8 @@ module.exports = {
       degreeId: {
         type: Sequelize.DataTypes.STRING,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        validate:{isUppercase: true}
       },
       degreeName: {
         type: Sequelize.DataTypes.STRING,

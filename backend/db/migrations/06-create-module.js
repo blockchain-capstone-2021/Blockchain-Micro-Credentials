@@ -10,6 +10,7 @@ module.exports = {
       },
       unitId: {
           type: Sequelize.DataTypes.STRING,
+          allowNull: false,
           references: {
               model: {
             tableName: 'Units'
