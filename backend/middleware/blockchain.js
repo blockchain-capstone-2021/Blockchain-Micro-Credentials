@@ -70,6 +70,7 @@ async function addHashToContractWithOutTracker(contractJson, contractAddress, ha
     })
 }
 
+//returning a promise
 async function getHashFromContract(contractJson, trackerContractJson, contractAddress, trackerContractAddress, key)
 {
     let contract = new web3.eth.Contract(contractJson.abi,  contractAddress);
@@ -149,6 +150,7 @@ async function addTracker(returnIndex, trackerContract, trackerContractAddress, 
     })
 }
 
+//returning a promise
 async function checkExists(trackerContractJson, trackerContractAddress, key)
 {
     let trackerContract = new web3.eth.Contract(trackerContractJson.abi, trackerContractAddress);
