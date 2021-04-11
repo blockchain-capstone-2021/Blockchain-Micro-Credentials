@@ -1,6 +1,6 @@
 'use strict';
-const Student = require("./student");
-const Unit = require("./unit");
+const Student = require("../models/student");
+const Unit = require("../models/unit");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Enrolments', {

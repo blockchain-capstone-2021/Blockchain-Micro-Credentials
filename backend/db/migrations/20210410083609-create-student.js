@@ -1,5 +1,5 @@
 'use strict';
-const Degree = require("./degree");
+const Degree = require("../models/degree");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Students', {

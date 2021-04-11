@@ -1,5 +1,5 @@
 'use strict';
-const Question = require("./question");
+const Question = require("../models/question");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Answers', {
