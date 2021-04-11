@@ -3,24 +3,24 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Answers', {
       answerId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
         autoIncrement: true
       },
       questionId: {
-          type: DataTypes.INTEGER,
+          type: Sequelize.DataTypes.INTEGER,
           references: {
               model: Question,
               key: 'questionId'
           }
       },
       content: {
-          type: DataTypes.TEXT,
+          type: Sequelize.DataTypes.TEXT,
           allowNull: false
       },
       isCorrect :{
-          type: DataTypes.BOOLEAN,
+          type: Sequelize.DataTypes.BOOLEAN,
           allowNull: false
       }
     });

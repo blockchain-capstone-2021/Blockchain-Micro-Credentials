@@ -3,20 +3,20 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Degrees', {
       degreeId: {
-        type: DataTypes.STRING,
+        type: Sequelize.DataTypes.STRING,
         primaryKey: true,
         allowNull: false
       },
       degreeName: {
-        type: DataTypes.STRING,
+        type: Sequelize.DataTypes.STRING,
         allowNull: false
       },
       totalCreditPoints: {
-          type: DataTypes.INTEGER,
+          type: Sequelize.DataTypes.INTEGER,
           allowNull: false
       },
       creditPointsPerSem: {
-          type: DataTypes.INTEGER,
+          type: Sequelize.DataTypes.INTEGER,
           allowNull: false
       }
     });

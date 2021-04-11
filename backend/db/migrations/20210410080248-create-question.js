@@ -3,20 +3,20 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Questions', {
       questionId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
         autoIncrement: true
       },
       moduleId: {
-          type: DataTypes.INTEGER,
+          type: Sequelize.DataTypes.INTEGER,
           references: {
               model: Module,
               key: 'moduleId'
           }
       },
       content: {
-        type: DataTypes.TEXT,
+        type: Sequelize.DataTypes.TEXT,
         allowNull: false
       }
     });
