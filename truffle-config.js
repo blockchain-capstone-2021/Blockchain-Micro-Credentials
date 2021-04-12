@@ -1,3 +1,4 @@
+const path = require('path');
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const mnemonic = "elite pill excuse win amazing page lady observe trap ring sad power";
 
