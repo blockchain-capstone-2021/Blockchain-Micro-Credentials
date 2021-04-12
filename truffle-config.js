@@ -4,10 +4,10 @@ const mnemonic = "elite pill excuse win amazing page lady observe trap ring sad 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
-  contracts_directory: ("./backend/blockchain/contracts"),
-  contracts_build_directory: ("./backend/blockchain/contracts"),
-  test_directory: ("./backend/blockchain/contracts"),
-  migrations_directory: ("./backend/blockchain/contracts"),
+  contracts_directory: "./backend/blockchain/contracts",
+  contracts_build_directory: "./backend/blockchain/build",
+  test_directory: "./backend/blockchain/test",
+  migrations_directory: "./backend/blockchain/migrations",
   networks: {
     staging: {
       network_id: 1617247087085,
