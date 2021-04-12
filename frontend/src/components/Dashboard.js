@@ -1,7 +1,22 @@
 import React from 'react'
 import Module from './modules/Module'
+import {Link} from 'react-router-dom'
+const Dashboard = (props) => {
 
-const Dashboard = () => {
+  // Conditionally call api methods based upon user type (Student or Staff)
+
+  // TODO: Create seperate dashboard js files for staff and student. Better this way, otherwise
+
+  const courseProgress = () => {
+    // make an API call to express to pull latest module data
+    // THEN render each module where needed.
+  }
+
+  const moduleProgress = () => {
+    // make an API call to express to pull latest module data
+    // THEN render each module under the Modules section.
+  }
+
     return (
         <div className="container">
             <main role="main" ><div className="chartjs-size-monitor" classNamele="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div className="chartjs-size-monitor-expand" classNamele="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div classNamele="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div className="chartjs-size-monitor-shrink" classNamele="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div classNamele="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
@@ -9,12 +24,27 @@ const Dashboard = () => {
             <h1 className="h2">Dashboard</h1>
           </div>
           <section className="mb-5">
-          <h2>Section title</h2>
-          <Module />
+          <h2>Modules</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {/* //TODO: RENDER MODULES HERE. */}
+                <th scope="row">2</th>
+                <td><Link to="/module/2">Go</Link></td>
+              </tr>
+            </tbody>
+          </table>
           </section>
 
           <section>
-          <h2>Section title</h2>
+            {/* Maybe convert this into a recents section? To show 5 most recently attempted modules */}
+          <h2>Table data</h2>
           <div className="table-responsive">
             <table className="table table-striped table-sm">
               <thead>

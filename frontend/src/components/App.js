@@ -10,8 +10,18 @@ import Home from './Home'
 import "../style.css";
 
 const App = () => {
+
+  // Create API call to authenticate user login details
+  // TODO: Implement Browser/Hashrouter to allow route access control.
+
+  const getModule = () => {
+    // Make API call to get a module and pass it to the module prop
+    
+  }
+
   return (
     <div>
+      
       <BrowserRouter>
         <Header />
         <Switch>
