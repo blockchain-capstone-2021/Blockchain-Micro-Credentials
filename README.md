@@ -82,16 +82,14 @@ Any template files to be used repeatedly (i.e. headers and footers) will:
 │   │   ├── config
 │   │   ├── controllers
 │   │   ├── migrations
-│   │   ├── models
-│   │   └── seeders
+│   │   └── models
 │   ├── middleware
 │   └── routes
 └── frontend
     ├── public
     └── src
-        ├── apis
         └── components
-            └── templates
+            └── modules
 ```
 
 
