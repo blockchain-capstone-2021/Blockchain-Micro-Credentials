@@ -1,10 +1,6 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const path = require("path");
-const dotenv = require('dotenv');
-dotenv.config({
-  path: path.join(__dirname, "/backend/.env"),
-  debug: process.env.DEBUG
-});
+const mnemonic = "elite pill excuse win amazing page lady observe trap ring sad power";
+const ganache_url = "https://sandbox.truffleteams.com/c0be1a1a-eda2-4119-b48c-27ecc1ffc269"
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -18,8 +14,8 @@ module.exports = {
       network_id: 1617247087085,
       provider: function() {
         return new HDWalletProvider(
-          process.env.GANACHE_MNEMONIC, 
-          process.env.GANACHE_URL,
+          mnemonic, 
+          ganache_url,
           0,
           10,
           false
