@@ -46,28 +46,12 @@ async function addHashToContractWithTracker(contractJson, trackerContractJson, c
 async function addHashToContractWithOutTracker(contractJson, contractAddress, hash)
 {
     let contract = new web3.eth.Contract(contractJson.abi,  contractAddress);
-    
-    const data = contract.methods.addHash(hash).encodeABI();
 
-    web3.eth.getTransactionCount(web3.eth.defaultAccount, (err, txCount) => {
-        const txObject = {
-            nonce: web3.utils.toHex(txCount),
-            gasLimit: web3.utils.toHex(1000000),
-            gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-            to: contractAddress,
-            data: data
-        }
+    const preLength = await contract.methods.getLength().call();
 
-        const tx = new Tx(txObject)
-        tx.sign(privateKeyBuffer);
+    console.log("printing the array length before mod: "+preLength);
 
-        const serializedTx = tx.serialize()
-        const raw = '0x' + serializedTx.toString('hex')
-
-        web3.eth.sendSignedTransaction (raw, (err, txHash) => {
-            console.log('error:', err, 'txHash:', txHash)
-        })
-    })
+    await addHashWithoutTracker(contract, contractAddress, hash);
 }
 
 //returning a promise
@@ -88,6 +72,32 @@ async function getHashFromContract(contractJson, trackerContractJson, contractAd
     });
 
     return hash;
+}
+
+async function addHashWithoutTracker(contract, contractAddress, hash)
+{
+    const data = contract.methods.addHash(hash).encodeABI();
+
+    web3.eth.getTransactionCount(web3.eth.defaultAccount, (err, txCount) => {
+        const txObject = {
+            nonce: web3.utils.toHex(txCount),
+            gasLimit: web3.utils.toHex(1000000),
+            gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
+            to: contractAddress,
+            data: data
+        }
+
+        const tx = new Tx(txObject)
+        tx.sign(privateKeyBuffer);
+
+        const serializedTx = tx.serialize()
+        const raw = '0x' + serializedTx.toString('hex')
+
+        web3.eth.sendSignedTransaction (raw, (err, txHash) => {
+            console.log('error:', err, 'txHash:', txHash)
+            printLatestIndex(contract)
+        })
+    })
 }
 
 async function addHash(contract, trackerContract, contractAddress, trackerContractAddress, hash, key, callback)
@@ -122,10 +132,10 @@ async function getIndex (contract, trackerContract, trackerContractAddress, key,
 
     console.log("printing the array index: "+returnIndex);
 
-    callback(returnIndex, trackerContract, trackerContractAddress, key);
+    callback(returnIndex, contract, trackerContract, trackerContractAddress, key, printLatestIndex);
 }
 
-async function addTracker(returnIndex, trackerContract, trackerContractAddress, key)
+async function addTracker(returnIndex, contract, trackerContract, trackerContractAddress, key, callback)
 {
     const trackerData = trackerContract.methods.addTracker(key, returnIndex).encodeABI();
 
@@ -146,8 +156,16 @@ async function addTracker(returnIndex, trackerContract, trackerContractAddress, 
 
         web3.eth.sendSignedTransaction (raw, (err, txHash) => {
             console.log('error:', err, 'txHash:', txHash)
+             callback(contract)
         })
     })
+}
+
+async function printLatestIndex(contract)
+{
+    const postLength = await contract.methods.getLength().call();
+
+    console.log("printing the array length after mod: "+postLength);
 }
 
 //returning a promise
