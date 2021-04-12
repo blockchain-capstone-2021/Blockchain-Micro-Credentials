@@ -6,6 +6,7 @@ const cors = require('cors');
 
 const marksRouter = require('./routes/marks')
 const questionsRouter = require('./routes/questions')
+const studentsRouter = require('./routes/students')
 const app = express();
 
 // Module dependencies for express
@@ -19,6 +20,7 @@ app.use(cors());
 
 app.use('/marks', marksRouter);
 app.use('/questions', questionsRouter);
+app.use('/student', studentsRouter)
 
 
 // catch 404 and forward to error handler
