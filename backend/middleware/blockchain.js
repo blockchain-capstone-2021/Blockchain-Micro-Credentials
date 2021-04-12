@@ -54,7 +54,13 @@ async function addHashToContractWithOutTracker(contractJson, contractAddress, ha
     await addHashWithoutTracker(contract, contractAddress, hash, printLatestIndex);
 }
 
-//returning a promise
+//Returning a promise
+//Below is an example of how to deal with the return promise:
+//      var hash;
+//      await getHashFromContract(moduleContract, moduleTrackerContract, moduleAddress, moduleTrackerAddress, key).then(function(result){
+//          hash = result;
+//      });
+//      console.log(hash);
 async function getHashFromContract(contractJson, trackerContractJson, contractAddress, trackerContractAddress, key)
 {
     let contract = new web3.eth.Contract(contractJson.abi,  contractAddress);
@@ -168,7 +174,13 @@ async function printLatestIndex(contract)
     console.log("printing the array length after mod: "+postLength);
 }
 
-//returning a promise
+//Returning a promise
+//Below is an example of how to deal with the return promise:
+//      var exists    
+//      await checkExists(moduleTrackerContract,moduleTrackerAddress,key).then(function(result){
+//          exists = result;
+//      });
+//      console.log(exists);
 async function checkExists(trackerContractJson, trackerContractAddress, key)
 {
     let trackerContract = new web3.eth.Contract(trackerContractJson.abi, trackerContractAddress);
