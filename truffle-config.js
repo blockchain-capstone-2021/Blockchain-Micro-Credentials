@@ -1,6 +1,5 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const mnemonic = "elite pill excuse win amazing page lady observe trap ring sad power";
-const ganache_url = "https://sandbox.truffleteams.com/c0be1a1a-eda2-4119-b48c-27ecc1ffc269"
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -15,7 +14,7 @@ module.exports = {
       provider: function() {
         return new HDWalletProvider(
           mnemonic, 
-          ganache_url,
+          "https://sandbox.truffleteams.com/c0be1a1a-eda2-4119-b48c-27ecc1ffc269",
           0,
           10,
           false
