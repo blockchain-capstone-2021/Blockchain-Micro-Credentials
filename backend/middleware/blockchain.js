@@ -51,7 +51,7 @@ async function addHashToContractWithOutTracker(contractJson, contractAddress, ha
 
     console.log("printing the array length before mod: "+preLength);
 
-    await addHashWithoutTracker(contract, contractAddress, hash);
+    await addHashWithoutTracker(contract, contractAddress, hash, printLatestIndex);
 }
 
 //returning a promise
@@ -74,7 +74,7 @@ async function getHashFromContract(contractJson, trackerContractJson, contractAd
     return hash;
 }
 
-async function addHashWithoutTracker(contract, contractAddress, hash)
+async function addHashWithoutTracker(contract, contractAddress, hash, callback)
 {
     const data = contract.methods.addHash(hash).encodeABI();
 
@@ -95,7 +95,7 @@ async function addHashWithoutTracker(contract, contractAddress, hash)
 
         web3.eth.sendSignedTransaction (raw, (err, txHash) => {
             console.log('error:', err, 'txHash:', txHash)
-            printLatestIndex(contract)
+            callback(contract)
         })
     })
 }
