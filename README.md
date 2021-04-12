@@ -105,8 +105,7 @@ Any template files to be used repeatedly (i.e. headers and footers) will:
 │   │   ├── config
 │   │   ├── controllers
 │   │   ├── migrations
-│   │   ├── models
-│   │   └── seeders
+│   │   └── models
 │   ├── middleware
 │   ├── object_models
 │   │   ├── blockchain
@@ -115,9 +114,8 @@ Any template files to be used repeatedly (i.e. headers and footers) will:
 └── frontend
     ├── public
     └── src
-        ├── apis
         └── components
-            └── templates
+            └── modules
 ```
 
 
