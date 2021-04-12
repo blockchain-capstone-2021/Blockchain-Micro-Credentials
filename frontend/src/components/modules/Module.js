@@ -1,8 +1,13 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Question from './Question'
 
-const Module = ({moduleId}) => {
+const Module = (props) => {
 
+      const [isActive, setActive] = useState(false);
+    
+      const toggleClass = () => {
+        setActive(!isActive);
+      };
     // create an API call here to get module questions and pop them into the questions constant
 
     const questions = [
@@ -29,6 +34,7 @@ const Module = ({moduleId}) => {
     }]
 
     const renderQuestions = () => {
+        console.log(props);
         return questions.map(question => {
             return <Question data={question} />
         })
@@ -36,8 +42,16 @@ const Module = ({moduleId}) => {
 
     return (
         <div className="container mt-3">
-            <h6 className="">Module {moduleId}</h6>
-            {renderQuestions()}
+            <h6 className="">Module {props.moduleId}</h6>
+            <h6>Attempts</h6>
+            {/* Render attempts here */}
+            <input name="quiz" id="quiz" class={`btn btn-primary ${isActive ? 'invisible' : 'visible'}`} type="button" value="Attempt Quiz?" onClick={() => {toggleClass()}} />
+            <div className={`container quiz ${isActive ? 'visible' : 'invisible'}`}>
+                <form method="post">
+                {renderQuestions()}
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
         </div>
     )
 }
