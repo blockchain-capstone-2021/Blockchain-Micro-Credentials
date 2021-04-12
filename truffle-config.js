@@ -5,7 +5,7 @@ module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
   contracts_directory: "./backend/blockchain/contracts",
-  contracts_build_directory: "./backend/blockchain/build",
+  contracts_build_directory: "./backend/blockchain/build/contracts",
   test_directory: "./backend/blockchain/test",
   migrations_directory: "./backend/blockchain/migrations",
   networks: {
