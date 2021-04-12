@@ -2,7 +2,7 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 const path = require("path");
 const dotenv = require('dotenv');
 dotenv.config({
-  path: '/backend/.env',
+  path: './backend/.env',
   debug: process.env.DEBUG
 });
 
