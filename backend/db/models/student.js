@@ -17,7 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Student.init({
-    studentId: DataTypes.STRING,
+    studentId: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
     degreeId: DataTypes.STRING,
     studentName: DataTypes.STRING,
     studentEmail: DataTypes.STRING,
