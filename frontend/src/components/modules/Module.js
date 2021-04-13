@@ -1,59 +1,54 @@
-import React, {useState} from 'react'
+import React, { Component } from 'react'
 import Question from './Question'
+import api from '../../apis/api';
 
-const Module = (props) => {
+class Module extends Component {
 
-      const [isActive, setActive] = useState(false);
-    
-      const toggleClass = () => {
-        setActive(!isActive);
-      };
-    // create an API call here to get module questions and pop them into the questions constant
-
-    const questions = [
-        // Placeholder module question data
-        {
-        questionId: 1,
-        text: "This is a question",
-        options: [
-            ['Option 1', true],
-            ['Option 2', false],
-            ['Option 3', false],
-            ['Option 4', false]
-        ]
-    },
-    {
-        questionId: 2,
-        text: "This is another question",
-        options: [
-            ['Option 1', true],
-            ['Option 23', false],
-            ['Option 3', false],
-            ['Option 4', false]
-        ]
-    }]
-
-    const renderQuestions = () => {
-        console.log(props);
-        return questions.map(question => {
-            return <Question data={question} />
-        })
+    constructor(props) {
+        super(props)
+        this.state = {
+             moduleId: this.props.match.params.moduleId
+        }
     }
 
-    return (
-        <div className="container mt-3">
-            <h6 className="">Module {props.moduleId}</h6>
-            <h6>Attempts</h6>
-            {/* Render attempts here */}
-            <input name="quiz" id="quiz" class={`btn btn-primary ${isActive ? 'invisible' : 'visible'}`} type="button" value="Attempt Quiz?" onClick={() => {toggleClass()}} />
-            <div className={`container quiz ${isActive ? 'visible' : 'invisible'}`}>
-                <form method="post">
-                {renderQuestions()}
-                <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+    componentDidMount = async () => {
+        this.setState({header: this.renderHeaderSection(this.state.moduleId)})
+        this.renderQuestions()
+    }
+
+    renderQuestions = async () => {
+        const response = await api.get(`questions/${this.props.match.params.moduleId}/10`)
+        this.setState({questions:
+            response.data.questions.map((question, key) => {
+                return (
+                    <Question questionId={question.questionId} content={question.content} />
+                )
+            })
+        })
+    }
+    
+    renderHeaderSection(number){
+        
+        return (
+            <div>
+                <section>
+                    <h6 className="">{`Module ${number}`}</h6>
+                    <h6>Attempts</h6>
+                </section>
             </div>
-        </div>
-    )
+        )
+    }
+   
+
+    render() {
+        return (
+            <div className="container mt-3">
+                {this.state.header}
+                {this.state.questions}
+            </div>
+        )
+    }
+
 }
 
 export default Module

@@ -14,8 +14,16 @@ const getUnit = async (req, res, next) => {
     next();
 }
 
+const getModules = async (req, res, next) => {
+    await models.Module.findAll({where: {unitId: req.params.id}}).then(modules => {
+        res.locals.modules = modules
+    });
+    next();
+}
+
 
 module.exports = {
     getUnits,
-    getUnit
+    getUnit,
+    getModules
 }

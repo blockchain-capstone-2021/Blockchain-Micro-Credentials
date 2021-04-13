@@ -3,7 +3,20 @@ const { createQuestion, getQuestions } = require('../db/controllers/QuestionCont
 var router = express.Router()
 
 
-router.get('/', getQuestions, async function (req, res, next) {
+// router.get('/', getAllQuestions, async function (req, res, next) {
+//     if(res.locals.questions) {
+//         return res.status(200).send({
+//             success: 'true',
+//             questions: res.locals.questions
+//         })
+//     }
+//     return res.status(400).send({
+//         success: 'false',
+//         message: 'No questions found.'
+//     })
+// })
+
+router.get('/:moduleId/:total', getQuestions, async function (req, res, next) {
     if(res.locals.questions) {
         return res.status(200).send({
             success: 'true',

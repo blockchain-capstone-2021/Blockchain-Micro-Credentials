@@ -30,7 +30,7 @@ const App = () => {
         <Header />
         <Switch>
           <Route path="/unit/:unitId" component={Unit} />
-          <Route path="/module/:moduleId" component={() => {return <Module />}} />
+          <Route path="/module/:moduleId" component={Module} />
           <Route path="/home" component={Home} />
           <Route path="/dashboard/student" component={StudentDashboard} />
           <Route path="/dashboard/staff" component={StaffDashboard} />

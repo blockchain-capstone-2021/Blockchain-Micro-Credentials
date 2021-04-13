@@ -13,7 +13,6 @@ class StudentDashboard extends Component {
 
   componentDidMount = async () => {
     this.renderEnrolments()
-    console.log(this.state.enrolments);
   }
 
   renderEnrolments = async () => {

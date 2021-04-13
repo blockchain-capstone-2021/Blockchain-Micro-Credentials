@@ -1,5 +1,5 @@
 const express = require('express')
-const { getUnit, getUnits } = require('../db/controllers/UnitController')
+const { getUnit, getUnits, getModules } = require('../db/controllers/UnitController')
 var router = express.Router()
 
 router.get('/', getUnits, async function (req, res, next) {
@@ -25,6 +25,19 @@ router.get('/:id', getUnit, async function (req, res, next) {
     return res.status(400).send({
         success: 'false',
         message: 'Unit does not exist.'
+    })
+})
+
+router.get('/:id/modules', getModules, async function (req, res, next) {
+    if(res.locals.modules) {
+        return res.status(200).send({
+            success: 'true',
+            modules: res.locals.modules
+        })
+    }
+    return res.status(400).send({
+        success: 'false',
+        message: 'Module does not exist.'
     })
 })
 

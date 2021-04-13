@@ -29,7 +29,7 @@ const createQuestion = async (req, res, next) => {
 };
 
 const getQuestions = async (req, res, next) => {
-    await models.Question.findAll().then( questions => {
+    await models.Question.findAll({where: {moduleId :parseInt(req.params.moduleId)},limit: parseInt(req.params.total)}).then(questions => {
         res.locals.questions = questions
     });
     console.log(res.locals.questions);
