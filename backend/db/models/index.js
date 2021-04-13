@@ -15,7 +15,7 @@ const staffModel = require('./staff')
 const studentModel = require('./student')
 const unitModel = require('./unit')
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
 let sequelize;
