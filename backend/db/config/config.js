@@ -9,7 +9,10 @@ module.exports = {
     "database": "MicrocredentialDB",
     "host": "127.0.0.1",
     "port": 8080,
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "define": {
+      timestamps: false
+  }
   },
   "test": {
     "use_env_variable": "DATABASE_URL"
@@ -20,6 +23,9 @@ module.exports = {
     "database": "MicrocredentialDB",
     "host": "127.0.0.1",
     "port": 8080,
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "define": {
+      timestamps: false
+  }
   }
 }

@@ -22,9 +22,14 @@ const privateKey = process.env.GANACHE_PRIVATE_KEY;
 
 const privateKeyBuffer = Buffer.from(privateKey, 'hex');
 
+// const provider = new HDWalletProvider(
+//     privateKey, 
+//     process.env.GANACHE_URL
+// );  
+
 const provider = new HDWalletProvider(
     privateKey, 
-    process.env.GANACHE_URL
+    "http://127.0.0.1:7545"
 );  
 
 const web3 = new Web3(provider);
