@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Degree.init({
-    degreeId: DataTypes.STRING,
+    degreeId: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
     degreeName: DataTypes.STRING,
     totalCreditPoints: DataTypes.INTEGER,
     creditPointsPerSem: DataTypes.INTEGER
