@@ -25,7 +25,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -38,7 +39,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -57,7 +59,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_micro_hash\",\"type\":\"string\"}],\"name\":\"addHash\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLastIndex\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"returnHash\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/shreyparekh/Documents/RMIT/YEAR 3/SEM 2/Capstone/Application/Blockchain-Micro-Credentials/backend/blockchain/contracts/Manual_Entry.sol\":\"Manual_Entry\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/shreyparekh/Documents/RMIT/YEAR 3/SEM 2/Capstone/Application/Blockchain-Micro-Credentials/backend/blockchain/contracts/Manual_Entry.sol\":{\"keccak256\":\"0x986ca8c9e2018d1fce3bcb24113dfcbeed6948534878d82f0eb5688734adc377\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2f60a5e3ce4d5892b9284bf96f7fe7e6d42b444f6b421fff12f070434da648f6\",\"dweb:/ipfs/QmfHGPz9brTYePBcQVJ8v9tFXgyhPBVLhEfaStQci1fjjs\"]}},\"version\":1}",
@@ -5303,9 +5306,17 @@
     "name": "solc",
     "version": "0.8.3+commit.8d00100c.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0x6baaCEF6FA047C19ceC3663532dcB49225aB3839",
+      "transactionHash": "0xb0ceec922d8c79c74e41566856e4fd046ba5effdf4899474e674805363389a55"
+    }
+  },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-12T23:39:47.873Z",
+  "updatedAt": "2021-04-13T03:19:25.414Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

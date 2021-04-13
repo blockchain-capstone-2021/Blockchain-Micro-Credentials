@@ -9,17 +9,23 @@ module.exports = {
   test_directory: "./backend/blockchain/test",
   migrations_directory: "./backend/blockchain/migrations",
   networks: {
-    staging: {
-      network_id: 1617247087085,
-      provider: function() {
-        return new HDWalletProvider(
-          mnemonic, 
-          "https://sandbox.truffleteams.com/c0be1a1a-eda2-4119-b48c-27ecc1ffc269",
-          0,
-          10,
-          false
-        );
-      }
+    // staging: {
+    //   network_id: 1617247087085,
+    //   provider: function() {
+    //     return new HDWalletProvider(
+    //       mnemonic, 
+    //       "https://sandbox.truffleteams.com/c0be1a1a-eda2-4119-b48c-27ecc1ffc269",
+    //       0,
+    //       10,
+    //       false
+    //     );
+    //   }
+    // }
+    development: {
+      host: "127.0.0.1",
+      port: 7545,
+      network_id: "5777", // Match any network id
+      from: '0x52fDDDbcB6DB3fE2ad580aC17D3386DB1D9C4DB4'
     }
   },
   compilers: {
