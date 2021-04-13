@@ -1,5 +1,5 @@
 const express = require('express')
-const { createStudent, getStudents } = require('../db/controllers/StudentController')
+const { createStudent, getStudents, getStudent, updateCreditPoints } = require('../db/controllers/StudentController')
 var router = express.Router()
 
 router.get('/', getStudents, async function (req, res, next) {
@@ -12,6 +12,19 @@ router.get('/', getStudents, async function (req, res, next) {
     return res.status(400).send({
         success: 'false',
         message: 'No students found.'
+    })
+})
+
+router.get('/:id', getStudent, async function (req, res, next) {
+    if(res.locals.student) {
+        return res.status(200).send({
+            success: 'true',
+            student: res.locals.student
+        })
+    }
+    return res.status(400).send({
+        success: 'false',
+        message: 'Student does not exist.'
     })
 })
 
@@ -28,5 +41,18 @@ router.post('/create', createStudent ,async function (req, res, next) {
         message: 'Student data is missing.'
     })
 });
+
+// router.put('/:id/updateCreditPoints', updateCreditPoints, async function(req, res, next) {
+//     if(res.locals.response.success) {
+//         return res.status(200).send({
+//             success: 'true',
+//             student: res.locals.student
+//         })
+//     }
+//     return res.status(400).send({
+//         success: 'false',
+//         message: 'id or credit points is missing.'
+//     })
+// })
 
 module.exports = router;

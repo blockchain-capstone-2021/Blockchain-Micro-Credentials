@@ -22,7 +22,7 @@ const createStudent = async (req, res, next) => {
         passwordHash: req.body.passwordHash
     }
 
-    await models.Question.create(student).then(student => {
+    await models.Student.create(student).then(student => {
         res.locals['response'] = {
             success: 'true',
             message: 'Student added successfully',
@@ -41,11 +41,31 @@ const getStudents = async (req, res, next) => {
     await models.Student.findAll().then( students => {
         res.locals.students = students
     });
-    console.log(res.locals.students);
     next();
 }
 
+const getStudent = async (req, res, next) => {
+    await models.Student.findAll({where: {studentId:req.params.id}}).then(student => {
+        res.locals.student = student
+    });
+    next();
+}
+
+const updateCreditPoints = async (req, res, next) => {
+    await models.Student.update(
+        {studentCreditPoints: parseInt(req.body.studentCreditPoints)},
+        {returning:true, where: {studentId: req.params.id}}
+        ).then(function([ rowsUpdate, [updatedBook] ]) {
+            console.log(rowsUpdate, updatedBook);
+            res.locals.student = student
+        })
+    next();
+}
+
+
 module.exports = {
     createStudent,
-    getStudents
+    getStudents,
+    getStudent,
+    updateCreditPoints
 }
