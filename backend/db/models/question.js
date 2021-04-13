@@ -17,7 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Question.init({
-    questionId: DataTypes.INTEGER,
+    questionId: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     moduleId: DataTypes.INTEGER,
     content: DataTypes.TEXT
   }, {
