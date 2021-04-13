@@ -51,6 +51,13 @@ const getStudent = async (req, res, next) => {
     next();
 }
 
+const getStudentEnrolments = async (req, res, next) => {
+    await models.Enrolment.findAll({where: {studentId:req.params.id}}).then(enrolments => {
+        res.locals.enrolments = enrolments
+    });
+    next();
+}
+
 const updateCreditPoints = async (req, res, next) => {
     await models.Student.update(
         {studentCreditPoints: parseInt(req.body.studentCreditPoints)},
@@ -67,5 +74,6 @@ module.exports = {
     createStudent,
     getStudents,
     getStudent,
-    updateCreditPoints
+    updateCreditPoints,
+    getStudentEnrolments
 }

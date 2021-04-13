@@ -1,5 +1,5 @@
 const express = require('express')
-const { createStudent, getStudents, getStudent, updateCreditPoints } = require('../db/controllers/StudentController')
+const { createStudent, getStudents, getStudent, updateCreditPoints, getStudentEnrolments } = require('../db/controllers/StudentController')
 var router = express.Router()
 
 router.get('/', getStudents, async function (req, res, next) {
@@ -25,6 +25,19 @@ router.get('/:id', getStudent, async function (req, res, next) {
     return res.status(400).send({
         success: 'false',
         message: 'Student does not exist.'
+    })
+})
+
+router.get('/:id/enrolments', getStudentEnrolments, async function (req, res, next) {
+    if(res.locals.enrolments) {
+        return res.status(200).send({
+            success: 'true',
+            enrolments: res.locals.enrolments
+        })
+    }
+    return res.status(400).send({
+        success: 'false',
+        message: 'Enrolments for the student does not exist.'
     })
 })
 
