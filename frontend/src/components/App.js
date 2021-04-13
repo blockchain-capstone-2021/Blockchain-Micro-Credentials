@@ -6,8 +6,11 @@ import Header from "./Header";
 import Module from "./modules/Module"
 import Login from "./Login";
 import Home from './Home'
+import StaffDashboard from './dashboards/StaffDashboard'
+import StudentDashboard from './dashboards/StudentDashboard'
 
 import "../style.css";
+import Unit from "./units/Unit";
 
 const App = () => {
 
@@ -18,6 +21,7 @@ const App = () => {
     // Make API call to get a module and pass it to the module prop
     
   }
+  window.localStorage.setItem('studentId', 's3710669');
 
   return (
     <div>
@@ -25,8 +29,11 @@ const App = () => {
       <BrowserRouter>
         <Header />
         <Switch>
-          <Route path="/module/:moduleId" component={() => {return <Module moduleId={2} />}} />
+          <Route path="/unit/:unitId" component={Unit} />
+          <Route path="/module/:moduleId" component={() => {return <Module />}} />
           <Route path="/home" component={Home} />
+          <Route path="/dashboard/student" component={StudentDashboard} />
+          <Route path="/dashboard/staff" component={StaffDashboard} />
           <Route exact path="/" component={Login} />
         </Switch>
         <Footer />

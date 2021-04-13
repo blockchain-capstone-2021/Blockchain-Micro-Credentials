@@ -1,5 +1,4 @@
 import React from 'react'
-import Module from './modules/Module'
 import {Link} from 'react-router-dom'
 const Dashboard = (props) => {
 
