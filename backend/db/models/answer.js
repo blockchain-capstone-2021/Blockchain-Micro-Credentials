@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Answer.init({
-    answerId: DataTypes.INTEGER,
+    answerId: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     questionId: DataTypes.INTEGER,
     content: DataTypes.STRING,
     isCorrect: DataTypes.BOOLEAN
