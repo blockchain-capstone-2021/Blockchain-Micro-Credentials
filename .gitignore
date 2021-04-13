@@ -17,6 +17,7 @@ frontend/build
 backend/.DS_Store
 backend/blockchain/.DS_Store
 backend/db/.DS_Store
+backend/.env
 .DS_Store
 backend/db/models/.DS_Store
 frontend/.DS_Store
