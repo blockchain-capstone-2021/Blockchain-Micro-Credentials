@@ -19,7 +19,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Unit.init({
-    unitId: DataTypes.STRING,
+    unitId: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
     staffId: DataTypes.STRING,
     unitName: DataTypes.STRING,
     noOfModules: DataTypes.INTEGER,

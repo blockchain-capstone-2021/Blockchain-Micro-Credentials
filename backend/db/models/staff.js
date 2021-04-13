@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Staff.init({
-    staffId: DataTypes.STRING,
+    staffId: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
     staffName: DataTypes.STRING,
     passwordHash: DataTypes.STRING
   }, {
