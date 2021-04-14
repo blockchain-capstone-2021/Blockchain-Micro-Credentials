@@ -1,54 +1,40 @@
-import React, { Component } from 'react'
-import Answer from './Answer'
-import api from '../../apis/api'
-
+import React, { Component } from "react";
 
 class Question extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {}
-      }
+  constructor(props) {
+    super(props);
+    this.state = { answers: props.data };
+  }
 
-      componentDidMount() {
-          this.renderAnswers()
-      }
-    
-      renderAnswers = async () => {
-        const response = await api.get(
-          `/questions/1/answers`
-        )
-        console.log(response.data);
-        this.setState({
-          answers: response.data.answers.map((answers, key) => {
+    renderAnswers(){
+        return this.state.answers.map(answer => {
             return (
-              <div class="form-check">
+                <div class="form-check">
                 <input
-                  class="form-check-input"
-                  type="radio"
-                  name="exampleRadios"
-                  id="exampleRadios1"
-                  value="option1"
+                class="form-check-input"
+                type="radio"
+                name={`quiz-${this.props.question.questionId}`}
+                id={`q${answer.questionId}_a${answer.answerId}`}
+                value={answer.isCorrect}
                 />
-                <label class="form-check-label" for="exampleRadios1">
-                  s
+                <label class="form-check-label" for={`q${answer.questionId}_a${answer.answerId}`}>
+                {answer.content}
                 </label>
-              </div>
-            );
-          }),
-        });
-      };
-
-    render() {
-        return (
-            <div className="my-3">
-            <h6>Question #{this.props.questionId}</h6>
-            <p>{this.props.content}</p>
-            <hr />
-        </div>
-        )
+            </div>
+            )
+    })   
     }
+
+  render() {
+    return (
+      <div className="pt-3">
+          <h5>Question # {this.props.question.questionId}</h5>
+          <h6>{this.props.question.content}</h6>
+          {this.renderAnswers()}
+          <hr />
+      </div>
+    );
+  }
 }
 
-
-export default Question
-
+export default Question;

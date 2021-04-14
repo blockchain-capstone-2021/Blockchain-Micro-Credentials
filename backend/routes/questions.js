@@ -16,6 +16,19 @@ var router = express.Router()
 //     })
 // })
 
+router.get('/:questionId/answers', getAnswers, async function (req, res, next) {
+    if(res.locals.answers) {
+        return res.status(200).send({
+            success: 'true',
+            answers: res.locals.answers
+        })
+    }
+    return res.status(400).send({
+        success: 'false',
+        message: 'No answers found.'
+    })
+})
+
 router.get('/:moduleId/:total', getQuestions, async function (req, res, next) {
     if(res.locals.questions) {
         return res.status(200).send({
@@ -29,18 +42,6 @@ router.get('/:moduleId/:total', getQuestions, async function (req, res, next) {
     })
 })
 
-router.get('/:questionId/answers', getAnswers, async function (req, res, next) {
-    if(res.locals.answers) {
-        return res.status(200).send({
-            success: 'true',
-            answers: res.locals.answers
-        })
-    }
-    return res.status(400).send({
-        success: 'false',
-        message: 'No answers found.'
-    })
-})
 
 router.post('/create', createQuestion ,async function (req, res, next) {
     if(res.locals.response.success) {

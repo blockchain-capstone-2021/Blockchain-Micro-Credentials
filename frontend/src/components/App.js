@@ -22,6 +22,7 @@ const App = () => {
     
   }
   window.localStorage.setItem('studentId', 's3710669');
+  window.localStorage.setItem('staffId', 'e1234567');
 
   return (
     <div>
@@ -36,7 +37,7 @@ const App = () => {
           <Route path="/dashboard/staff" component={StaffDashboard} />
           <Route exact path="/" component={Login} />
         </Switch>
-        <Footer />
+        {/* <Footer /> */}
       </BrowserRouter>
     </div>
   );

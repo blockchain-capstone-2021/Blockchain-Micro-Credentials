@@ -40,7 +40,7 @@ class Unit extends Component {
             <div className="container mt-5">
                 {this.state.data}
                 <section>
-                    <table class="table">
+                    <table className="table">
                         <thead>
                             <tr>
                                 <th>Id</th>

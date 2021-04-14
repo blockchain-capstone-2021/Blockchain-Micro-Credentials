@@ -29,15 +29,16 @@ const createQuestion = async (req, res, next) => {
 };
 
 const getQuestions = async (req, res, next) => {
-    await models.Question.findAll({where: {moduleId :parseInt(req.params.moduleId)},limit: parseInt(req.params.total)}).then(questions => {
+    await models.Question.findAll({where: {moduleId :parseInt(req.params.moduleId)},limit: 10}).then(questions => {
         res.locals.questions = questions
     });
     next();
 }
 
 const getAnswers = async (req, res, next) => {
-    await models.Answer.findAll({where: {questionId :parseInt(req.params.questionId)}}).then(answers => {
+    await models.Answer.findAll({where: {questionId :req.params.questionId}}).then(answers => {
         res.locals.answers = answers
+        console.log(answers);
     });
     next();
 }

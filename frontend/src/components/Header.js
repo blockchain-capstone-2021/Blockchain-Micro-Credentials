@@ -29,10 +29,10 @@ const Header = () => {
                         </ul>
                         </li>
                         <li className="nav-item">
-                        <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        <a className="nav-link disabled" href="#" tabIndex="-1" aria-disabled="true">Disabled</a>
                         </li>
                     </ul>
-                    <div class="form-inline my-2 my-lg-0">
+                    <div className="form-inline my-2 my-lg-0">
                     <Link to="/" className="btn btn-outline-success my-2 my-sm-0">Login</Link>
                     </div>
                     </div>

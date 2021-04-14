@@ -33,7 +33,7 @@ const UnitDetail = (props) => {
                 <h1>{props.unitName}</h1>
             </section>
             <h2>Modules</h2>
-            <table class="table">
+            <table className="table">
                 <thead>
                     <tr>
                         <th>Id</th>
