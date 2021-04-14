@@ -16,7 +16,6 @@ class Unit extends Component {
         const {unitId} = this.props.match.params
         const response = await api.get(`/unit/${unitId}`)
         const modulesResponse = await api.get(`/unit/${unitId}/modules`)
-        console.log(modulesResponse.data);
         this.setState({unit: response.data.unit[0]})
         this.setState({data: <div><section><h1>{this.state.unit.unitId}</h1><p>{this.state.unit.unitName}</p></section></div>})
         this.renderModules(modulesResponse)

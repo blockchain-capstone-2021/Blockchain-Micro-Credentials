@@ -32,11 +32,18 @@ const getQuestions = async (req, res, next) => {
     await models.Question.findAll({where: {moduleId :parseInt(req.params.moduleId)},limit: parseInt(req.params.total)}).then(questions => {
         res.locals.questions = questions
     });
-    console.log(res.locals.questions);
+    next();
+}
+
+const getAnswers = async (req, res, next) => {
+    await models.Answer.findAll({where: {questionId :parseInt(req.params.questionId)}}).then(answers => {
+        res.locals.answers = answers
+    });
     next();
 }
 
 module.exports = {
     createQuestion,
-    getQuestions
+    getQuestions,
+    getAnswers
 }
