@@ -12,32 +12,17 @@ async function getQuestions (_moduleId, noOfQuestions)
       }).then( questions => {
         _questions = questions;
     });
-    
+  
     for(var i=1; i<=noOfQuestions; i++)
     {
         var index = Math.floor(Math.random()*(_questions.length-1)+0);
-        
-        let question = _questions.splice(index, 1);
-
-        console.log(question);
-
+        let question = _questions[index]
+        _questions.splice(index, 1);
         _returnQuestions.push(question)
     }
-
-
-    console.log(_questions.length);
-
-    // _returnQuestions.forEach(question => {
-    //     console.log(question)
-    // });
-
-
-    // console.log(_questions);
-
-    // return _returnQuestions;
+    return _returnQuestions;
 }
 
-getQuestions(10, 10);
-// module.exports = {
-//     getQuestions
-// }
+module.exports = {
+    getQuestions
+}
