@@ -32,6 +32,7 @@ class StudentList extends Component {
         return (
             <div className="container">
                 <h1>Students</h1>
+                <Link to="/student/create" className="btn btn-success">Add +</Link>
                 <table class="table">
                     <thead>
                         <tr>

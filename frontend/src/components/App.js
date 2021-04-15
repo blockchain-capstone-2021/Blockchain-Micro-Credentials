@@ -13,6 +13,7 @@ import "../style.css";
 import Unit from "./units/Unit";
 import StudentList from "./Staff/StudentList";
 import StudentDetail from "./Staff/StudentDetail";
+import StudentCreate from "./Staff/StudentCreate";
 
 const App = () => {
 
@@ -32,6 +33,7 @@ const App = () => {
       <BrowserRouter>
         <Header />
         <Switch>
+        <Route path="/student/create" component={StudentCreate} />
           <Route path="/student/:studentId" component={StudentDetail} />
           <Route path="/students" component={StudentList} />
           <Route path="/module/:moduleId" component={Module} />

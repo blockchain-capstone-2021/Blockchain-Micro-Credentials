@@ -25,7 +25,7 @@ class Module extends Component {
         setTimeout(() => {
             this.setState({render: this.renderQuestions(this.state.questions)})
         }, 3000);
-        console.log(this.state.render);
+        
         }  
 
     displayQuestions(renderData) {

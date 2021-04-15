@@ -38,7 +38,7 @@ const getQuestions = async (req, res, next) => {
 const getAnswers = async (req, res, next) => {
     await models.Answer.findAll({where: {questionId :req.params.questionId}}).then(answers => {
         res.locals.answers = answers
-        console.log(answers);
+        
     });
     next();
 }

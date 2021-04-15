@@ -1,5 +1,6 @@
 const { models } = require('../models/index')
 const createStudent = async (req, res, next) => {
+    console.log(req.body)
     if (!req.body.studentId           ||
         !req.body.degreeId            ||
         !req.body.studentName         ||
@@ -63,7 +64,7 @@ const updateCreditPoints = async (req, res, next) => {
         {studentCreditPoints: parseInt(req.body.studentCreditPoints)},
         {returning:true, where: {studentId: req.params.id}}
         ).then(function([ rowsUpdate, [updatedBook] ]) {
-            console.log(rowsUpdate, updatedBook);
+            
             res.locals.student = student
         })
     next();
