@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+
 import api from '../../apis/api'
 
 class StudentCreate extends Component {
@@ -16,7 +17,6 @@ class StudentCreate extends Component {
             this.setState({degrees: degrees.data.degrees.map(degree => {
                 return degree
             })})
-
         }
         )
     }
@@ -69,6 +69,7 @@ class StudentCreate extends Component {
             studentCreditPoints: this.state.credit,
             passwordHash: this.state.password
         })
+        this.props.history.push('/students')
     }
 
 
