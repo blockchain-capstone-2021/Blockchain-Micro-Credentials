@@ -14,6 +14,7 @@ class Unit extends Component {
     
     componentDidMount = async() => {
         const {unitId} = this.props.match.params
+        window.localStorage.setItem('unitId', unitId)
         const response = await api.get(`/unit/${unitId}`)
         const modulesResponse = await api.get(`/unit/${unitId}/modules`)
         this.setState({unit: response.data.unit[0]})
@@ -26,8 +27,9 @@ class Unit extends Component {
             response.data.modules.map((module, key) => {
               return (
                 <tr className="py-2">
-                    <td scope="row">{module.moduleId}</td>
                     <td>{module.moduleName}</td>
+                    <td>3</td>
+                    <td>7/10</td>
                     <td><Link to={`/module/${module.moduleId}`} className="btn btn-primary">Go</Link></td>
                 </tr>
               )
@@ -43,8 +45,9 @@ class Unit extends Component {
                     <table className="table">
                         <thead>
                             <tr>
-                                <th>Id</th>
                                 <th>Name</th>
+                                <th># of Attempts</th>
+                                <th>Best result</th>
                                 <th>Action</th>
                             </tr>
                         </thead>

@@ -11,6 +11,8 @@ import StudentDashboard from './dashboards/StudentDashboard'
 
 import "../style.css";
 import Unit from "./units/Unit";
+import StudentList from "./Staff/StudentList";
+import StudentDetail from "./Staff/StudentDetail";
 
 const App = () => {
 
@@ -30,7 +32,8 @@ const App = () => {
       <BrowserRouter>
         <Header />
         <Switch>
-          <Route path="/unit/:unitId" component={Unit} />
+          <Route path="/student/:studentId" component={StudentDetail} />
+          <Route path="/students" component={StudentList} />
           <Route path="/module/:moduleId" component={Module} />
           <Route path="/home" component={Home} />
           <Route path="/dashboard/student" component={StudentDashboard} />

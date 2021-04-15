@@ -12,6 +12,7 @@ class Module extends Component {
     }
 
     componentDidMount = async () => {
+        window.localStorage.setItem('moduleId', this.props.match.params.moduleId)
         this.setState({header: this.renderHeaderSection(this.state.moduleId)});
         this.setState({questions: await this.getQuestions()}); 
         const newQuestions = []
@@ -59,8 +60,7 @@ class Module extends Component {
             <div>
                 <section>
                     <h6 className="">{`Module ${number}`}</h6>
-                    <h6>Attempts</h6>
-                    // Render attempts here
+                    <h6>Attempt #</h6>
                 </section>
             </div>
         )
@@ -74,6 +74,10 @@ class Module extends Component {
                 <section>
                 <form method="post">
                 {this.displayQuestions(this.state.render)}  
+                <input type="hidden" id="enrolmentPeriod" name="enrolmentPeriod" value={window.localStorage.getItem('enrolmentPeriod')}/>
+                <input type="hidden" id="moduleId" name="moduleId" value={window.localStorage.getItem('moduleId')}/>
+                <input type="hidden" id="unitId" name="unitId" value={window.localStorage.getItem('unitId')}/>
+                <input type="hidden" id="studentId" name="studentId" value={window.localStorage.getItem('studentId')} />
                 <button type="submit" class="btn btn-primary">Submit</button>
                 </form>  
                 </section>

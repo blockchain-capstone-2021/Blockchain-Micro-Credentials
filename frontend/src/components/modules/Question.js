@@ -13,9 +13,9 @@ class Question extends Component {
                 <input
                 class="form-check-input"
                 type="radio"
-                name={`quiz-${this.props.question.questionId}`}
+                name={`qid_${this.props.question.questionId}`}
                 id={`q${answer.questionId}_a${answer.answerId}`}
-                value={answer.isCorrect}
+                value={`q${answer.questionId}_a${answer.answerId}_${answer.isCorrect}`}
                 />
                 <label class="form-check-label" for={`q${answer.questionId}_a${answer.answerId}`}>
                 {answer.content}
