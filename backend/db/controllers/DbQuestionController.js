@@ -1,5 +1,6 @@
 const { models } = require('../models/index')
 
+//return a given number of randomised questions for a given module
 async function getQuestions (_moduleId, noOfQuestions) 
 {
     let _questions;
@@ -23,6 +24,19 @@ async function getQuestions (_moduleId, noOfQuestions)
     return _returnQuestions;
 }
 
+//return a question for a given questionId
+async function getQuestion(_questionId) 
+{
+    let _question;
+
+    await models.Question.findByPk(_questionId).then( question => {
+        _question = question;
+    });
+
+    return _question;
+}
+
 module.exports = {
-    getQuestions
+    getQuestions,
+    getQuestion
 }
