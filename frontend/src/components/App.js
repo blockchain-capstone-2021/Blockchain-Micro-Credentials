@@ -5,6 +5,7 @@ import Header from "./Header";
 import Module from "./modules/Module"
 import Login from "./Login";
 import Home from './Home'
+import Unit from './units/Unit'
 import StaffDashboard from './dashboards/StaffDashboard'
 import StudentDashboard from './dashboards/StudentDashboard'
 
@@ -28,7 +29,8 @@ const App = () => {
       <BrowserRouter>
         <Header />
         <Switch>
-        <Route path="/student/create" component={StudentCreate} />
+          <Route path="/unit/:unitId" component={Unit} />
+          <Route path="/student/create" component={StudentCreate} />
           <Route path="/student/:studentId" component={StudentDetail} />
           <Route path="/students" component={() => <StudentList key={getDate()} />} />
           <Route path="/module/:moduleId" component={Module} />
