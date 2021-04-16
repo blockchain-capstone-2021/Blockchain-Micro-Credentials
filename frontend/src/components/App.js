@@ -19,15 +19,18 @@ const App = () => {
   window.localStorage.setItem('studentId', 's3710669');
   window.localStorage.setItem('staffId', 'e1234567');
 
+  function getDate(){
+    return Date.now().toString()
+  };
+
   return (
     <div>
-      
       <BrowserRouter>
         <Header />
         <Switch>
         <Route path="/student/create" component={StudentCreate} />
           <Route path="/student/:studentId" component={StudentDetail} />
-          <Route path="/students" component={StudentList} />
+          <Route path="/students" component={() => <StudentList key={getDate()} />} />
           <Route path="/module/:moduleId" component={Module} />
           <Route path="/home" component={Home} />
           <Route path="/dashboard/student" component={StudentDashboard} />

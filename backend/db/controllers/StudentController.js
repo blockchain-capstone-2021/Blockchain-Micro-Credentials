@@ -38,6 +38,21 @@ const createStudent = async (req, res, next) => {
     next()
 };
 
+const deleteStudent = async (req, res, next) => {
+    await models.Student.destroy({where: {studentId: req.params.id}}).then(student => {
+        res.locals.response = {
+            success: 'true',
+            message: 'Student has been deleted successfully!'
+        }
+    }).catch(err => {
+        res.locals.response = {
+            success: 'false',
+            message:err,
+        }
+    })
+    next()
+}
+
 const updateStudent = async (req, res, next) => {
     await models.Student.findAll({where: {studentId:req.params.id}}).then(async student => {
         const newStudent = {
@@ -103,7 +118,7 @@ module.exports = {
     createStudent,
     getStudents,
     getStudent,
-    updateCreditPoints,
+    deleteStudent,
     getStudentEnrolments,
     updateStudent
 }

@@ -34,7 +34,7 @@ export default class StudentForm extends Component {
                 if(this.state.student){
                     selected = (degree.degreeId === this.state.student.degreeId) ? "selected" : ""
                 }
-                return (<option key={degree.degreeId} value={degree.degreeId} {...selected}>{degree.degreeName}</option>)
+                return (<option key={degree.degreeId} name={degree.degreeId} value={degree.degreeId} {...selected}>{degree.degreeName}</option>)
             })
             return Promise.all(render).then(() => {
                 this.setState({options: render})
@@ -103,7 +103,7 @@ export default class StudentForm extends Component {
                     <div className="form-group  my-4">
                         <label htmlFor="degree">Degree</label>
                         <select className="form-control form-control" name="degree" value={this.state.degreeId} onChange={(e) => this.onDegreeChange(e)}>
-                        <option>Select a degree</option>
+                        <option name="dummy" key="dummy">Select a degree</option>
                         {this.state.options}
                         </select>
                     </div>

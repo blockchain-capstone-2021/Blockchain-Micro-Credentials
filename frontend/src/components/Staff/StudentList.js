@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import api from '../../apis/api'
 
 class StudentList extends Component {
@@ -8,8 +8,11 @@ class StudentList extends Component {
         super(props)
     
         this.state = {
-             students: null
+            history: this.props.history,
+            students: null,
+            redirect: null
         }
+        this.setRedirect = this.setRedirect.bind(this)
     }
 
     async componentDidMount(){
@@ -24,38 +27,41 @@ class StudentList extends Component {
                     <td>{student.studentCreditPoints}</td>
                     <td>
                     <Link to={`/student/${student.studentId}`} className="btn btn-warning"> Edit </Link>
-                    <a name="" id="" class="btn btn-danger mx-2" href="#" role="button">Delete</a>
+                    <button type="button" className="btn btn-danger mx-2" data-bs-toggle="modal" data-bs-studentname={student.studentName} data-bs-studentid={student.studentId} data-bs-target="#deleteConf" onClick={this.displayDeleteModal(this.state.history, this.setRedirect)}>
+                    Delete
+                </button>
                     </td>
                 </tr>
             )
         })})
     }
 
-    renderDeleteModal(){
-        return (
+    setRedirect() {
+        this.setState({redirect: '/students'})
+    }
 
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
-                </div>
-                </div>
-            </div>
-            </div>
-
-        )
+    displayDeleteModal(history, redirect) {
+        const el = document.getElementById('deleteConf')
+        el.addEventListener('show.bs.modal', function (event) {
+          const button = event.relatedTarget
+          const name = button.getAttribute('data-bs-studentname')
+          const studentId = button.getAttribute('data-bs-studentid')
+          const modalTitle = el.querySelector('.modal-title')
+          const modalBodyInput = el.querySelector('.modal-body p')
+          const deleteButton = document.getElementById('del')
+          modalTitle.innerHTML = 'Delete \'' + name + '\'?'
+          modalBodyInput.innerHTML = 'Are you sure that you want to delete\'' + name + '\'? This action is irreversible.'
+          deleteButton.onclick = async function() {
+            await api.post(`/student/${studentId}/delete`)
+            redirect()
+          }
+        })
     }
 
     render() {
+        if(this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
         return (
             <div className="container">
                 <h1>Students</h1>
@@ -76,9 +82,28 @@ class StudentList extends Component {
                     </tbody>
                 </table>
 
+                <div className="modal fade" id="deleteConf" tabIndex="-1" aria-labelledby="deleteConf" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                        <p></p>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <Link to="/students" className="btn btn-danger" id="del" data-bs-dismiss="modal">Delete</Link>
+                        {/* <button type="button" className="btn btn-danger" id="del" data-bs-dismiss="modal">Delete</button> */}
+                    </div>
+                    </div>
+                </div>
+                </div>
+
             </div>
         )
     }
 }
 
-export default  StudentList
+export default withRouter(StudentList)

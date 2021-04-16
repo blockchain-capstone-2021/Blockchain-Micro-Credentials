@@ -1,5 +1,5 @@
 const express = require('express')
-const { createStudent, getStudents, getStudent, updateStudent, getStudentEnrolments } = require('../db/controllers/StudentController')
+const { createStudent, getStudents, getStudent, updateStudent, getStudentEnrolments,deleteStudent } = require('../db/controllers/StudentController')
 var router = express.Router()
 
 router.get('/', getStudents, async function (req, res, next) {
@@ -69,17 +69,18 @@ router.post('/:id/edit', updateStudent, async function (req, res, next) {
     })
 })
 
-// router.put('/:id/updateCreditPoints', updateCreditPoints, async function(req, res, next) {
-//     if(res.locals.response.success) {
-//         return res.status(200).send({
-//             success: 'true',
-//             student: res.locals.student
-//         })
-//     }
-//     return res.status(400).send({
-//         success: 'false',
-//         message: 'id or credit points is missing.'
-//     })
-// })
+router.post('/:id/delete', deleteStudent, async function (req,res,next) {
+    if(res.locals.response.success) {
+        return res.status(200).send({
+            success: res.locals.response.success,
+            message: res.locals.response.message
+        })
+    }
+    return res.status(400).send({
+        success: 'false',
+        message: 'Student was not deleted.'
+    })
+})
+
 
 module.exports = router;
