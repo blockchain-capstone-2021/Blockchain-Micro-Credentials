@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Module.belongsTo(Unit)
       Module.hasMany(Question)
+      Module.hasMany(Module_Attempt)
     }
   };
   Module.init({

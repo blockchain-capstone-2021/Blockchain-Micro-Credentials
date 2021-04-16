@@ -1,6 +1,6 @@
 const { models } = require('../models/index')
 
-//return a module for a given moduleId
+//return a degree for a given degreeId
 async function getDegree(_degreeId) 
 {
     let _degree;

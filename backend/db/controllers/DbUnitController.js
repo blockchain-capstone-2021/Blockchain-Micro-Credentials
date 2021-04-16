@@ -1,6 +1,6 @@
 const { models } = require('../models/index')
 
-//return all answers for a given question
+//return unit by unitId
 async function getUnit(_unitId) 
 {
   let _unit;
@@ -12,7 +12,7 @@ async function getUnit(_unitId)
   return _unit;
 }
 
-//return an answer for a given answerId
+//return all unitar for a given staffId
 async function getUnitByStaff(_staffId) 
 {
   let _units;
