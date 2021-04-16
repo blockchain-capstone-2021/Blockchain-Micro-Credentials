@@ -5,16 +5,16 @@ async function getNoOfAttempts(_studentId, _moduleId)
 {
     let attempts = 0;
 
-    await models.Module_Attempt.findAll({
+    let module_attempt = await models.Module_Attempt.findOne({
         where: {
-            studentId = _studentId,
+            studentId: _studentId,
             moduleId: _moduleId
         }
-      }).then( module_attempts => {
-          if(module_attempts){
-            attempts = module_attempts.length
-          }
-    });
+    })
+
+    if(module_attempt){
+        attempts = module_attempt.attemptNo
+    }
 
     return attempts;
 }
