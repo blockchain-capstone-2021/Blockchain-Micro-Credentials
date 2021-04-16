@@ -78,7 +78,7 @@ class Module extends Component {
                 <input type="hidden" id="moduleId" name="moduleId" value={window.localStorage.getItem('moduleId')}/>
                 <input type="hidden" id="unitId" name="unitId" value={window.localStorage.getItem('unitId')}/>
                 <input type="hidden" id="studentId" name="studentId" value={window.localStorage.getItem('studentId')} />
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">Submit</button>
                 </form>  
                 </section>
                 

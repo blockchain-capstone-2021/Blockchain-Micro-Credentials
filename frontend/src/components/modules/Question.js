@@ -9,15 +9,15 @@ class Question extends Component {
     renderAnswers(){
         return this.state.answers.map(answer => {
             return (
-                <div class="form-check">
+                <div className="form-check">
                 <input
-                class="form-check-input"
+                className="form-check-input"
                 type="radio"
                 name={`qid_${this.props.question.questionId}`}
                 id={`q${answer.questionId}_a${answer.answerId}`}
                 value={`q${answer.questionId}_a${answer.answerId}_${answer.isCorrect}`}
                 />
-                <label class="form-check-label" for={`q${answer.questionId}_a${answer.answerId}`}>
+                <label className="form-check-label" htmlFor={`q${answer.questionId}_a${answer.answerId}`}>
                 {answer.content}
                 </label>
             </div>

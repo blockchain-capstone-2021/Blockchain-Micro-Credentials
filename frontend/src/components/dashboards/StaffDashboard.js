@@ -4,11 +4,11 @@ class StaffDashboard extends Component {
 
   renderCard(url, cardTitle, cardDescription, path){
     return (
-      <div class="card mx-2" style={{width: "18rem"}}>
-        <img src={url} class="card-img-top" alt="..." style={{height:"190px", width:"286px"}} />
-        <div class="card-body">
-          <h5 class="card-title">{cardTitle}</h5>
-          <p class="card-text">{cardDescription}</p>
+      <div className="card mx-2" style={{width: "18rem"}}>
+        <img src={url} className="card-img-top" alt="..." style={{height:"190px", width:"286px"}} />
+        <div className="card-body">
+          <h5 className="card-title">{cardTitle}</h5>
+          <p className="card-text">{cardDescription}</p>
           <Link to={path} className="btn btn-primary">Go</Link>
         </div>
       </div>

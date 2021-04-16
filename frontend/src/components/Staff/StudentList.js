@@ -16,8 +16,8 @@ class StudentList extends Component {
         const response = await api.get('/student');
         this.setState({students: response.data.students.map(student => {
             return (
-                <tr>
-                    <td scope="row">{student.studentId}</td>
+                <tr key={student.studentId}>
+                    <td>{student.studentId}</td>
                     <td>{student.studentName}</td>
                     <td>{student.degreeId}</td>
                     <td>{student.studentEmail}</td>
@@ -33,10 +33,10 @@ class StudentList extends Component {
             <div className="container">
                 <h1>Students</h1>
                 <Link to="/student/create" className="btn btn-success">Add +</Link>
-                <table class="table">
+                <table className="table">
                     <thead>
                         <tr>
-                            <th>Id</th>
+                            <th scope="row">Id</th>
                             <th>Name</th>
                             <th>Degree Id</th>
                             <th>Email</th>
@@ -45,7 +45,7 @@ class StudentList extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {!this.state.students ? "Loading" : this.state.students}
+                        {!this.state.students ? <tr><td colSpan="6">Loading</td></tr> : this.state.students}
                     </tbody>
                 </table>
             </div>
