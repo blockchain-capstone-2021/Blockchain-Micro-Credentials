@@ -18,7 +18,7 @@ class Module extends Component {
         const newQuestions = []
         await this.state.questions.map(async (question, key) => {
             const answers = await api.get(`/questions/${question.questionId}/answers`)
-            const nQuestion = {...question, answers: answers.data.answers}
+            const nQuestion = {...question, answers: answers.data.answers, key: question.questionId}
             newQuestions.push(nQuestion)
         });
         this.setState({questions: newQuestions})
@@ -38,7 +38,7 @@ class Module extends Component {
     renderQuestions(x){
         return x.map((question) => {
             return (
-                <Question question={question} data={question.answers} />
+                <Question key={question.questionId} question={question} data={question.answers} />
             )
         })
     }

@@ -26,7 +26,7 @@ class Unit extends Component {
         this.setState({modules:
             response.data.modules.map((module, key) => {
               return (
-                <tr className="py-2">
+                <tr className="py-2" key={module.moduleId}>
                     <td>{module.moduleName}</td>
                     <td>3</td>
                     <td>7/10</td>
