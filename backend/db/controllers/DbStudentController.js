@@ -1,6 +1,6 @@
 const { models } = require('../models/index')
 
-//return a staff member for a given staffId
+//return a student for a given studentId
 async function getStudent(_studentId) 
 {
     let _student;
@@ -12,7 +12,7 @@ async function getStudent(_studentId)
     return _student;
 }
 
-//check if a staff member exists for a given staffId
+//check if a student exists for a given studentId
 async function checkStudentExists(_studentId) 
 {
     const student = await getStudent(_studentId)
@@ -25,9 +25,13 @@ async function checkStudentExists(_studentId)
     return studentExists
 }
 
+//updates credit points by a specified amount
 async function updateCreditPoints(_studentId, _creditPoints)
 {
-    await models.Student.update({ studentCreditPoints: _creditPoints}, {
+    let student = await getStudent(_studentId)
+    let currentPoints = student.studentCreditPoints
+    let updatedPoints = currentPoints + _creditPoints
+    await models.Student.update({ studentCreditPoints: updatedPoints}, {
         where: {
             studentId: _studentId
         }

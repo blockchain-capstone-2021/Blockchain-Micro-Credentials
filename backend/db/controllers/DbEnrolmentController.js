@@ -1,6 +1,6 @@
 const { models } = require('../models/index')
 
-//return all answers for a given question
+//return all enrolments for a given studentId
 async function getEnrolmentsByStudent(_studentId) 
 {
     let _enrolments;
@@ -16,7 +16,7 @@ async function getEnrolmentsByStudent(_studentId)
     return _enrolments;
 }
 
-//return an answer for a given answerId
+//return all enrollments for a given unitId
 async function getEnrolmentsByUnit(_unitId) 
 {
   let _enrolments;
