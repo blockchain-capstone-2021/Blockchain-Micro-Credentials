@@ -22,10 +22,37 @@ class StudentList extends Component {
                     <td>{student.degreeId}</td>
                     <td>{student.studentEmail}</td>
                     <td>{student.studentCreditPoints}</td>
-                    <td><Link to={`/student/${student.studentId}`} className="btn btn-primary">Go</Link></td>
+                    <td>
+                    <Link to={`/student/${student.studentId}`} className="btn btn-warning"> Edit </Link>
+                    <a name="" id="" class="btn btn-danger mx-2" href="#" role="button">Delete</a>
+                    </td>
                 </tr>
             )
         })})
+    }
+
+    renderDeleteModal(){
+        return (
+
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+        )
     }
 
     render() {
@@ -48,6 +75,7 @@ class StudentList extends Component {
                         {!this.state.students ? <tr><td colSpan="6">Loading</td></tr> : this.state.students}
                     </tbody>
                 </table>
+
             </div>
         )
     }

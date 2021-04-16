@@ -7,7 +7,13 @@ export default class StudentForm extends Component {
         super(props)
         this.state = {
              student: this.props.student,
-             options: this.props.options
+             options: this.props.options,
+             studentId: this.props.student ? this.props.student.studentId : "",
+             studentName: this.props.student ? this.props.student.studentName : "",
+             degreeId: this.props.student ? this.props.student.degreeId : "",
+             studentEmail: this.props.student ? this.props.student.studentEmail : "",
+             studentCreditPoints: this.props.student ? parseInt(this.props.student.studentCreditPoints) : 0,
+             passwordHash: this.props.student? this.props.student.passwordHash : ""
         }
     }
 
@@ -46,7 +52,6 @@ export default class StudentForm extends Component {
 
     onDegreeChange(e){
         this.setState({degreeId: e.target.value })
-        console.log(e.target.value);
     }
 
     onEmailChange(e){
@@ -54,62 +59,61 @@ export default class StudentForm extends Component {
     }
 
     onCreditChange(e){
-        this.setState({credit: e.target.value })
+        this.setState({studentCreditPoints: e.target.value })
     }
 
     onPasswordChange(e){
-        this.setState({password: e.target.value })
+        this.setState({passwordHash: e.target.value })
 
     }
 
     async onSubmit(e) {
         e.preventDefault();
-        await api.post('/student/create', {
+        const route = (!this.state.student) ? '/student/create' : `/student/${this.state.student.studentId}/edit`
+        await api.post(route, {
             studentId: this.state.studentId,
             studentName: this.state.studentName,
             degreeId: this.state.degreeId,
             studentEmail: this.state.studentEmail,
-            studentCreditPoints: this.state.credit,
-            passwordHash: this.state.password
+            studentCreditPoints: this.state.studentCreditPoints,
+            passwordHash: this.state.passwordHash
         })
         this.props.history.push('/students')
     }
     
     onCreateForm(property) {
         if(!this.state.student) {
-            return ""
+            return 
         }
         return this.state.student[property]
     }
 
-    renderForm(){
-        
-    }
     render() {
         return (
             <div>
                 <form onSubmit={(e) => {this.onSubmit(e)}}>
                     <div className="form-group  my-4">
                         <label htmlFor="studentId">Student Id</label>
-                        <input type="text" className="form-control" name="studentId" id="studentId" aria-describedby="studentId" placeholder="Student Id" value={this.onCreateForm("studentId")} onChange={(e) => this.onIdChange(e)}  />
+                        <input type="text" className="form-control" name="studentId" id="studentId" aria-describedby="studentId" placeholder="Student Id" value={this.state.studentId} onChange={(e) => this.onIdChange(e)}  />
                     </div>
                     <div className="form-group  my-4">
                         <label htmlFor="studentName">Student Name</label>
-                        <input type="text" className="form-control" name="studentName" id="studentName" aria-describedby="studentName" placeholder="Student Name" value={this.onCreateForm("studentName")} onChange={(e) => this.onNameChange(e)}  />
+                        <input type="text" className="form-control" name="studentName" id="studentName" aria-describedby="studentName" placeholder="Student Name" value={this.state.studentName} onChange={(e) => this.onNameChange(e)}  />
                     </div>
                     <div className="form-group  my-4">
                         <label htmlFor="degree">Degree</label>
-                        <select className="form-control form-control" name="degree" value={this.onCreateForm("degreeId")} onChange={(e) => this.onDegreeChange(e)}>
+                        <select className="form-control form-control" name="degree" value={this.state.degreeId} onChange={(e) => this.onDegreeChange(e)}>
+                        <option>Select a degree</option>
                         {this.state.options}
                         </select>
                     </div>
                     <div className="form-group  my-4">
                         <label htmlFor="studentEmail">Student Email</label>
-                        <input type="email" className="form-control" name="studentEmail" id="studentEmail" aria-describedby="studentEmail" placeholder="Student Email" value={this.onCreateForm("studentEmail")} onChange={(e) => this.onEmailChange(e)}  />
+                        <input type="email" className="form-control" name="studentEmail" id="studentEmail" aria-describedby="studentEmail" placeholder="Student Email" value={this.state.studentEmail} onChange={(e) => this.onEmailChange(e)}  />
                     </div>
                     <div className="form-group  my-4">
                         <label htmlFor="studentCreditPoints">Credit Points</label>
-                        <input type="number" className="form-control" name="studentCreditPoints" id="studentCreditPoints" aria-describedby="studentCreditPoints" max="288" placeholder="Credit Points" value={this.onCreateForm("studentCreditPoints")} onChange={(e) => this.onCreditChange(e)}  />
+                        <input type="number" className="form-control" name="studentCreditPoints" id="studentCreditPoints" aria-describedby="studentCreditPoints" max="288" placeholder="Credit Points" value={this.state.studentCreditPoints} onChange={(e) => this.onCreditChange(e)}  />
                     </div>
                     <div className="form-group  my-4">
                         <label htmlFor="password">Password</label>

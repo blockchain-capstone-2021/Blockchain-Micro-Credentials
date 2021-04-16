@@ -38,6 +38,34 @@ const createStudent = async (req, res, next) => {
     next()
 };
 
+const updateStudent = async (req, res, next) => {
+    await models.Student.findAll({where: {studentId:req.params.id}}).then(async student => {
+        const newStudent = {
+            studentId: !req.body.studentId ? student.studentId : req.body.studentId,
+            degreeId: !req.body.degreeId ? student.degreeId : req.body.degreeId,
+            studentName: !req.body.studentName ? student.studentName : req.body.studentName,
+            studentEmail: !req.body.studentEmail ? student.studentEmail : req.body.studentEmail,
+            studentCreditPoints: !req.body.studentCreditPoints ? student.studentCreditPoints : req.body.studentCreditPoints,
+            passwordHash: !req.body.passwordHash ? student.passwordHash : req.body.passwordHash
+        }
+
+        await models.Student.update(newStudent, {where: {studentId: req.body.studentId}}).then(updatedStudent => {
+            res.locals['response'] = {
+                success: 'true',
+                message: 'Student updated successfully',
+                updatedStudent,
+            }
+        }).catch(err => {
+            res.locals['response'] = {
+                success: 'false',
+                message:err,
+            }
+        })
+        next()
+        })
+
+    };
+
 const getStudents = async (req, res, next) => {
     await models.Student.findAll().then( students => {
         res.locals.students = students
@@ -76,5 +104,6 @@ module.exports = {
     getStudents,
     getStudent,
     updateCreditPoints,
-    getStudentEnrolments
+    getStudentEnrolments,
+    updateStudent
 }

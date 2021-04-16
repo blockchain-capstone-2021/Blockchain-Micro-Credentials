@@ -31,7 +31,7 @@ class StudentCreate extends Component {
             render.unshift(<option defaultValue="" disabled hidden>Select a Degree</option>)
             return Promise.all(render).then(() => {
                 this.setState({data: render})
-                this.setState({form : <StudentForm type="CREATE" options={render} />})
+                this.setState({form : <StudentForm type="CREATE" options={render} history={this.props.history} />})
             })
         }
     }
@@ -60,21 +60,6 @@ class StudentCreate extends Component {
         this.setState({password: e.target.value })
 
     }
-
-    async onSubmit(e) {
-        e.preventDefault();
-        await api.post('/student/create', {
-            studentId: this.state.studentId,
-            studentName: this.state.studentName,
-            degreeId: this.state.degreeId,
-            studentEmail: this.state.studentEmail,
-            studentCreditPoints: this.state.credit,
-            passwordHash: this.state.password
-        })
-        this.props.history.push('/students')
-    }
-
-
      
     render() {
         return (
