@@ -1,6 +1,6 @@
 async function getCurrentSemester(){
     let date = new Date()
-    let semOfEnrol = `Y${date.getFullYear}S`
+    let semOfEnrol = `Y${date.getFullYear()}S`
     let month = date.getMonth()
     let semester
     if(month < 7){
@@ -8,8 +8,8 @@ async function getCurrentSemester(){
     }else{
         semester = '2'
     }
-    semOfEnrol.concat(semester)
-
+    semOfEnrol += semester
+ 
     return semOfEnrol
 }
 
