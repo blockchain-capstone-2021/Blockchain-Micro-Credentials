@@ -56,7 +56,7 @@ async function addHashToContractWithOutTracker(contractJson, contractAddress, ha
 
     console.log("printing the array length before mod: "+preLength);
 
-    await addHashWithoutTracker(contract, contractAddress, hash, printLatestIndex);
+    await addHashWithoutTracker(contract, contractAddress, hash, printNewLength);
 }
 
 //Returning a promise
@@ -146,6 +146,26 @@ async function getIndex (contract, trackerContract, trackerContractAddress, key,
     callback(returnIndex, contract, trackerContract, trackerContractAddress, key, printLatestIndex);
 }
 
+//Returning a promise
+async function getHashIndex (trackerContractJson, trackerContractAddress, key)
+{
+    let trackerContract = new web3.eth.Contract(trackerContractJson.abi, trackerContractAddress);
+
+    const index = await trackerContract.methods.returnIndex(key).call();
+
+    return index;
+}
+
+//Returning a promise
+async function getLatestIndex (contractJson, contractAddress)
+{
+    let contract = new web3.eth.Contract(contractJson.abi,  contractAddress);
+
+    const returnIndex = await contract.methods.getLastIndex().call();
+
+    return returnIndex
+}
+
 async function addTracker(returnIndex, contract, trackerContract, trackerContractAddress, key, callback)
 {
     const trackerData = trackerContract.methods.addTracker(key, returnIndex).encodeABI();
@@ -172,7 +192,7 @@ async function addTracker(returnIndex, contract, trackerContract, trackerContrac
     })
 }
 
-async function printLatestIndex(contract)
+async function printNewLength(contract)
 {
     const postLength = await contract.methods.getLength().call();
 
@@ -199,5 +219,7 @@ module.exports = {
     addHashToContractWithTracker,
     addHashToContractWithOutTracker,
     getHashFromContract,
-    checkExists
+    checkExists,
+    getHashIndex,
+    getLatestIndex
 }
