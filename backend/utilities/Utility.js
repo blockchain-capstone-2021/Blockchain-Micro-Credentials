@@ -9,7 +9,7 @@ async function getCurrentSemester(){
         semester = '2'
     }
     semOfEnrol += semester
- 
+    
     return semOfEnrol
 }
 

@@ -11,7 +11,6 @@ const blockchain = require('../middleware/blockchain')
 const utility = require('../utilities/Utility')
 const Unit_Key = require('../object_models/blockchain/Unit_Key')
 
-
 const getEnrolmentsByStudent = async (req, res, next)=>{
     let currentSemester
     await utility.getCurrentSemester().then(_currentSemester => {
@@ -52,7 +51,44 @@ const getEnrolmentsByStudent = async (req, res, next)=>{
 
 const getEnrolmentsByUnit = async (req, res, next)=>{
 
-    
+    let availableStudents = []
+    let unavailableStudents = []
+    let studentScoreMap = new Map()
+
+    await utility.getCurrentSemester().then(async (_currentSemester) => {
+        await dbEnrolmentController.getEnrolmentsByUnit(req.params.unitId, _currentSemester).then(async (enrolments) => {
+            for (const enrolment of enrolments){
+                let enrolKey = new Unit_Key(enrolment.studentId, enrolment.unitId, _currentSemester)
+                let serialisedKey = JSON.stringify(enrolKey)
+                await blockchain.checkExists(unitTrackerContract, process.env.UNIT_TRACKER_ADDRESS, serialisedKey).then(async (exists) => {
+                    if (!exists)
+                    {
+                        await dbStudentController.getStudent(enrolment.studentId).then(student => {
+                            availableStudents.push(student)
+                        });
+                    }
+                    else
+                    {
+                        await dbStudentController.getStudent(enrolment.studentId).then(async (student) => {
+                            unavailableStudents.push(student)  
+                            await blockchain.getHashFromContract(unitContract, unitTrackerContract, process.env.UNIT_ADDRESS,
+                                process.env.UNIT_TRACKER_ADDRESS, serialisedKey).then(async (hash) => {
+                                    await ipfs.ipfsGetData(hash).then(data =>{
+                                        let deserialisedUnit = JSON.parse(data)
+                                        studentScoreMap[student.studentId] = deserialisedUnit._finalResult
+                                    });
+                                });
+                        });
+                    }
+                });
+            }
+            res.locals.availableStudents = availableStudents;
+            res.locals.unavailableStudents = unavailableStudents;
+            res.locals.studentScoreMap = studentScoreMap;
+        });
+        
+    });
+
     next();
 }
 
