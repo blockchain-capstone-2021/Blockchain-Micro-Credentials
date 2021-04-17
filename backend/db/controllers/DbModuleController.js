@@ -17,7 +17,7 @@ async function getModulesByUnit (_unitId)
 {
     let _modules;
 
-    await models.Question.findAll({
+    await models.Module.findAll({
         where: {
           unitId: _unitId
         }
