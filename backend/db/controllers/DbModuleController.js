@@ -12,6 +12,23 @@ async function getModule(_moduleId)
     return _module;
 }
 
+//return all modules for a given unitId
+async function getModulesByUnit (_unitId) 
+{
+    let _modules;
+
+    await models.Question.findAll({
+        where: {
+          unitId: _unitId
+        }
+      }).then( modules => {
+        _modules = modules;
+    });
+  
+    return _modules;
+}
+
 module.exports = {
-    getModule
+    getModule,
+    getModulesByUnit
 }

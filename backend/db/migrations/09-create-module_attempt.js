@@ -19,7 +19,7 @@ module.exports = {
           }
       },
       moduleId: {
-          type: Sequelize.DataTypes.STRING,
+          type: Sequelize.DataTypes.INTEGER,
           allowNull: false,
           references: {
             model: {
