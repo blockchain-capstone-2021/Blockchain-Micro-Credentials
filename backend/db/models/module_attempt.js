@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     attemptNo: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'module_attempt'
+    modelName: 'Module_Attempt'
   });
   return Module_Attempt;
 };
