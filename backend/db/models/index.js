@@ -14,6 +14,7 @@ const moduleModel = require('./module')
 const staffModel = require('./staff')
 const studentModel = require('./student')
 const unitModel = require('./unit')
+const module_attempt = require('./module_attempt')
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
@@ -34,9 +35,9 @@ const models = {
   Enrolment: enrolmentModel(sequelize, Sequelize.DataTypes),
   Module: moduleModel(sequelize, Sequelize.DataTypes),
   Question: questionModel(sequelize, Sequelize.DataTypes),
-  Answer: answerModel(sequelize, Sequelize.DataTypes)
+  Answer: answerModel(sequelize, Sequelize.DataTypes),
+  Module_Attempt: module_attempt(sequelize, Sequelize.DataTypes)
 }
-
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
