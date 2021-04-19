@@ -143,7 +143,7 @@ async function getIndex (contract, trackerContract, trackerContractAddress, key,
 
     console.log("printing the array index: "+returnIndex);
 
-    callback(returnIndex, contract, trackerContract, trackerContractAddress, key, printLatestIndex);
+    callback(returnIndex, contract, trackerContract, trackerContractAddress, key, printNewLength);
 }
 
 //Returning a promise
