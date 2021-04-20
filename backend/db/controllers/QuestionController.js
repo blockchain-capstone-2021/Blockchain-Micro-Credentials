@@ -29,14 +29,22 @@ const createQuestion = async (req, res, next) => {
 };
 
 const getQuestions = async (req, res, next) => {
-    await models.Question.findAll().then( questions => {
+    await models.Question.findAll({where: {moduleId :parseInt(req.params.moduleId)},limit: 10}).then(questions => {
         res.locals.questions = questions
     });
-    console.log(res.locals.questions);
+    next();
+}
+
+const getAnswers = async (req, res, next) => {
+    await models.Answer.findAll({where: {questionId :req.params.questionId}}).then(answers => {
+        res.locals.answers = answers
+        
+    });
     next();
 }
 
 module.exports = {
     createQuestion,
-    getQuestions
+    getQuestions,
+    getAnswers
 }
