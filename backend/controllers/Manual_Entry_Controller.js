@@ -19,7 +19,7 @@ const Unit_Data = require('../object_models/ipfs/Unit')
 
 const submitManualEntry = async (req, res, next)=>{
 
-    await utility.getCurrentSemester().then(currentSemester => {
+    await utility.getCurrentSemester().then(async (currentSemester) => {
         await submitScore(currentSemester, req.params.studentId, req.params.unitId, req.params.finalResult)
     })
     next();
