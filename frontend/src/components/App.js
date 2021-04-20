@@ -12,21 +12,13 @@ import StudentDashboard from './dashboards/StudentDashboard'
 import "../style.css";
 import StudentList from "./Staff/StudentList";
 import StudentDetail from "./Staff/StudentDetail";
-import StudentCreate from "./Staff/StudentCreate";
+import StudentCreate from "./Staff/StudentCreate"
 
-function setToken(userToken) {
-  sessionStorage.setItem('token', JSON.stringify(userToken));
-}
-
-function getToken() {
-  const tokenString = sessionStorage.getItem('token');
-  const userToken = JSON.parse(tokenString);
-  return userToken?.token
-}
+import useToken from './useToken';
 
 const App = () => {
 
-  const token = getToken();
+  const { token, setToken } = useToken();
 
   if(!token) {
     return <Login setToken={setToken} />
