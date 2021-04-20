@@ -14,8 +14,23 @@ import StudentList from "./Staff/StudentList";
 import StudentDetail from "./Staff/StudentDetail";
 import StudentCreate from "./Staff/StudentCreate";
 
+function setToken(userToken) {
+  sessionStorage.setItem('token', JSON.stringify(userToken));
+}
+
+function getToken() {
+  const tokenString = sessionStorage.getItem('token');
+  const userToken = JSON.parse(tokenString);
+  return userToken?.token
+}
+
 const App = () => {
 
+  const token = getToken();
+
+  if(!token) {
+    return <Login setToken={setToken} />
+  }
 
   window.localStorage.setItem('studentId', 's3710669');
   window.localStorage.setItem('staffId', 'e1234567');
@@ -37,7 +52,7 @@ const App = () => {
           <Route path="/home" component={Home} />
           <Route path="/dashboard/student" component={StudentDashboard} />
           <Route path="/dashboard/staff" component={StaffDashboard} />
-          <Route exact path="/" component={Login} />
+          <Route exact path="/" component={Home} />
         </Switch>
         {/* <Footer /> */}
       </BrowserRouter>

@@ -26,6 +26,11 @@ app.use('/student', studentsRouter)
 app.use('/unit', unitsRouter)
 app.use('/degree', degreesRouter)
 
+app.use('/login', (req, res) => {
+  res.send({
+    token: 'test123'
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
