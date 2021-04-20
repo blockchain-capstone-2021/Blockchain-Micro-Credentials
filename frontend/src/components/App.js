@@ -24,7 +24,7 @@ const App = () => {
     return <Login setToken={setToken} />
   }
 
-  window.localStorage.setItem('studentId', 's3710669');
+  // window.localStorage.setItem('studentId', 's3710669');
   window.localStorage.setItem('staffId', 'e1234567');
 
   function getDate(){
@@ -44,7 +44,7 @@ const App = () => {
           <Route path="/home" component={Home} />
           <Route path="/dashboard/student" component={StudentDashboard} />
           <Route path="/dashboard/staff" component={StaffDashboard} />
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={StudentDashboard} />
         </Switch>
         {/* <Footer /> */}
       </BrowserRouter>

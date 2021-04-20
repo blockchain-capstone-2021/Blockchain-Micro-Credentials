@@ -22,6 +22,8 @@ const Login = ({ setToken }) => {
           username,
           password
         });
+        window.localStorage.setItem('studentId', username);
+        window.localStorage.setItem('loggenIn', true);
         setToken(token);
     }
 
@@ -31,7 +33,7 @@ const Login = ({ setToken }) => {
             <h1 className="text-center">Login</h1>
             <form onSubmit={handleSubmit}>
                 <div className="row mb-3">
-                    <label htmlFor="inputID" className="col-sm-2 col-form-label">ID</label>
+                    <label htmlFor="inputID" className="col-sm-2 col-form-label">Username (ID)</label>
                     <div className="col-sm-10">
                     <input type="text" className="form-control" id="inputID" onChange={e => setUserName(e.target.value)}/>
                     </div>
