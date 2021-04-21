@@ -1,5 +1,5 @@
 const express = require('express')
-const { createQuestion, getQuestions } = require('../db/controllers/DbQuestionController')
+const { createQuestion, getQuestions } = require('../controllers/Question_Controller')
 var router = express.Router()
 
 

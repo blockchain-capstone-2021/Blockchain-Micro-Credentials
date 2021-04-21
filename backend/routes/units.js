@@ -1,8 +1,9 @@
 const express = require('express')
-const { getUnit, getUnits, getModules } = require('../db/controllers/UnitController')
+const { getUnitsByStaff } = require('../controllers/Unit_Controller')
+const { getEnrolmentsByUnit } = require('../controllers/Enrolment_Controller')
 var router = express.Router()
 
-router.get('/', getUnits, async function (req, res, next) {
+router.get('/:staffId', getUnitsByStaff, async function (req, res, next) {
     if(res.locals.units) {
         return res.status(200).send({
             success: 'true',
@@ -15,29 +16,17 @@ router.get('/', getUnits, async function (req, res, next) {
     })
 })
 
-router.get('/:id', getUnit, async function (req, res, next) {
-    if(res.locals.unit) {
+router.get('/:unitId/enrolled', getEnrolmentsByUnit, async function (req, res, next) {
+    if(res.locals.availableStudents) {
         return res.status(200).send({
             success: 'true',
-            unit: res.locals.unit
+            students: {available: res.locals.availableStudents, unavailable: res.locals.unavailableStudents},
+            scores: res.locals.studentScoreMap 
         })
     }
     return res.status(400).send({
         success: 'false',
-        message: 'Unit does not exist.'
-    })
-})
-
-router.get('/:id/modules', getModules, async function (req, res, next) {
-    if(res.locals.modules) {
-        return res.status(200).send({
-            success: 'true',
-            modules: res.locals.modules
-        })
-    }
-    return res.status(400).send({
-        success: 'false',
-        message: 'Module does not exist.'
+        message: 'No students enrolled.'
     })
 })
 

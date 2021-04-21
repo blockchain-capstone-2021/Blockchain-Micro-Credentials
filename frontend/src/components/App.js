@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import Header from "./templates/Header";
@@ -10,6 +10,9 @@ import StaffDashboard from './dashboards/StaffDashboard'
 import StudentDashboard from './dashboards/StudentDashboard'
 
 import "../style.css";
+import CourseList from "./courses/CourseList";
+import CourseDetail from "./courses/CourseDetail";
+import FinalMarkForm from './courses/FinalMarkForm'
 import StudentList from "./Staff/StudentList";
 import StudentDetail from "./Staff/StudentDetail";
 import StudentCreate from "./Staff/StudentCreate"
@@ -17,6 +20,12 @@ import StudentCreate from "./Staff/StudentCreate"
 import useToken from './useToken';
 
 const App = () => {
+
+  const [userId, setUserId] = useState()
+
+  useEffect(() => {
+    setUserId(window.localStorage.getItem('userId'))
+  }, [])
 
   const { token, setToken } = useToken();
 
@@ -33,12 +42,16 @@ const App = () => {
       <BrowserRouter>
         <Header />
         <Switch>
+          <Route path="/courses/staff/:staffId" component={CourseList} />
+          <Route path="/staffhome" component={StaffDashboard} />
+          <Route path="/courses/:courseId/final/:studentId" component={FinalMarkForm} />
+          <Route path="/courses/:courseId" component={CourseDetail} />
+          <Route path="/module/:moduleId" component={() => {return <Module moduleId={2} />}} />
           <Route path="/unit/:unitId" component={Unit} />
           <Route path="/student/create" component={StudentCreate} />
           <Route path="/student/:studentId" component={StudentDetail} />
           <Route path="/students" component={() => <StudentList key={getDate()} />} />
           <Route path="/module/:moduleId" component={Module} />
-          <Route path="/home" component={Home} />
           <Route path="/dashboard/student" component={StudentDashboard} />
           <Route path="/dashboard/staff" component={StaffDashboard} />
           

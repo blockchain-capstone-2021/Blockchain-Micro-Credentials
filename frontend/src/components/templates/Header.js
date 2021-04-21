@@ -31,7 +31,7 @@ function logout() {
 const Header = () => {
   
     //create initial menuCollapse state using useState hook
-    const [menuCollapse, setMenuCollapse] = useState(false)
+    const [menuCollapse, setMenuCollapse] = useState(true)
 
     // create account type state to show appropriate content
     const [isStaff, setStaff] = useState(true)
@@ -42,6 +42,8 @@ const Header = () => {
     menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
   };
 
+
+
   const renderStaffMenu = () => {
     if(isStaff) {
       return (
@@ -49,7 +51,7 @@ const Header = () => {
         <MenuItem active={true} icon={<FiHome />}>
           Home<Link to='/'/>
         </MenuItem>
-        <MenuItem icon={<FiBook />}>Courses</MenuItem>
+        <MenuItem icon={<FiBook />}><Link to={`/courses/staff/${window.localStorage.getItem('staffId')}`}>Courses</Link></MenuItem>
         <MenuItem icon={<FaUsers />}>Profile</MenuItem>
         <MenuItem icon={<BiCog />}>Settings</MenuItem>
       </Menu>

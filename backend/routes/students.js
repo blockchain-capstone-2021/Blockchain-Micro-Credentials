@@ -1,86 +1,37 @@
 const express = require('express')
-const { createStudent, getStudents, getStudent, updateStudent, getStudentEnrolments,deleteStudent } = require('../db/controllers/StudentController')
+const { getEnrolmentsByStudent } = require('../controllers/Enrolment_Controller')
+const { getStudent } = require('../db/controllers/DbStudentController')
+
 var router = express.Router()
 
-router.get('/', getStudents, async function (req, res, next) {
-    if(res.locals.students) {
-        return res.status(200).send({
-            success: 'true',
-            students: res.locals.students
+router.get('/:studentId', async function (req, res, next) {
+        await getStudent(req.params.studentId).then(student => {
+        if(student) {
+            return res.status(200).send({
+                success: 'true',
+                student
+                })
+            }
+            
+        return res.status(400).send({
+            success: 'false',
+            message: 'Student not found'
+            })
         })
-    }
-    return res.status(400).send({
-        success: 'false',
-        message: 'No students found.'
     })
-})
 
-router.get('/:id', getStudent, async function (req, res, next) {
-    if(res.locals.student) {
-        return res.status(200).send({
-            success: 'true',
-            student: res.locals.student
+    router.get('/:studentId/enrolled', getEnrolmentsByStudent, async function (req, res, next) {
+        if(res.locals) {
+            return res.status(200).send({
+                success: 'true',
+                enrolments: {available: res.locals.availableEnrolments, unavailable: res.locals.unavailableEnrolments},
+                unitMap: res.locals.unitMap 
+            })
+        }
+        return res.status(400).send({
+            success: 'false',
+            message: 'No students enrolled.'
         })
-    }
-    return res.status(400).send({
-        success: 'false',
-        message: 'Student does not exist.'
     })
-})
-
-router.get('/:id/enrolments', getStudentEnrolments, async function (req, res, next) {
-    if(res.locals.enrolments) {
-        return res.status(200).send({
-            success: 'true',
-            enrolments: res.locals.enrolments
-        })
-    }
-    return res.status(400).send({
-        success: 'false',
-        message: 'Enrolments for the student does not exist.'
-    })
-})
-
-router.post('/create', createStudent ,async function (req, res, next) {
-    if(res.locals.response.success) {
-        return res.status(201).send({
-            success: res.locals.response.success,
-            message: res.locals.response.message,
-            student: res.locals.response.student,
-        })
-    }
-    return res.status(400).send({
-        success: 'false',
-        message: 'Student data is missing.'
-    })
-});
-
-router.post('/:id/edit', updateStudent, async function (req, res, next) {
-    if(res.locals.response.success) {
-        return res.status(201).send({
-            success: res.locals.response.success,
-            message: res.locals.response.message,
-            student: res.locals.response.student,
-        })
-    }
-    return res.status(400).send({
-        success: 'false',
-        message: 'Student data is missing.'
-    })
-})
-
-router.post('/:id/delete', deleteStudent, async function (req,res,next) {
-    if(res.locals.response.success) {
-        return res.status(200).send({
-            success: res.locals.response.success,
-            message: res.locals.response.message
-        })
-    }
-    return res.status(400).send({
-        success: 'false',
-        message: 'Student was not deleted.'
-    })
-})
-
 
 module.exports = router;
