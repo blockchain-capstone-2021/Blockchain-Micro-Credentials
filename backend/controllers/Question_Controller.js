@@ -6,6 +6,7 @@ const getQuestions = async (req, res, next)=>{
     let module = await dbModuleController.getModule(req.params.moduleId)
     res.locals.questions =  await dbQuestionController.getQuestions(req.params.moduleId, module.noOfQuestions)
     res.locals.answersMap = await getAnswers(questions)
+    next();
 }
 
 async function getAnswers(questions)
