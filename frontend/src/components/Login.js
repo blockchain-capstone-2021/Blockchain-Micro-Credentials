@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types';
+import"./Login.css";
 
 async function loginUser(credentials) {
     return fetch('http://localhost:3001/login', {
@@ -23,11 +24,11 @@ const Login = ({ setToken }) => {
           password
         });
         window.localStorage.setItem('studentId', username);
-        window.localStorage.setItem('loggenIn', true);
         setToken(token);
     }
 
     return (
+        <div class="jumbotron vertical-center">
         <div className="vertical-center">
             <div className="container w-50">
             <h1 className="text-center">Login</h1>
@@ -46,6 +47,7 @@ const Login = ({ setToken }) => {
                 </div>
                 <button type="submit" className="btn btn-primary">Sign in</button>
             </form>
+        </div>
         </div>
         </div>
     )

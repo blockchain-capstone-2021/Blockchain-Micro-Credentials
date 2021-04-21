@@ -23,6 +23,10 @@ import "react-pro-sidebar/dist/css/styles.css";
 import "./Header.css";
 import { Link } from "react-router-dom";
 
+function logout() {
+  localStorage.clear();
+  window.location.reload();
+ }
 
 const Header = () => {
   
@@ -86,7 +90,7 @@ const Header = () => {
           </SidebarContent>
           <SidebarFooter>
             <Menu iconShape="square">
-              <MenuItem icon={<FiLogOut />}>Logout</MenuItem>
+              <MenuItem icon={<FiLogOut />} onClick={logout}>Logout</MenuItem>
             </Menu>
           </SidebarFooter>
         </ProSidebar>

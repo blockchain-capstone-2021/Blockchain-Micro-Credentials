@@ -25,7 +25,7 @@ const App = () => {
   }
 
   // window.localStorage.setItem('studentId', 's3710669');
-  window.localStorage.setItem('staffId', 'e1234567');
+  // window.localStorage.setItem('staffId', 'e1234567');
 
   function getDate(){
     return Date.now().toString()
@@ -44,7 +44,9 @@ const App = () => {
           <Route path="/home" component={Home} />
           <Route path="/dashboard/student" component={StudentDashboard} />
           <Route path="/dashboard/staff" component={StaffDashboard} />
+          
           <Route exact path="/" component={StudentDashboard} />
+
         </Switch>
       </BrowserRouter>
     </div>
