@@ -1,17 +1,32 @@
 const express = require('express')
-const {storeData, retrieveData} = require('../middleware/ipfs')
+const { submitManualEntry } = require('../controllers/Manual_Entry_Controller')
 var router = express.Router()
 
-router.get('/get/', async function (req, res, next) {
-    const {fileUrl} = req.query;
-    const data = retrieveData(fileUrl)
-    res.status(200).send({"data": data})
+
+router.post('/submitFinalMark/:studentId/:unitId/:finalResult', submitManualEntry, async function (req,res,next) {
+    if(res.locals.success) {
+        return res.status(200).send({
+            success: res.locals.success
+        })
+    }
+    return res.status(400).send({
+        message: "That did not work. Try again."
+    })
 })
 
-router.post('/', async function (req, res, next) {
-    data = {name: req.body.name, age: req.body.age}
-    const url = storeData(data);
-    res.status(200).send({"url": url})
-})
+
+// router.post('/create', createQuestion ,async function (req, res, next) {
+//     if(res.locals.response.success) {
+//         return res.status(201).send({
+//             success: res.locals.response.success,
+//             message: res.locals.response.message,
+//             question: res.locals.response.question,
+//         })
+//     }
+//     return res.status(400).send({
+//         success: 'false',
+//         message: 'ModuleId or data for question is missing.'
+//     })
+// })
 
 module.exports = router;

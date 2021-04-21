@@ -9,14 +9,13 @@ const CourseDetail = (props) => {
     const [unavailableStudents, setUnavailableStudents] = useState([])
 
     useEffect(() => {
-        setcourse(props.match.params.courseId)
         async function getEnrolledStudents() {
-                const response = await microcredapi.get(`/unit/${course}/enrolled`)
+                const response = await microcredapi.get(`/unit/${props.match.params.courseId}/enrolled`)
                 setAvailableStudents(response.data.students.available)
                 setUnavailableStudents(response.data.students.unavailable)
             }
             getEnrolledStudents()
-    }, [course])
+    }, [])
 
     function renderStudents(students, type) {
         return students.map(student => {

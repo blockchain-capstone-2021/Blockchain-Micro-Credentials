@@ -17,7 +17,7 @@ router.get('/:staffId', getUnitsByStaff, async function (req, res, next) {
 })
 
 router.get('/:unitId/enrolled', getEnrolmentsByUnit, async function (req, res, next) {
-    if(res.locals.availableStudents) {
+    if(res.locals.success) {
         return res.status(200).send({
             success: 'true',
             students: {available: res.locals.availableStudents, unavailable: res.locals.unavailableStudents},
