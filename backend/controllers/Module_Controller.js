@@ -1,5 +1,5 @@
 require('dotenv').config({
-  path: ('../.env_address'),
+  path: ('../.env'),
   debug: process.env.DEBUG
 })
 const dbModuleController = require('../db/controllers/DbModuleController')
