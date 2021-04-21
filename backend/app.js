@@ -6,8 +6,9 @@ const cors = require('cors');
 
 const marksRouter = require('./routes/marks')
 const questionsRouter = require('./routes/questions')
-const unitsRouter = require('./routes/units')
 const studentsRouter = require('./routes/students')
+const unitsRouter = require('./routes/units')
+const degreesRouter = require('./routes/degrees')
 const app = express();
 
 // Module dependencies for express
@@ -21,8 +22,15 @@ app.use(cors());
 
 app.use('/marks', marksRouter);
 app.use('/questions', questionsRouter);
-app.use('/units', unitsRouter)
-app.use('/students', studentsRouter)
+app.use('/student', studentsRouter)
+app.use('/unit', unitsRouter)
+app.use('/degree', degreesRouter)
+
+app.use('/login', (req, res) => {
+  res.send({
+    token: 'test123'
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

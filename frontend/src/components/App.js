@@ -5,29 +5,41 @@ import Header from "./templates/Header";
 import Module from "./modules/Module"
 import Login from "./Login";
 import Home from './Home'
+import Unit from './units/Unit'
+import StaffDashboard from './dashboards/StaffDashboard'
+import StudentDashboard from './dashboards/StudentDashboard'
 
 import "../style.css";
 import CourseList from "./courses/CourseList";
 import CourseDetail from "./courses/CourseDetail";
 import StaffDashboard from "../Dashboards/StaffDashboard";
 import FinalMarkForm from './courses/FinalMarkForm'
+import StudentList from "./Staff/StudentList";
+import StudentDetail from "./Staff/StudentDetail";
+import StudentCreate from "./Staff/StudentCreate"
+
+import useToken from './useToken';
 
 const App = () => {
 
-
-  const [studentId, setStudentId] = useState()
-  const [staffId, setStaffId] = useState()
+  const [userId, setUserId] = useState()
 
   useEffect(() => {
-    setStudentId('s3710669')
-    setStaffId('e1234567')
-    window.localStorage.setItem('studentId', 's3710669');
-    window.localStorage.setItem('staffId', 'e1234567');
+    setUserId(window.localStorage.getItem('userId'))
   }, [])
+
+  const { token, setToken } = useToken();
+
+  if(!token) {
+    return <Login setToken={setToken} />
+  }
+
+  function getDate(){
+    return Date.now().toString()
+  };
 
   return (
     <div>
-      
       <BrowserRouter>
         <Header />
         <Switch>
@@ -36,8 +48,16 @@ const App = () => {
           <Route path="/courses/:courseId/final/:studentId" component={FinalMarkForm} />
           <Route path="/courses/:courseId" component={CourseDetail} />
           <Route path="/module/:moduleId" component={() => {return <Module moduleId={2} />}} />
-          <Route path="/home" component={Home} />
-          <Route exact path="/" component={Login} />
+          <Route path="/unit/:unitId" component={Unit} />
+          <Route path="/student/create" component={StudentCreate} />
+          <Route path="/student/:studentId" component={StudentDetail} />
+          <Route path="/students" component={() => <StudentList key={getDate()} />} />
+          <Route path="/module/:moduleId" component={Module} />
+          <Route path="/dashboard/student" component={StudentDashboard} />
+          <Route path="/dashboard/staff" component={StaffDashboard} />
+          
+          <Route exact path="/" component={window.localStorage.getItem('isStaff') ? StaffDashboard : StudentDashboard} />
+
         </Switch>
       </BrowserRouter>
     </div>
