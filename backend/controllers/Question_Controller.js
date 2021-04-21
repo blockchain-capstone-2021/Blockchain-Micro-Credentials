@@ -3,17 +3,19 @@ const dbModuleController = require('../db/controllers/DbModuleController')
 const dbAnswerController = require('../db/controllers/DbAnswerController')
 
 const getQuestions = async (req, res, next)=>{
-    await dbModuleController.getModule(req.params.moduleId).then(async (module) => {
+    try{
+        let module = await dbModuleController.getModule(req.params.moduleId)
+        res.locals.questions =  await dbQuestionController.getQuestions(req.params.moduleId, module.noOfQuestions)
+        res.locals.answersMap = await getAnswers(questions)
 
-        await dbQuestionController.getQuestions(req.params.moduleId, module.noOfQuestions).then(async (questions) => {
-            res.locals.questions = questions
-
-            await getAnswers(questions).then(map =>{
-                res.locals.answersMap = map
-            });
-        });
-
-    });
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
 }
 
 async function getAnswers(questions)
@@ -21,9 +23,7 @@ async function getAnswers(questions)
     let answersMap = new Map()
 
     for (const question of questions){
-        await dbAnswerController.getAnswers(question.questionId).then(answers=>{
-            answersMap[question.questionId] = answers 
-        });
+        answersMap[question.questionId] = await dbAnswerController.getAnswers(question.questionId)
     } 
 
     return answersMap;

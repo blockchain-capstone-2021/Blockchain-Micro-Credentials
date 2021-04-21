@@ -8,7 +8,7 @@ const FinalMarkForm = (props) => {
 
     useEffect(() => {
         async function getStudent() {
-            const response = await microcredapi.get(`/students/${props.match.params.studentId}`).then(response => response.data.student)
+            const response = await microcredapi.get(`/student/${props.match.params.studentId}`).then(response => response.data.student)
             setStudent(response)
         }
         getStudent()

@@ -51,7 +51,7 @@ const Header = () => {
         <MenuItem active={true} icon={<FiHome />}>
           Home<Link to='/'/>
         </MenuItem>
-        <MenuItem icon={<FiBook />}><Link to={`/courses/staff/${window.localStorage.getItem('staffId')}`}>Courses</Link></MenuItem>
+        <MenuItem icon={<FiBook />}><Link to={`/courses/staff/${window.localStorage.getItem('userId')}`}>Courses</Link></MenuItem>
         <MenuItem icon={<FaUsers />}>Profile</MenuItem>
         <MenuItem icon={<BiCog />}>Settings</MenuItem>
       </Menu>

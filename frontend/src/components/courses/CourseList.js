@@ -8,9 +8,9 @@ const CourseList = (props) => {
     
     useEffect(() => {
             console.log(props);
-        const staffId = window.localStorage.getItem('staffId')
+        const staffId = window.localStorage.getItem('userId')
         async function getCourses() {
-            const response = await microcredapi.get(`/units/${staffId}`)
+            const response = await microcredapi.get(`/unit/${staffId}`)
             setCourses(response.data.units)
             }
             getCourses()

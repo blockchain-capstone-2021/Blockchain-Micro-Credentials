@@ -45,7 +45,8 @@ async function addHashToContractWithTracker(contractJson, trackerContractJson, c
 
     console.log("printing the array length before mod: "+preLength);
 
-    await addHash(contract, trackerContract, contractAddress, trackerContractAddress, hash, key, getIndex);
+    await addHash(contract, trackerContract, contractAddress, trackerContractAddress, hash, key, getIndex); 
+
 }
 
 async function addHashToContractWithOutTracker(contractJson, contractAddress, hash)
@@ -89,7 +90,7 @@ async function addHashWithoutTracker(contract, contractAddress, hash, callback)
 {
     const data = contract.methods.addHash(hash).encodeABI();
 
-    web3.eth.getTransactionCount(web3.eth.defaultAccount, (err, txCount) => {
+    await web3.eth.getTransactionCount(web3.eth.defaultAccount, async (err, txCount) => {
         const txObject = {
             nonce: web3.utils.toHex(txCount),
             gasLimit: web3.utils.toHex(1000000),
@@ -104,18 +105,18 @@ async function addHashWithoutTracker(contract, contractAddress, hash, callback)
         const serializedTx = tx.serialize()
         const raw = '0x' + serializedTx.toString('hex')
 
-        web3.eth.sendSignedTransaction (raw, (err, txHash) => {
+        await web3.eth.sendSignedTransaction (raw, (err, txHash) => {
             console.log('error:', err, 'txHash:', txHash)
-            callback(contract)
         })
     })
+
+    await callback(contract)
 }
 
 async function addHash(contract, trackerContract, contractAddress, trackerContractAddress, hash, key, callback)
 {
     const data = contract.methods.addHash(hash).encodeABI();
-
-    web3.eth.getTransactionCount(web3.eth.defaultAccount, (err, txCount) => {
+    await web3.eth.getTransactionCount(web3.eth.defaultAccount, async (err, txCount) => {
         const txObject = {
             nonce: web3.utils.toHex(txCount),
             gasLimit: web3.utils.toHex(1000000),
@@ -130,11 +131,11 @@ async function addHash(contract, trackerContract, contractAddress, trackerContra
         const serializedTx = tx.serialize()
         const raw = '0x' + serializedTx.toString('hex')
 
-        web3.eth.sendSignedTransaction (raw, (err, txHash) => {
+        await web3.eth.sendSignedTransaction (raw, async (err, txHash) => {
             console.log('error:', err, 'txHash:', txHash)
-            callback(contract, trackerContract, trackerContractAddress, key, addTracker)
         })
     })
+    await callback(contract, trackerContract, trackerContractAddress, key, addTracker)
 }
 
 async function getIndex (contract, trackerContract, trackerContractAddress, key, callback)
@@ -143,7 +144,7 @@ async function getIndex (contract, trackerContract, trackerContractAddress, key,
 
     console.log("printing the array index: "+returnIndex);
 
-    callback(returnIndex, contract, trackerContract, trackerContractAddress, key, printLatestIndex);
+    await callback(returnIndex, contract, trackerContract, trackerContractAddress, key, printNewLength);
 }
 
 //Returning a promise
@@ -169,8 +170,7 @@ async function getLatestIndex (contractJson, contractAddress)
 async function addTracker(returnIndex, contract, trackerContract, trackerContractAddress, key, callback)
 {
     const trackerData = trackerContract.methods.addTracker(key, returnIndex).encodeABI();
-
-    web3.eth.getTransactionCount(web3.eth.defaultAccount, (err, txCount) => {
+    await web3.eth.getTransactionCount(web3.eth.defaultAccount, async (err, txCount) => {
         const txObject = {
             nonce: web3.utils.toHex(txCount),
             gasLimit: web3.utils.toHex(1000000),
@@ -185,11 +185,11 @@ async function addTracker(returnIndex, contract, trackerContract, trackerContrac
         const serializedTx = tx.serialize()
         const raw = '0x' + serializedTx.toString('hex')
 
-        web3.eth.sendSignedTransaction (raw, (err, txHash) => {
+        await web3.eth.sendSignedTransaction (raw, async (err, txHash) => {
             console.log('error:', err, 'txHash:', txHash)
-             callback(contract)
         })
     })
+    await callback(contract)
 }
 
 async function printNewLength(contract)

@@ -6,7 +6,7 @@ const StaffDashboard = (props) => {
 
     const [staffId, setStaffId] = useState()
     useEffect(() => {
-        setStaffId(window.localStorage.getItem('staffId'))
+        setStaffId(window.localStorage.getItem('userId'))
     }, [])
     
     function renderCard(url, cardTitle, cardDescription, path){

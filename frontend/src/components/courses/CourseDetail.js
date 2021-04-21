@@ -11,7 +11,7 @@ const CourseDetail = (props) => {
     useEffect(() => {
         setcourse(props.match.params.courseId)
         async function getEnrolledStudents() {
-                const response = await microcredapi.get(`/units/${course}/enrolled`)
+                const response = await microcredapi.get(`/unit/${course}/enrolled`)
                 setAvailableStudents(response.data.students.available)
                 setUnavailableStudents(response.data.students.unavailable)
             }
