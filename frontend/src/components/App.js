@@ -12,7 +12,6 @@ import StudentDashboard from './dashboards/StudentDashboard'
 import "../style.css";
 import CourseList from "./courses/CourseList";
 import CourseDetail from "./courses/CourseDetail";
-import StaffDashboard from "../Dashboards/StaffDashboard";
 import FinalMarkForm from './courses/FinalMarkForm'
 import StudentList from "./Staff/StudentList";
 import StudentDetail from "./Staff/StudentDetail";
