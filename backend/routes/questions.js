@@ -1,5 +1,5 @@
 const express = require('express')
-const { createQuestion, getQuestions } = require('../db/controllers/QuestionController')
+const { createQuestion, getQuestions } = require('../db/controllers/DbQuestionController')
 var router = express.Router()
 
 
@@ -16,19 +16,19 @@ router.get('/', getQuestions, async function (req, res, next) {
     })
 })
 
-router.post('/create', createQuestion ,async function (req, res, next) {
-    if(res.locals.response.success) {
-        return res.status(201).send({
-            success: res.locals.response.success,
-            message: res.locals.response.message,
-            question: res.locals.response.question,
-        })
-    }
-    return res.status(400).send({
-        success: 'false',
-        message: 'ModuleId or data for question is missing.'
-    })
-})
+// router.post('/create', createQuestion ,async function (req, res, next) {
+//     if(res.locals.response.success) {
+//         return res.status(201).send({
+//             success: res.locals.response.success,
+//             message: res.locals.response.message,
+//             question: res.locals.response.question,
+//         })
+//     }
+//     return res.status(400).send({
+//         success: 'false',
+//         message: 'ModuleId or data for question is missing.'
+//     })
+// })
 
 
 module.exports = router;
