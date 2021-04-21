@@ -25,7 +25,7 @@ const CourseDetail = (props) => {
                 <td>{student.studentName}</td>
                 <td>{student.studentCreditPoints}</td>
                 <td>{type === 'available' ? "Enrolled" : "Completed"}</td>
-                <td>{type === 'available' ? <Link to={`/courses/${course}/final/${student.studentId}`} className="btn btn-primary">Go</Link> : "" }</td>
+                <td>{type === 'available' ? <Link to={`/courses/${props.match.params.courseId}/final/${student.studentId}`} className="btn btn-primary">Go</Link> : "" }</td>
                 </tr>
             )
         })
