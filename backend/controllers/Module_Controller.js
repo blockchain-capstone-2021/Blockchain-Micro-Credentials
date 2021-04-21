@@ -1,5 +1,5 @@
 require('dotenv').config({
-  path: ('../.env_address'),
+  path: ('../.env'),
   debug: process.env.DEBUG
 })
 const dbModuleController = require('../db/controllers/DbModuleController')
@@ -77,11 +77,11 @@ const getModules = async (req, res, next)=>{
 
 const submitModule = async(req, res, next)=>{
     try{
-        let module = await dbModuleController.getModule(req.params.moduleId)
+        let module = await dbModuleController.getModule(parseInt(req.params.moduleId))
         let qAList = req.body.qAPairs
         let moduleNo = module.moduleNo
-        let result = await submitQAPairs(req.params.studentId, req.params.unitId, req.params.enrolmentPeriod, req.params.attemptNo, moduleNo, req.params.moduleId, qAList)
-        await submitAttempt(result.qAIndices, req.params.studentId, req.params.unitId, moduleNo, module.moduleId, req.params.enrolmentPeriod, req.params.attemptNo, result.score)
+        let result = await submitQAPairs(req.params.studentId, req.params.unitId, req.params.enrolmentPeriod, parseInt(req.params.attemptNo), moduleNo, parseInt(req.params.moduleId), qAList)
+        await submitAttempt(result.qAIndices, req.params.studentId, req.params.unitId, moduleNo, module.moduleId, req.params.enrolmentPeriod, parseInt(req.params.attemptNo), result.score)
     
         await dbModule_AttemptController.incrementAttempts(req.params.studentId, module.moduleId)
 
