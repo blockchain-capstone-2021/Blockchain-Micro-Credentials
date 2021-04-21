@@ -14,11 +14,12 @@ const FinalMarkForm = (props) => {
         getStudent()
     }, [])
 
-    function onSubmit(e) {
+    async function onSubmit(e) {
         e.preventDefault();
         console.log(student.studentId, props.match.params.courseId,finalMark);
 
-        // Call to data entry api to submit form
+        const response = await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`)
+        console.log(response);
     }
 
     return (

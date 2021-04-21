@@ -20,7 +20,7 @@ const Unit_Data = require('../object_models/ipfs/Unit')
 const submitManualEntry = async (req, res, next)=>{
     try{
         currentSemester = await utility.getCurrentSemester()
-        await submitScore(currentSemester, req.params.studentId, req.params.unitId, req.params.finalResult)
+        await submitScore(currentSemester, req.params.studentId, req.params.unitId, parseInt(req.params.finalResult))
 
         res.locals.success = true
     }
