@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import Footer from "./Footer";
-import Header from "./Header";
+import Header from "./templates/Header";
 import Module from "./modules/Module"
 import Login from "./Login";
 import Home from './Home'
@@ -40,7 +39,6 @@ const App = () => {
           <Route path="/home" component={Home} />
           <Route exact path="/" component={Login} />
         </Switch>
-        <Footer />
       </BrowserRouter>
     </div>
   );
