@@ -24,7 +24,7 @@ import "./Header.css";
 import { Link } from "react-router-dom";
 
 function logout() {
-  localStorage.clear();
+  window.localStorage.clear();
   window.location.reload();
  }
 
@@ -45,14 +45,14 @@ const Header = () => {
 
 
   const renderStaffMenu = () => {
-    if(isStaff) {
+    if(isStaff === "true") {
       return (
         <Menu iconShape="square">
         <MenuItem active={true} icon={<FiHome />}>
           Home<Link to='/'/>
         </MenuItem>
         <MenuItem icon={<FiBook />}><Link to={`/courses/staff/${window.localStorage.getItem('userId')}`}>Courses</Link></MenuItem>
-        <MenuItem icon={<FaQuestion />}>Questions</MenuItem>
+        <MenuItem icon={<FaQuestion />}><Link to="/questions">Questions</Link></MenuItem>
         <MenuItem icon={<BiCog />}>Settings</MenuItem>
       </Menu>
       )
@@ -62,7 +62,6 @@ const Header = () => {
       <MenuItem active={true} icon={<FiHome />}>
         Home<Link to='/'/>
       </MenuItem>
-      <MenuItem icon={<FiBook />}>Units</MenuItem>
       <MenuItem icon={<FaUsers />}>Profile</MenuItem>
     </Menu>
   )
@@ -76,7 +75,7 @@ const Header = () => {
           <SidebarHeader>
           <div className="logotext">
               {/* small and big change using menucollapse state */}
-              <p>{menuCollapse ? "Logo" : "Microcred"}</p>
+              <p>{menuCollapse ? "MC" : "Microcred"}</p>
             </div>
             <div className="closemenu" onClick={menuIconClick}>
                 {/* changing menu collapse icon on click */}
