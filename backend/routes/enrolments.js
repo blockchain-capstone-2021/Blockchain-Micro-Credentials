@@ -1,5 +1,5 @@
 const express = require('express')
-const { getEnrolmentsByUnit } = require('../controllers/Enrolment_Controller')
+const { getEnrolmentsByUnit, getUnitsByStaff } = require('../controllers/Enrolment_Controller')
 var router = express.Router()
 
 router.get('/courses/:unitId/enrolled', getUnitsByStaff, async function (req, res, next) {
