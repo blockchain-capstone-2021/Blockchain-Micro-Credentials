@@ -9,10 +9,12 @@ const dbQuestionController = require('../db/controllers/DbQuestionController')
 const ipfs = require('../middleware/ipfs')
 const moduleContract = require('../blockchain/build/contracts/Micro_Module.json')
 const moduleTrackerContract = require('../blockchain/build/contracts/Micro_Module_Tracker.json')
+const questionAnswerTrackerContract = require('../blockchain/build/contracts/QA_Tracker.json')
 const questionAnswerContract = require('../blockchain/build/contracts/QA.json')
 const blockchain = require('../middleware/blockchain')
 const utility = require('../utilities/Utility')
 const Module_Key = require('../object_models/blockchain/Module_Key')
+const QA_Key = require('../object_models/blockchain/QA_Key')
 const QA_Data = require('../object_models/ipfs/QA')
 const Module_Data = require('../object_models/ipfs/MicroModule')
 
@@ -79,44 +81,23 @@ const getModules = async (req, res, next)=>{
     next();
 }
 
-// const submitModule = async (req, res, next)=>{
-   
-//     await dbModuleController.getModule(req.params.moduleId).then(async (module)=>{
-//         let moduleNo = module.moduleNo
-//         await submitQAPairs(req.params.studentId, req.params.unitId, req.params.enrolmentPeriod, req.params.attemptNo, 
-//             moduleNo, req.params.qAList).then(async (result) => {
-//             submitAttempt(result.qAIndices, req.params.studentId, req.params.unitId, moduleNo, module.moduleId, 
-//                 req.params.enrolmentPeriod, req.params.attemptNo, result.score).then(async () => {
-//                     await dbModule_AttemptController.incrementAttempts(studentId, module.moduleId)
-//             })
-//         })
-//     })
-//     next();
-// }
+const submitModule = async(req, res, next)=>{
+    let module = await dbModuleController.getModule(req.params.moduleId)
+    let qAList = req.body.qAPairs
+    let moduleNo = module.moduleNo
+    let result = await submitQAPairs(req.params.studentId, req.params.unitId, req.params.enrolmentPeriod, req.params.attemptNo, moduleNo, req.params.moduleId, qAList)
+    await submitAttempt(result.qAIndices, req.params.studentId, req.params.unitId, moduleNo, module.moduleId, req.params.enrolmentPeriod, req.params.attemptNo, result.score)
 
-async function submitModule(moduleId, studentId, unitId, enrolmentPeriod, attemptNo, qAList){
-   
-    await dbModuleController.getModule(moduleId).then(async (module)=>{
-        let moduleNo = module.moduleNo
-        console.log(moduleNo)
-        await submitQAPairs(studentId, unitId, enrolmentPeriod, attemptNo, 
-            moduleNo, qAList).then(async (result) => {
-            console.log(result.qAIndices)
-            console.log(result.score)
-            submitAttempt(result.qAIndices, studentId, unitId, moduleNo, module.moduleId, 
-                enrolmentPeriod, attemptNo, result.score).then(async () => {
-                    await dbModule_AttemptController.incrementAttempts(studentId, module.moduleId).then(() => {console.log("increased by 1")})
-            })
-        })
-    })
+    await dbModule_AttemptController.incrementAttempts(req.params.studentId, module.moduleId)
+
+    next();
 }
 
-async function submitQAPairs(studentId, unitId, currentSemester, attemptNo, moduleNo, qAList)
+async function submitQAPairs(studentId, unitId, currentSemester, attemptNo, moduleNo, moduleId, qAList)
 {
     let score = 0
     let qAIndices = []
 
-    console.log(qAList)
     for(let i = 0; i<qAList.length; i++){
         let qAData = qAList[i].toString().split("_")
         let isCorrect = qAData[2]
@@ -127,79 +108,67 @@ async function submitQAPairs(studentId, unitId, currentSemester, attemptNo, modu
         let providedAnswer
         let correctAnswer
         
-        await dbQuestionController.getQuestion(questionId).then(async (question)=>{
-            questionContent = question.content
-            await dbAnswerController.getAnswer(answerId).then(async (answer)=>{
-                providedAnswer = answer.content
-                if(isCorrect == "true"){
-                    score++
-                    correctAnswer = providedAnswer
-                }else{
-                    await dbAnswerController.getCorrectAnswer(questionId).then(_correctAnswer => {
-                        correctAnswer = _correctAnswer.content
-                    })
-                }
-                await addQABlock(questionContent, providedAnswer, correctAnswer, studentId, 
-                    unitId, moduleNo, currentSemester, attemptNo).then(async () => {
-                        await blockchain.getLatestIndex(questionAnswerContract, process.env.QA_ADDRESS).then(latestIndex =>{
-                            qAIndices.push(latestIndex)
-                        })
-                })
-            })
-        })   
-    }
+        let question = await dbQuestionController.getQuestion(questionId)
+        questionContent = question.content
 
+        let answer = await dbAnswerController.getAnswer(answerId)
+        providedAnswer = answer.content
+
+        if(isCorrect == "true"){
+            score++
+            correctAnswer = providedAnswer
+        }else{
+            correctAnswer = await dbAnswerController.getCorrectAnswer(questionId)
+        }
+        let index = await addQABlock(questionContent, question.questionId, providedAnswer, correctAnswer, studentId, 
+            unitId, moduleNo, moduleId, currentSemester, attemptNo)
+
+        qAIndices.push(index)
+    }
     return {qAIndices, score}
 }
 
-async function addQABlock(question, providedAnswer, correctAnswer, studentId, unitId, moduleNo, currentSemester, attemptNo){
+async function addQABlock(question, questionId, providedAnswer, correctAnswer, studentId, unitId, moduleNo, moduleId, currentSemester, attemptNo){
     let qAData = new QA_Data(question, providedAnswer, correctAnswer, studentId, unitId, moduleNo, currentSemester, attemptNo)
     let serialisedQAData = JSON.stringify(qAData)
-    await ipfs.ipfsStoreData(serialisedQAData).then(async (qAHash) =>{
-        await blockchain.addHashToContractWithOutTracker(questionAnswerContract, process.env.QA_ADDRESS, qAHash)
-    })
+    let qAHash = await ipfs.ipfsStoreData(serialisedQAData)
+    let qAKey = new QA_Key(studentId, unitId, moduleId, questionId, attemptNo, currentSemester)
+    let serialisedQAKey = JSON.stringify(qAKey)
+    await blockchain.addHashToContractWithTracker(questionAnswerContract, questionAnswerTrackerContract, process.env.QA_ADDRESS, 
+        process.env.QA_TRACKER_ADDRESS, qAHash, serialisedQAKey)
+
+    return await blockchain.getHashIndex(questionAnswerTrackerContract, process.env.QA_TRACKER_ADDRESS, serialisedQAKey)
 }
 
 async function submitAttempt(qAList, studentId, unitId, moduleNo, moduleId, currentSemester, attemptNo, result){
     let modData = new Module_Data(qAList, studentId, unitId, moduleNo, currentSemester, attemptNo, result)
     let serialisedModData = JSON.stringify(modData)
-    await ipfs.ipfsStoreData(serialisedModData).then(async (newHash) => {
-        let modKey = new Module_Key(studentId, unitId, moduleId, currentSemester)
-        let serialisedKey = JSON.stringify(modKey)
-        await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey).then(async (exists) => {
-            if (!exists)
-            {
-                await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
-                    process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKey).then(() => {console.log("Add because does not exist")})
-            }
-            else
-            {
-                await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
-                    process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey).then(async (exisitngHash) => {
-                        await ipfs.ipfsGetData(exisitngHash).then(async (data) =>{
-                            let deserialisedModule = JSON.parse(data)
-                            if(deserialisedModule._result >= result)
-                            {
-                                await blockchain.addHashToContractWithOutTracker(moduleContract, process.env.MICRO_MODULE_ADDRESS, newHash).then(() => {
-                                    console.log("exists but new score is not better")
-                                })
-                            }
-                            else
-                            {
-                                await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
-                                    process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKey).then(() => {
-                                        console.log("exists but new score is better")
-                                    })
-                            }
-                        });
-                });
-            }
-        });
-    })
-}
+    let newHash = await ipfs.ipfsStoreData(serialisedModData)
+    let modKey = new Module_Key(studentId, unitId, moduleId, currentSemester)
+    let serialisedKey = JSON.stringify(modKey)
 
-//(moduleId, studentId, unitId, enrolmentPeriod, attemptNo, qAList)
-submitModule(1,"s3541003","COSC2536","Y2021S1",1,["q1_a4_true", "q2_a6_true","q3_a10_true","q4_a13_true","q5_a20_true","q6_a22_false","q7_a25_false","q8_a32_false","q9_a35_false","q10_a37_false"])
+    let exists = await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey)
+    if (!exists){
+        await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+            process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKey)
+    }else{
+        let existingHash = await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+            process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey)
+
+        let data = await ipfs.ipfsGetData(existingHash)
+
+        let deserialisedModule = JSON.parse(data)
+        if(deserialisedModule._result >= result)
+        {
+            await blockchain.addHashToContractWithOutTracker(moduleContract, process.env.MICRO_MODULE_ADDRESS, newHash)
+        }
+        else
+        {
+            await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+                process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKey)
+        }
+    }
+}
 
 module.exports = {
     getModules,
