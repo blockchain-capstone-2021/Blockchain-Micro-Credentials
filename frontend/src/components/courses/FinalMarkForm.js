@@ -24,7 +24,7 @@ const FinalMarkForm = (props) => {
 
     return (
         <div className="container">
-            <h1 className="text-center">Final Mark Form</h1>
+            <h1 className="mt-5">Final Mark Form</h1>
             {
                 student?
                 <form>

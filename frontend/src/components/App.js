@@ -18,6 +18,8 @@ import StudentDetail from "./Staff/StudentDetail";
 import StudentCreate from "./Staff/StudentCreate"
 
 import useToken from './useToken';
+import QuestionList from "./questions/QuestionList";
+import QuestionCreate from "./questions/QuestionCreate";
 
 const App = () => {
 
@@ -41,7 +43,10 @@ const App = () => {
     <div>
       <BrowserRouter>
         <Header />
+        <div className="container">
         <Switch>
+          <Route path="/question/add" component={QuestionCreate} />
+          <Route path="/questions" component={QuestionList} />
           <Route path="/courses/staff/:staffId" component={CourseList} />
           <Route path="/staffhome" component={StaffDashboard} />
           <Route path="/courses/:courseId/final/:studentId" component={FinalMarkForm} />
@@ -53,11 +58,10 @@ const App = () => {
           <Route path="/students" component={() => <StudentList key={getDate()} />} />
           <Route path="/module/:moduleId" component={Module} />
           <Route path="/dashboard/student" component={StudentDashboard} />
-          <Route path="/dashboard/staff" component={StaffDashboard} />
-          
+          <Route path="/dashboard/staff" component={StaffDashboard} />        
           <Route exact path="/" component={window.localStorage.getItem('isStaff') ? StaffDashboard : StudentDashboard} />
-
         </Switch>
+        </div>
       </BrowserRouter>
     </div>
   );

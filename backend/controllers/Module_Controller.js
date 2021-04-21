@@ -55,6 +55,26 @@ async function getHighestScores(studentId, unitId, modules){
     return highestScoreMap
 }
 
+const getUnitModules = async (req, res, next) => {
+    // Method that doesnt tie in student ID
+    try {
+
+        const modules = await dbModuleController.getModulesByUnit(req.params.unitId)
+        res.locals = {
+            success: true,
+            modules: modules
+        }
+        res.locals.modules = modules
+        res.locals.success = true
+
+    } catch (err) {
+        console.log(err);
+        res.locals.success = false
+    } finally {
+        next();
+    }
+}
+
 const getModules = async (req, res, next)=>{
 
     try{
@@ -174,5 +194,6 @@ async function submitAttempt(qAList, studentId, unitId, moduleNo, moduleId, curr
 
 module.exports = {
     getModules,
+    getUnitModules,
     submitModule
 }

@@ -33,9 +33,9 @@ const CourseDetail = (props) => {
 
 
     return (
-        <div className="container">
+        <div className="container  mt-5">
             <h1>Enrolled Students</h1>
-            <table class="table">
+            <table class="table mt-5">
             <thead>
                 <tr>
                 <th scope="col">ID</th>
