@@ -57,26 +57,42 @@ async function getHighestScores(studentId, unitId, modules){
 
 const getModules = async (req, res, next)=>{
 
-    let modules = await dbModuleController.getModulesByUnit(req.params.unitId)
+    try{
+        let modules = await dbModuleController.getModulesByUnit(req.params.unitId)
 
-    res.locals.modules = modules
-    
-    res.locals.attemptsMap = await getAttemptNumbers(req.params.studentId, modules)
-    res.locals.highestScoreMap = await getHighestScores(req.params.studentId, req.params.unitId, modules)
+        res.locals.modules = modules
+        
+        res.locals.attemptsMap = await getAttemptNumbers(req.params.studentId, modules)
+        res.locals.highestScoreMap = await getHighestScores(req.params.studentId, req.params.unitId, modules)
 
-    next();
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
 }
 
 const submitModule = async(req, res, next)=>{
-    let module = await dbModuleController.getModule(req.params.moduleId)
-    let qAList = req.body.qAPairs
-    let moduleNo = module.moduleNo
-    let result = await submitQAPairs(req.params.studentId, req.params.unitId, req.params.enrolmentPeriod, req.params.attemptNo, moduleNo, req.params.moduleId, qAList)
-    await submitAttempt(result.qAIndices, req.params.studentId, req.params.unitId, moduleNo, module.moduleId, req.params.enrolmentPeriod, req.params.attemptNo, result.score)
+    try{
+        let module = await dbModuleController.getModule(req.params.moduleId)
+        let qAList = req.body.qAPairs
+        let moduleNo = module.moduleNo
+        let result = await submitQAPairs(req.params.studentId, req.params.unitId, req.params.enrolmentPeriod, req.params.attemptNo, moduleNo, req.params.moduleId, qAList)
+        await submitAttempt(result.qAIndices, req.params.studentId, req.params.unitId, moduleNo, module.moduleId, req.params.enrolmentPeriod, req.params.attemptNo, result.score)
+    
+        await dbModule_AttemptController.incrementAttempts(req.params.studentId, module.moduleId)
 
-    await dbModule_AttemptController.incrementAttempts(req.params.studentId, module.moduleId)
-
-    next();
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
 }
 
 async function submitQAPairs(studentId, unitId, currentSemester, attemptNo, moduleNo, moduleId, qAList)
