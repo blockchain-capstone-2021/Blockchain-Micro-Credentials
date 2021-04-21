@@ -12,74 +12,87 @@ const utility = require('../utilities/Utility')
 const Unit_Key = require('../object_models/blockchain/Unit_Key')
 
 const getEnrolmentsByStudent = async (req, res, next)=>{
-    let currentSemester = await utility.getCurrentSemester()
+    try{
+        let currentSemester = await utility.getCurrentSemester()
 
-    let enrolments = await dbEnrolmentController.getEnrolmentsByStudent(req.params.studentId, currentSemester)
-
-    let unitMap = new Map()
-    let availableEnrolments = []
-    let unavailableEnrolments = []
-
-    for (const enrolment of enrolments){
-        let unit  = await dbUnitController.getUnit(enrolment.unitId)
-        unitMap[unit.unitId] = unit.unitName
-
-        let unitKey = new Unit_Key(req.params.studentId, enrolments.unitId, currentSemester)
-        let serialisedKey = JSON.stringify(unitKey)
-        let exists = await blockchain.checkExists(unitTrackerContract, process.env.UNIT_TRACKER_ADDRESS, serialisedKey)
-        if (!exists)
-        {
-            availableEnrolments.push(enrolment)
-        }
-        else
-        {
-            unavailableEnrolments.push(enrolment)
-        }
-    }
-    res.locals.unitMap = unitMap
-    res.locals.availableEnrolments = availableEnrolments
-    res.locals.unavailableEnrolments = unavailableEnrolments
+        let enrolments = await dbEnrolmentController.getEnrolmentsByStudent(req.params.studentId, currentSemester)
     
-    next();
+        let unitMap = new Map()
+        let availableEnrolments = []
+        let unavailableEnrolments = []
+    
+        for (const enrolment of enrolments){
+            let unit  = await dbUnitController.getUnit(enrolment.unitId)
+            unitMap[unit.unitId] = unit.unitName
+    
+            let unitKey = new Unit_Key(req.params.studentId, enrolments.unitId, currentSemester)
+            let serialisedKey = JSON.stringify(unitKey)
+            let exists = await blockchain.checkExists(unitTrackerContract, process.env.UNIT_TRACKER_ADDRESS, serialisedKey)
+            if (!exists)
+            {
+                availableEnrolments.push(enrolment)
+            }
+            else
+            {
+                unavailableEnrolments.push(enrolment)
+            }
+        }
+        res.locals.unitMap = unitMap
+        res.locals.availableEnrolments = availableEnrolments
+        res.locals.unavailableEnrolments = unavailableEnrolments
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
 }
 
 const getEnrolmentsByUnit = async (req, res, next)=>{
+    try{
+        let availableStudents = []
+        let unavailableStudents = []
+        let studentScoreMap = new Map()
 
-    let availableStudents = []
-    let unavailableStudents = []
-    let studentScoreMap = new Map()
+        let currentSemester = await utility.getCurrentSemester()
 
-    let currentSemester = await utility.getCurrentSemester()
+        let enrolments = await dbEnrolmentController.getEnrolmentsByUnit(req.params.unitId, currentSemester)
 
-    let enrolments = await dbEnrolmentController.getEnrolmentsByUnit(req.params.unitId, currentSemester)
+        for (const enrolment of enrolments){
+            let enrolKey = new Unit_Key(enrolment.studentId, enrolment.unitId, currentSemester)
+            let serialisedKey = JSON.stringify(enrolKey)
 
-    for (const enrolment of enrolments){
-        let enrolKey = new Unit_Key(enrolment.studentId, enrolment.unitId, currentSemester)
-        let serialisedKey = JSON.stringify(enrolKey)
+            let exists = await blockchain.checkExists(unitTrackerContract, process.env.UNIT_TRACKER_ADDRESS, serialisedKey)
+            let student = await dbStudentController.getStudent(enrolment.studentId)
+            if (!exists)
+            {   
+                availableStudents.push(student)
+            }
+            else
+            {
+                unavailableStudents.push(student)  
+                
+                let hash = await blockchain.getHashFromContract(unitContract, unitTrackerContract, process.env.UNIT_ADDRESS,
+                    process.env.UNIT_TRACKER_ADDRESS, serialisedKey)
 
-        let exists = await blockchain.checkExists(unitTrackerContract, process.env.UNIT_TRACKER_ADDRESS, serialisedKey)
-        let student = await dbStudentController.getStudent(enrolment.studentId)
-        if (!exists)
-        {   
-            availableStudents.push(student)
+                let data = await ipfs.ipfsGetData(hash)
+                let deserialisedUnit = JSON.parse(data)
+                studentScoreMap[student.studentId] = deserialisedUnit._finalResult
+            }
         }
-        else
-        {
-            unavailableStudents.push(student)  
-            
-            let hash = await blockchain.getHashFromContract(unitContract, unitTrackerContract, process.env.UNIT_ADDRESS,
-                process.env.UNIT_TRACKER_ADDRESS, serialisedKey)
-
-            let data = await ipfs.ipfsGetData(hash)
-            let deserialisedUnit = JSON.parse(data)
-            studentScoreMap[student.studentId] = deserialisedUnit._finalResult
-        }
+        res.locals.availableStudents = availableStudents;
+        res.locals.unavailableStudents = unavailableStudents;
+        res.locals.studentScoreMap = studentScoreMap;
+        res.locals.success = true
     }
-    res.locals.availableStudents = availableStudents;
-    res.locals.unavailableStudents = unavailableStudents;
-    res.locals.studentScoreMap = studentScoreMap;
-
-    next();
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
 }
 
 module.exports = {
