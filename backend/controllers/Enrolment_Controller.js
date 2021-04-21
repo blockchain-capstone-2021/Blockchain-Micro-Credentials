@@ -1,5 +1,5 @@
 require('dotenv').config({
-  path: ('../.env_address'),
+  path: ('../.env'),
   debug: process.env.DEBUG
 })
 const dbEnrolmentController = require('../db/controllers/DbEnrolmentController')
@@ -8,6 +8,7 @@ const dbUnitController = require('../db/controllers/DbUnitController')
 const unitContract = require('../blockchain/build/contracts/Unit.json')
 const unitTrackerContract = require('../blockchain/build/contracts/Unit_Tracker.json')
 const blockchain = require('../middleware/blockchain')
+const ipfs = require('../middleware/ipfs')
 const utility = require('../utilities/Utility')
 const Unit_Key = require('../object_models/blockchain/Unit_Key')
 
@@ -88,6 +89,7 @@ const getEnrolmentsByUnit = async (req, res, next)=>{
         res.locals.success = true
     }
     catch(err){
+        console.log(err);
         res.locals.success = false
     }
     finally{
