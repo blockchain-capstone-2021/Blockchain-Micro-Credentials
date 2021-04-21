@@ -21,10 +21,17 @@ const MicroCred_Data = require('../object_models/ipfs/ManualEntry')
 const Unit_Data = require('../object_models/ipfs/Unit')
 
 const submitMicroCred = async (req, res, next)=>{
+    try{
+        await generateScore(req.params.studentId, req.params.unitId, req.params.enrolmentPeriod)
 
-    await generateScore(req.params.studentId, req.params.unitId, req.params.enrolmentPeriod)
-
-    next();
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
 }
 
 async function generateScore(studentId, unitId, currentSemester){
