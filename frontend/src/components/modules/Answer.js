@@ -1,14 +1,12 @@
-import React from 'react'
+import React, { Component } from "react";
+import api from '../../apis/api'
+class Answer extends Component {
+    
 
-const Answer = ({text, correct}) => {
-    return (
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" />
-            <label class="form-check-label" for="exampleRadios1">
-            {text}
-            </label>
-        </div>
-    )
+
+  render() {
+    return <div>s</div>;
+  }
 }
 
-export default Answer
+export default Answer;
