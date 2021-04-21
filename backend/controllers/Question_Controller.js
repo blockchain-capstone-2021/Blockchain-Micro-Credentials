@@ -3,10 +3,19 @@ const dbModuleController = require('../db/controllers/DbModuleController')
 const dbAnswerController = require('../db/controllers/DbAnswerController')
 
 const getQuestions = async (req, res, next)=>{
-    let module = await dbModuleController.getModule(req.params.moduleId)
-    res.locals.questions =  await dbQuestionController.getQuestions(req.params.moduleId, module.noOfQuestions)
-    res.locals.answersMap = await getAnswers(questions)
-    next();
+    try{
+        let module = await dbModuleController.getModule(req.params.moduleId)
+        res.locals.questions =  await dbQuestionController.getQuestions(req.params.moduleId, module.noOfQuestions)
+        res.locals.answersMap = await getAnswers(questions)
+
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
 }
 
 async function getAnswers(questions)
