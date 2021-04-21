@@ -18,10 +18,18 @@ const ManualEntry_Data = require('../object_models/ipfs/ManualEntry')
 const Unit_Data = require('../object_models/ipfs/Unit')
 
 const submitManualEntry = async (req, res, next)=>{
+    try{
+        currentSemester = await utility.getCurrentSemester()
+        await submitScore(currentSemester, req.params.studentId, req.params.unitId, req.params.finalResult)
 
-    currentSemester = await utility.getCurrentSemester()
-    await submitScore(currentSemester, req.params.studentId, req.params.unitId, req.params.finalResult)
-    next();
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
 }
 
 async function submitScore(currentSemester, studentId, unitId, finalResult){
