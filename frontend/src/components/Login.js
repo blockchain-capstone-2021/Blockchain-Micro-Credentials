@@ -23,7 +23,11 @@ const Login = ({ setToken }) => {
           username,
           password
         });
-        window.localStorage.setItem('studentId', username);
+        
+        window.localStorage.setItem('userId', username);
+        // Check if user is a staff or student
+        if (username.startsWith("e")) {localStorage.setItem('isStaff', true)}
+        console.log(username)
         setToken(token);
     }
 

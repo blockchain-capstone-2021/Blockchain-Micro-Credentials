@@ -77,7 +77,7 @@ class Module extends Component {
                 <input type="hidden" id="enrolmentPeriod" name="enrolmentPeriod" value={window.localStorage.getItem('enrolmentPeriod')}/>
                 <input type="hidden" id="moduleId" name="moduleId" value={window.localStorage.getItem('moduleId')}/>
                 <input type="hidden" id="unitId" name="unitId" value={window.localStorage.getItem('unitId')}/>
-                <input type="hidden" id="studentId" name="studentId" value={window.localStorage.getItem('studentId')} />
+                <input type="hidden" id="studentId" name="studentId" value={window.localStorage.getItem('userId')} />
                 <button type="submit" className="btn btn-primary">Submit</button>
                 </form>  
                 </section>

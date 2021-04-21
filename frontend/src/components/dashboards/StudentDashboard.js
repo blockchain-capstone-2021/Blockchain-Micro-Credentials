@@ -18,7 +18,7 @@ class StudentDashboard extends Component {
   }
 
   renderEnrolments = async () => {
-    const studentId = window.localStorage.getItem('studentId');
+    const studentId = window.localStorage.getItem('userId');
     const response = await api.get(`/student/${studentId}/enrolments`)
     this.setState({enrolments:
       response.data.enrolments.map((enrolment, key) => {
