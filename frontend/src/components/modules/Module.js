@@ -1,59 +1,91 @@
-import React, {useState} from 'react'
+import React, { Component } from 'react'
 import Question from './Question'
+import api from '../../apis/api';
 
-const Module = (props) => {
+class Module extends Component {
 
-      const [isActive, setActive] = useState(false);
-    
-      const toggleClass = () => {
-        setActive(!isActive);
-      };
-    // create an API call here to get module questions and pop them into the questions constant
-
-    const questions = [
-        // Placeholder module question data
-        {
-        questionId: 1,
-        text: "This is a question",
-        options: [
-            ['Option 1', true],
-            ['Option 2', false],
-            ['Option 3', false],
-            ['Option 4', false]
-        ]
-    },
-    {
-        questionId: 2,
-        text: "This is another question",
-        options: [
-            ['Option 1', true],
-            ['Option 23', false],
-            ['Option 3', false],
-            ['Option 4', false]
-        ]
-    }]
-
-    const renderQuestions = () => {
-        console.log(props);
-        return questions.map(question => {
-            return <Question data={question} />
-        })
+    constructor(props) {
+        super(props)
+        this.state = {
+             moduleId: this.props.match.params.moduleId
+        }
     }
 
-    return (
-        <div className="container mt-3">
-            <h6 className="">Module {props.moduleId}</h6>
-            <h6>Attempts</h6>
-            {/* Render attempts here */}
-            <input name="quiz" id="quiz" class={`btn btn-primary ${isActive ? 'invisible' : 'visible'}`} type="button" value="Attempt Quiz?" onClick={() => {toggleClass()}} />
-            <div className={`container quiz ${isActive ? 'visible' : 'invisible'}`}>
-                <form method="post">
-                {renderQuestions()}
-                <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+    componentDidMount = async () => {
+        window.localStorage.setItem('moduleId', this.props.match.params.moduleId)
+        this.setState({header: this.renderHeaderSection(this.state.moduleId)});
+        this.setState({questions: await this.getQuestions()}); 
+        const newQuestions = []
+        await this.state.questions.map(async (question, key) => {
+            const answers = await api.get(`/questions/${question.questionId}/answers`)
+            const nQuestion = {...question, answers: answers.data.answers, key: question.questionId}
+            newQuestions.push(nQuestion)
+        });
+        this.setState({questions: newQuestions})
+        setTimeout(() => {
+            this.setState({render: this.renderQuestions(this.state.questions)})
+        }, 3000);
+        
+        }  
+
+    displayQuestions(renderData) {
+        if(renderData !== undefined) {
+            return this.state.render
+        }
+        return <p>Loading</p>
+    }
+    
+    renderQuestions(x){
+        return x.map((question) => {
+            return (
+                <Question key={question.questionId} question={question} data={question.answers} />
+            )
+        })
+    }
+    async getQuestions(){
+        const questions =  await api.get(`questions/${this.props.match.params.moduleId}/10`)
+        .then(response => response.data.questions)
+        return questions;
+    };
+
+    
+    async getAnswers(questionId) {
+        const answers = await api.get(`questions/${questionId}/answers`)
+        .then(response => response.data.answers)
+        return answers
+    }
+    
+    renderHeaderSection(number){
+        return (
+            <div>
+                <section>
+                    <h6 className="">{`Module ${number}`}</h6>
+                    <h6>Attempt #</h6>
+                </section>
             </div>
-        </div>
-    )
+        )
+    }
+   
+
+    render() {
+        return (
+            <div className="container mt-3">
+                {this.state.header}
+                <section>
+                <form method="post">
+                {this.displayQuestions(this.state.render)}  
+                <input type="hidden" id="enrolmentPeriod" name="enrolmentPeriod" value={window.localStorage.getItem('enrolmentPeriod')}/>
+                <input type="hidden" id="moduleId" name="moduleId" value={window.localStorage.getItem('moduleId')}/>
+                <input type="hidden" id="unitId" name="unitId" value={window.localStorage.getItem('unitId')}/>
+                <input type="hidden" id="studentId" name="studentId" value={window.localStorage.getItem('userId')} />
+                <button type="submit" className="btn btn-primary">Submit</button>
+                </form>  
+                </section>
+                
+            </div>
+        )
+    }
+
 }
 
 export default Module
