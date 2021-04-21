@@ -17,7 +17,7 @@ class StaffDashboard extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="jumbotron align-center">
          <section>
            <h1>Portals</h1>
            <div className="d-flex">

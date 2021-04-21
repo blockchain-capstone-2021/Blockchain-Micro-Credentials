@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import api from '../../apis/api'
+import "./Dashboard.css";
+
 class StudentDashboard extends Component {
 
   constructor(props) {
@@ -35,16 +37,16 @@ class StudentDashboard extends Component {
   
   render() {
     return (
-      <div className="container">
-          <main role="main" >
-        <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 className="h2">Dashboard</h1>
-        </div>
-        <section className="mb-5">
-        <h2>Enrolments</h2>
-        {this.state.enrolments}
-        </section>
-      </main>
+      <div className="jumbotron align-center">
+        <main role="main" >
+          <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 className="h2">Dashboard</h1>
+          </div>
+          <section className="mb-5">
+          <h2>Enrolments</h2>
+          {this.state.enrolments}
+          </section>
+        </main>
       </div>
   )
   }

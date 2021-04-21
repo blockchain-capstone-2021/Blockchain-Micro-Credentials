@@ -1,7 +1,6 @@
-.vertical-center {
+.align-center {
     min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
     min-height: 100vh; /* These two lines are counted as one :-)       */
   
-    align-items: center;
-    padding-top: 5%;
+    padding-left: 10%;
   }

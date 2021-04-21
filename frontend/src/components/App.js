@@ -25,7 +25,7 @@ const App = () => {
   }
 
   // window.localStorage.setItem('studentId', 's3710669');
-  // window.localStorage.setItem('staffId', 'e1234567');
+  window.localStorage.setItem('staffId', 'e1234567');
 
   function getDate(){
     return Date.now().toString()
