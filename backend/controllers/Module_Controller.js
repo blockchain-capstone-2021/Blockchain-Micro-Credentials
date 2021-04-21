@@ -22,9 +22,7 @@ async function getAttemptNumbers(studentId, modules){
     let attemptsMap = new Map()
 
     for (const module of modules){
-        await dbModule_AttemptController.getNoOfAttempts(studentId, module.moduleId).then(attempts=>{
-            attemptsMap[module.moduleId] = attempts 
-        });
+        attemptsMap[module.moduleId] = await dbModule_AttemptController.getNoOfAttempts(studentId, module.moduleId)
     } 
 
     return attemptsMap;
@@ -33,32 +31,25 @@ async function getAttemptNumbers(studentId, modules){
 async function getHighestScores(studentId, unitId, modules){
 
     let highestScoreMap = new Map()
-
-    let currentSemester
-    await utility.getCurrentSemester().then(_currentSemester => {
-        currentSemester = _currentSemester
-    })
-
+    let currentSemester = await utility.getCurrentSemester()
 
     for (const module of modules){
         let modKey = new Module_Key(studentId, unitId, module.moduleId, currentSemester)
         let serialisedKey = JSON.stringify(modKey)
-        await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey).then(async (exists) => {
-            if (!exists)
-            {
-                highestScoreMap[module.moduleId] = `0/${module.noOfQuestions}`
-            }
-            else
-            {
-                await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
-                    process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey).then(async (hash) => {
-                        await ipfs.ipfsGetData(hash).then(data =>{
-                            let deserialisedModule = JSON.parse(data)
-                            highestScoreMap[module.moduleId] = `${deserialisedModule._result}/${module.noOfQuestions}`
-                        });
-                    });
-            }
-        });
+        let exists = await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey)
+
+        if (!exists)
+        {
+            highestScoreMap[module.moduleId] = `0/${module.noOfQuestions}`
+        }
+        else
+        {
+            let hash = await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+                process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey)
+            let data = await ipfs.ipfsGetData(hash)
+            let deserialisedModule = JSON.parse(data)
+            highestScoreMap[module.moduleId] = `${deserialisedModule._result}/${module.noOfQuestions}`
+        }
     }
 
     return highestScoreMap
@@ -66,18 +57,13 @@ async function getHighestScores(studentId, unitId, modules){
 
 const getModules = async (req, res, next)=>{
 
-    await dbModuleController.getModulesByUnit(req.params.unitId).then(async (modules) => {
-        res.locals.modules = modules
-        
-        await getAttemptNumbers(req.params.studentId, modules).then(map =>{
-            res.locals.attemptsMap = map
-        })
+    let modules = await dbModuleController.getModulesByUnit(req.params.unitId)
 
-        await getHighestScores(req.params.studentId, req.params.unitId, modules).then(map =>{
-            res.locals.highestScoreMap = map
-        })
+    res.locals.modules = modules
+    
+    res.locals.attemptsMap = await getAttemptNumbers(req.params.studentId, modules)
+    res.locals.highestScoreMap = await getHighestScores(req.params.studentId, req.params.unitId, modules)
 
-    });
     next();
 }
 
