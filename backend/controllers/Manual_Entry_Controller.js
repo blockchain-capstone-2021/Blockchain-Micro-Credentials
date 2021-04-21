@@ -19,71 +19,68 @@ const Unit_Data = require('../object_models/ipfs/Unit')
 
 const submitManualEntry = async (req, res, next)=>{
 
-    await utility.getCurrentSemester().then(async (currentSemester) => {
-        await submitScore(currentSemester, req.params.studentId, req.params.unitId, req.params.finalResult)
-    })
+    currentSemester = await utility.getCurrentSemester()
+    await submitScore(currentSemester, req.params.studentId, req.params.unitId, req.params.finalResult)
     next();
 }
 
 async function submitScore(currentSemester, studentId, unitId, finalResult){
     let manualEntryData = new ManualEntry_Data(studentId, unitId, currentSemester, finalResult)
     let serialisedManualEntryData = JSON.stringify(manualEntryData)
-    await ipfs.ipfsStoreData(serialisedManualEntryData).then(async (manualEntryHash) =>{
-        let manualEntryKey = new ManualEntry_Key(studentId, unitId, currentSemester)
-        let serialisedManualEntryKey = JSON.stringify(manualEntryKey)
-        await blockchain.addHashToContractWithTracker(manualContract, manualTrackerContract, process.env.MANUAL_ENTRY_ADDRESS, 
-            process.env.MANUAL_ENTRY_TRACKER_ADDRESS, manualEntryHash, serialisedManualEntryKey).then(async ()=>{
-                await blockchain.getHashIndex(manualTrackerContract, process.env.MANUAL_ENTRY_TRACKER_ADDRESS, serialisedManualEntryKey).then(async (index)=>{
-                    await submitUnit(currentSemester, studentId, unitId, finalResult, index)
-                })
-            })
-        
-    })
+    let manualEntryHash = await ipfs.ipfsStoreData(serialisedManualEntryData)
+    let manualEntryKey = new ManualEntry_Key(studentId, unitId, currentSemester)
+    let serialisedManualEntryKey = JSON.stringify(manualEntryKey)
+    
+    await blockchain.addHashToContractWithTracker(manualContract, manualTrackerContract, process.env.MANUAL_ENTRY_ADDRESS, 
+        process.env.MANUAL_ENTRY_TRACKER_ADDRESS, manualEntryHash, serialisedManualEntryKey)
+
+    let index = await blockchain.getHashIndex(manualTrackerContract, process.env.MANUAL_ENTRY_TRACKER_ADDRESS, serialisedManualEntryKey)
+    await submitUnit(currentSemester, studentId, unitId, finalResult, index)
 }
 
 async function submitUnit(currentSemester, studentId, unitId, finalResult, manualEntryIndex){
     let unitData = new Unit_Data(undefined, manualEntryIndex, studentId, unitId, currentSemester, finalResult)
     let serialisedUnitData = JSON.stringify(unitData)
-    await ipfs.ipfsStoreData(serialisedUnitData).then(async (unitHash) =>{
-        let unitKey = new Unit_Key(studentId, unitId, currentSemester)
-        let serialisedUnitKey = JSON.stringify(unitKey)
-        await blockchain.addHashToContractWithTracker(unitContract, unitTrackerContract, process.env.UNIT_ADDRESS, 
-            process.env.UNIT_TRACKER_ADDRESS, unitHash, serialisedUnitKey).then(async ()=>{
-                await evaluatePerformance(studentId, unitId, finalResult)
-        })
-    })
+    let unitHash = await ipfs.ipfsStoreData(serialisedUnitData)
+    let unitKey = new Unit_Key(studentId, unitId, currentSemester)
+    let serialisedUnitKey = JSON.stringify(unitKey)
+
+    await blockchain.addHashToContractWithTracker(unitContract, unitTrackerContract, process.env.UNIT_ADDRESS, 
+        process.env.UNIT_TRACKER_ADDRESS, unitHash, serialisedUnitKey)
+
+    await evaluatePerformance(studentId, unitId, finalResult)
 }
 
 async function evaluatePerformance(studentId, unitId, finalResult){
 
-    await dbUnitController.getUnit(unitId).then(async (unit) =>{
-        let creditPoints = 0
-        if(finalResult >= unit.unitPassMark){
-            creditPoints = unit.unitCreditPoints
-        }
-        await dbStudentController.updateCreditPoints(studentId, creditPoints).then(async ()=>{
-            await dbStudentController.getStudent(studentId).then(async (student) =>{
-                await dbDegreeController.getDegree(student.degreeId).then(degree =>{ 
-                    if(student.studentCreditPoints >= degree.totalCreditPoints){ 
-                        //if student has enough credit points to complete degree
-                        console.log("Degree complete")
-                    }else if (student.studentCreditPoints % (degree.creditPointsPerSem * 2) == 0){ 
-                        //if student has enough credit points to complete  year
-                        console.log("Year complete")
-                    }else if(student.studentCreditPoints % degree.creditPointsPerSem == 0){ 
-                        //if student has enough credit points to complete semester
-                        console.log("Semester complete")
-                    }else if(creditPoints > 0){ 
-                        //if student completed unit
-                        console.log("Unit complete")
-                    }else{ 
-                        //if student failed unit
-                        console.log("Unit failed")
-                    }
-                })
-            })
-        })
-    })
+    let unit = await dbUnitController.getUnit(unitId)
+
+    let creditPoints = 0
+    if(finalResult >= unit.unitPassMark){
+        creditPoints = unit.unitCreditPoints
+    }
+    
+    await dbStudentController.updateCreditPoints(studentId, creditPoints)
+
+    let student = await dbStudentController.getStudent(studentId)
+    let degree = await dbDegreeController.getDegree(student.degreeId)
+
+    if(student.studentCreditPoints >= degree.totalCreditPoints){ 
+        //if student has enough credit points to complete degree
+        console.log("Degree complete")
+    }else if (student.studentCreditPoints % (degree.creditPointsPerSem * 2) == 0){ 
+        //if student has enough credit points to complete  year
+        console.log("Year complete")
+    }else if(student.studentCreditPoints % degree.creditPointsPerSem == 0){ 
+        //if student has enough credit points to complete semester
+        console.log("Semester complete")
+    }else if(creditPoints > 0){ 
+        //if student completed unit
+        console.log("Unit complete")
+    }else{ 
+        //if student failed unit
+        console.log("Unit failed")
+    }
 }
 
 //TESTING FUNCTION REMOVE LATER
