@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Student.belongsTo(Degree)
       Student.hasMany(Enrolment)
+      Student.hasMany(Module_Attempt)
     }
   };
   Student.init({

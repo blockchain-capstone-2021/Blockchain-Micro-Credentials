@@ -54,8 +54,10 @@ The folder is further divided into the below sub-directories:
     - Holds all the solidity smart contracts.
 - `/migrations`
     - Holds all the migrations for the smart contracts.
+- `/test`
+	- Holds all the tests for the smart contracts.
 
-Any truffle configrations can be made in `/backend/truffle-config.js`
+Any truffle configrations can be made in `./truffle-config.js`
 
 ### Middleware
 
@@ -99,7 +101,8 @@ Any template files to be used repeatedly (i.e. headers and footers) will:
 │   ├── blockchain
 │   │   ├── build
 │   │   ├── contracts
-│   │   └── migrations
+│   │   ├── migrations
+│   │   └── test
 │   ├── controllers
 │   ├── db
 │   │   ├── config
@@ -123,9 +126,9 @@ Any template files to be used repeatedly (i.e. headers and footers) will:
 
 ## Packages
 
-Both the frontend and backend folders are standalone projects meaning that they each have their own package.json files.
+The frontend, backend and root folders are standalone projects meaning that they each have their own package.json files. 
 
-To install these, go into `/backend` and `/frontend` respectively and run `npm install`
+To install these, in the root folder run `npm install`. Also go into `/backend` and `/frontend` respectively and run `npm install`.
 
 ## Running
 

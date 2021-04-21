@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import Header from "./Header";
+import Header from "./templates/Header";
 import Module from "./modules/Module"
 import Login from "./Login";
 import Home from './Home'
@@ -46,7 +46,6 @@ const App = () => {
           <Route path="/dashboard/staff" component={StaffDashboard} />
           <Route exact path="/" component={StudentDashboard} />
         </Switch>
-        {/* <Footer /> */}
       </BrowserRouter>
     </div>
   );
