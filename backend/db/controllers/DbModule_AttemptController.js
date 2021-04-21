@@ -22,10 +22,10 @@ async function getNoOfAttempts(_studentId, _moduleId)
 //increment number of attempts for a given studentId and moduleId
 async function incrementAttempts(_studentId, _moduleId)
 {
-    let attempts = getNoOfAttempts(_studentId, _moduleId)
+    let attempts = await getNoOfAttempts(_studentId, _moduleId)
     if(attempts > 0){
         let incrementedAttempts = attempts + 1
-        await models.Student.update({ noAttempts: incrementedAttempts}, {
+        await models.Module_Attempt.update({ attemptNo: incrementedAttempts}, {
             where: {
                 studentId: _studentId, 
                 moduleId: _moduleId
