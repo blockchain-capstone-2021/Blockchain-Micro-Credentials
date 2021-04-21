@@ -6,7 +6,10 @@ const cors = require('cors');
 
 const marksRouter = require('./routes/marks')
 const questionsRouter = require('./routes/questions')
+<<<<<<< HEAD
 const unitsRouter = require('./routes/units')
+=======
+>>>>>>> origin/dataentry-dev
 const app = express();
 
 // Module dependencies for express
@@ -20,7 +23,10 @@ app.use(cors());
 
 app.use('/marks', marksRouter);
 app.use('/questions', questionsRouter);
+<<<<<<< HEAD
 app.use('/units', unitsRouter)
+=======
+>>>>>>> origin/dataentry-dev
 
 
 // catch 404 and forward to error handler

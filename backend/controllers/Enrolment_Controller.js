@@ -1,5 +1,5 @@
 require('dotenv').config({
-  path: ('../.env'),
+  path: ('../.env_address'),
   debug: process.env.DEBUG
 })
 const dbEnrolmentController = require('../db/controllers/DbEnrolmentController')
