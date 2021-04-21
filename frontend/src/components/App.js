@@ -11,6 +11,7 @@ import "../style.css";
 import CourseList from "./courses/CourseList";
 import CourseDetail from "./courses/CourseDetail";
 import StaffDashboard from "../Dashboards/StaffDashboard";
+import FinalMarkForm from './courses/FinalMarkForm'
 
 const App = () => {
 
@@ -33,8 +34,8 @@ const App = () => {
         <Switch>
           <Route path="/courses/staff/:staffId" component={CourseList} />
           <Route path="/staffhome" component={StaffDashboard} />
+          <Route path="/courses/:courseId/final/:studentId" component={FinalMarkForm} />
           <Route path="/courses/:courseId" component={CourseDetail} />
-          
           <Route path="/module/:moduleId" component={() => {return <Module moduleId={2} />}} />
           <Route path="/home" component={Home} />
           <Route exact path="/" component={Login} />
