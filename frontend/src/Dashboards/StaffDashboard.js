@@ -24,7 +24,7 @@ const StaffDashboard = (props) => {
 
     return (
         <div className="container">
-            {renderCard("https://images.unsplash.com/photo-1546521343-4eb2c01aa44b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1275&q=80", "Courses", "View courses.", `/courses/staff/${staffId}`)}
+            
         </div>
     )
 }
