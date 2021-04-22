@@ -36,8 +36,8 @@ router.get('/:unitId/:studentId', getModules, async function (req, res, next) {
         return res.status(200).send({
             success: 'true',
             modules: res.locals.modules,
-            highestScore: res.locals.highestResultMap,
-            numAttempts: res.locals.noOfAttemptsMap
+            highestScore: res.locals.highestScoreMap,
+            numAttempts: res.locals.attemptsMap
         })
     }
     return res.status(400).send({

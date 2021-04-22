@@ -9,33 +9,46 @@ class Unit extends Component {
         super(props)
     
         this.state = {
-             unit: null
+             unit: null,
+             studentId: window.localStorage.getItem('userId')
         }
     }
     
     componentDidMount = async() => {
-        this.setModules()
+        this.getResponse()
     }
 
-    setModules = async () => {
+    getResponse = async () => {
+        // Set variables
         const {unitId} = this.props.match.params
-        const {studentId} = window.localStorage.getItem('userId')
         window.localStorage.setItem('unitId', unitId)
-        const response = await api.get(`/unit/${unitId}/${studentId}`)
-        console.log(response.data);
-        this.renderModules(response)
-        // this.setState({modules: response.data.modules})
-        // this.setState({data: <div><section><h1>{this.state.unit.unitId}</h1><p>{this.state.unit.unitName}</p></section></div>})
+        this.setState({unit: window.localStorage.getItem('unitId')})
+
+        // Make calls
+        const moduleResponse = await api.get(`/unit/${unitId}/${this.state.studentId}`)
+        const unitResponse = await api.get(`/student/${this.state.studentId}/enrolled`)
+        console.log(moduleResponse.data);
+
+        // send responses
+        this.renderModules(moduleResponse)
+        this.renderUnit(unitResponse)
+    }
+
+    renderUnit = async (response) => {
+        this.setState({unitMap: response.data.unitMap})
+        this.setState({data: <div><section><h1>{this.state.unitMap[this.state.unit]}</h1><h3>{this.state.unit}</h3></section></div>})
     }
 
     renderModules(response) {
+        this.setState({highestScore: response.data.highestScore})
+        this.setState({attempts: response.data.numAttempts})
         this.setState({modules:
             response.data.modules.map((module, key) => {
               return (
-                <tr className="py-2" key={module.moduleId}>
+                <tr className="py-2" key={module.moduleNo}>
                     <td>{module.moduleName}</td>
-                    <td>3</td>
-                    <td>7/10</td>
+                    <td>{}</td>
+                    <td>{}</td>
                     <td><Link to={`/module/${module.moduleId}`} className="btn btn-primary">Go</Link></td>
                 </tr>
               )
