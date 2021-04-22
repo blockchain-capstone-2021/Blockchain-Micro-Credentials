@@ -1,18 +1,18 @@
 {
   "contractName": "IterableMapping",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/danme/Desktop/blockchain/backend/blockchain/contracts/IterableMapping.sol\":\"IterableMapping\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/danme/Desktop/blockchain/backend/blockchain/contracts/IterableMapping.sol\":{\"keccak256\":\"0x134c13aef96a080eec5b998ef7f1b41e8f4d90af121aa5af868895d3e62c2287\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://64342a3441de48b6ec7db943f675e11be37bad9e2b5ee19906bab20824467499\",\"dweb:/ipfs/Qmf5h7NQLs1pNbbDgd4oyNo744DHqbm2w98rivMMnJjBYk\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206d7f651c13a2fc6ef785f7262c399921d8818d4641a4a08ab616a9c638c63a7964736f6c63430008030033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206d7f651c13a2fc6ef785f7262c399921d8818d4641a4a08ab616a9c638c63a7964736f6c63430008030033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/C/Users/shrey/Documents/2021/Capstone/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol\":\"IterableMapping\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/shrey/Documents/2021/Capstone/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol\":{\"keccak256\":\"0x134c13aef96a080eec5b998ef7f1b41e8f4d90af121aa5af868895d3e62c2287\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://64342a3441de48b6ec7db943f675e11be37bad9e2b5ee19906bab20824467499\",\"dweb:/ipfs/Qmf5h7NQLs1pNbbDgd4oyNo744DHqbm2w98rivMMnJjBYk\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122033ecc2756f281270bc10cb14ee349cf119056d24234dfc7e8a696a7e92240b0d64736f6c63430008030033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122033ecc2756f281270bc10cb14ee349cf119056d24234dfc7e8a696a7e92240b0d64736f6c63430008030033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
   "sourceMap": "268:825:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "268:825:0:-:0;;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity >=0.6.8 <=0.8.3;\r\n\r\nstruct IndexValue { uint keyIndex; uint value; }\r\nstruct KeyFlag { string key; bool deleted; }\r\n\r\nstruct itmap \r\n{\r\n    mapping(string => IndexValue) data;\r\n    KeyFlag[] keys;\r\n    uint size;\r\n}\r\n\r\nlibrary IterableMapping \r\n{\r\n    function insert(itmap storage self, string memory key, uint value) internal returns (bool replaced) {\r\n        uint keyIndex = self.data[key].keyIndex;\r\n        self.data[key].value = value;\r\n        if (keyIndex > 0)\r\n            return true;\r\n        else {\r\n            keyIndex = self.keys.length;\r\n            self.keys.push();\r\n            self.data[key].keyIndex = keyIndex + 1;\r\n            self.keys[keyIndex].key = key;\r\n            self.size++;\r\n            return false;\r\n        }\r\n    }\r\n\r\n    function contains(itmap storage self, string memory key) internal view returns (bool) {\r\n        return self.data[key].keyIndex > 0;\r\n    }\r\n\r\n    function get(itmap storage self, string memory key) internal view returns (uint value) {\r\n        value = self.data[key].value;\r\n    }\r\n}",
-  "sourcePath": "C:\\Users\\danme\\Desktop\\blockchain\\backend\\blockchain\\contracts\\IterableMapping.sol",
+  "sourcePath": "C:\\Users\\shrey\\Documents\\2021\\Capstone\\Blockchain-Micro-Credentials\\backend\\blockchain\\contracts\\IterableMapping.sol",
   "ast": {
-    "absolutePath": "/C/Users/danme/Desktop/blockchain/backend/blockchain/contracts/IterableMapping.sol",
+    "absolutePath": "/C/Users/shrey/Documents/2021/Capstone/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol",
     "exportedSymbols": {
       "IndexValue": [
         6
@@ -1652,7 +1652,7 @@
     "src": "33:1060:0"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/danme/Desktop/blockchain/backend/blockchain/contracts/IterableMapping.sol",
+    "absolutePath": "/C/Users/shrey/Documents/2021/Capstone/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol",
     "exportedSymbols": {
       "IndexValue": [
         6
@@ -3299,12 +3299,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x3BdE266eB8070b42695a96788dA4E79651Ab8960",
-      "transactionHash": "0x16b3afc9d94ffcf0eba41b5d0be729c473d349f7297a82d49a6518a2b478025a"
+      "address": "0xcE68b06D689c00AD7A10df56DCb1791C6D855368",
+      "transactionHash": "0x0bfc3a00e0fad40367101894fd1aae3725299738bebc84e191769200071450be"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-21T07:47:07.028Z",
+  "updatedAt": "2021-04-22T06:59:48.435Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

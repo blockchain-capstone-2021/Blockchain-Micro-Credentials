@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../apis/api'
+import "../dashboards/Dashboard.css";
 
 class Unit extends Component {
 
@@ -13,13 +14,18 @@ class Unit extends Component {
     }
     
     componentDidMount = async() => {
+        this.setModules()
+    }
+
+    setModules = async () => {
         const {unitId} = this.props.match.params
+        const {studentId} = window.localStorage.getItem('userId')
         window.localStorage.setItem('unitId', unitId)
-        const response = await api.get(`/unit/${unitId}`)
-        const modulesResponse = await api.get(`/unit/${unitId}/modules`)
-        this.setState({unit: response.data.unit[0]})
-        this.setState({data: <div><section><h1>{this.state.unit.unitId}</h1><p>{this.state.unit.unitName}</p></section></div>})
-        this.renderModules(modulesResponse)
+        const response = await api.get(`/unit/${unitId}/${studentId}`)
+        console.log(response.data);
+        this.renderModules(response)
+        // this.setState({modules: response.data.modules})
+        // this.setState({data: <div><section><h1>{this.state.unit.unitId}</h1><p>{this.state.unit.unitName}</p></section></div>})
     }
 
     renderModules(response) {
@@ -39,6 +45,7 @@ class Unit extends Component {
 
     render() {
         return (
+            <div className="jumbotron align-center">
             <div className="container mt-5">
                 {this.state.data}
                 <section>
@@ -56,6 +63,7 @@ class Unit extends Component {
                         </tbody>
                     </table>
                 </section>
+            </div>
             </div>
         )
     }
