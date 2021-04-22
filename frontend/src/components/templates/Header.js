@@ -12,7 +12,7 @@ import {
 } from "react-pro-sidebar";
 
 //import icons from react icons
-import { FaList, FaRegHeart, FaUser, FaUsers } from "react-icons/fa";
+import { FaList, FaQuestion, FaRegHeart, FaUser, FaUsers } from "react-icons/fa";
 import { FiHome, FiLogOut, FiArrowLeftCircle, FiArrowRightCircle, FiBook } from "react-icons/fi";
 import { RiPencilLine } from "react-icons/ri";
 import { BiCog } from "react-icons/bi";
@@ -52,7 +52,7 @@ const Header = () => {
           Home<Link to='/'/>
         </MenuItem>
         <MenuItem icon={<FiBook />}><Link to={`/courses/staff/${window.localStorage.getItem('userId')}`}>Courses</Link></MenuItem>
-        <MenuItem icon={<FaUsers />}>Profile</MenuItem>
+        <MenuItem icon={<FaQuestion />}>Questions</MenuItem>
         <MenuItem icon={<BiCog />}>Settings</MenuItem>
       </Menu>
       )
