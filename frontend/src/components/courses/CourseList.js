@@ -30,7 +30,7 @@ const CourseList = (props) => {
     }
 
     return (
-        <div className="container mt-5">
+        <div className="container pt-5">
             <h1>Courses</h1>
             <p>Courses currently being taught</p>
             <table class="table mt-5">

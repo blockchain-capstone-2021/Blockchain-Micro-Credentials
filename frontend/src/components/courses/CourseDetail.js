@@ -23,7 +23,6 @@ const CourseDetail = (props) => {
                 <tr key={student.studentId} className={type === 'available' ? "" : "table-secondary"}>
                 <th scope="row">{student.studentId}</th>
                 <td>{student.studentName}</td>
-                <td>{student.studentCreditPoints}</td>
                 <td>{type === 'available' ? "Enrolled" : "Completed"}</td>
                 <td>{type === 'available' ? <Link to={`/courses/${props.match.params.courseId}/final/${student.studentId}`} className="btn btn-primary">Go</Link> : "" }</td>
                 </tr>
@@ -33,14 +32,13 @@ const CourseDetail = (props) => {
 
 
     return (
-        <div className="container">
+        <div className="container  mt-5">
             <h1>Enrolled Students</h1>
-            <table class="table">
+            <table class="table mt-5">
             <thead>
                 <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
-                <th scope="col">Credit Points</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
                 </tr>
