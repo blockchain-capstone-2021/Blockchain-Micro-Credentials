@@ -65,10 +65,10 @@ class StudentDashboard extends Component {
             <h1 className="h2">Dashboard</h1>
           </div>
           <section className="mb-5">
-          <h2>Enrolments</h2>
-          <h3>Available</h3>
+          <h2 className="mt-2">Enrolments</h2>
+          <h3 className="my-5">Available</h3>
           {this.state.available ? this.renderAvailableEnrolments() :  "No available enrolments"}
-          <h3>Unavailable</h3>
+          <h3 className="my-5">Unavailable</h3>
           {this.state.unavailable ? this.renderUnavailableEnrolments() : "No unavailable enrolments"}
           </section>
         </main>
