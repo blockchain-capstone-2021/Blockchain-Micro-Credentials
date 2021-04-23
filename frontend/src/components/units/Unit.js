@@ -30,8 +30,8 @@ class Unit extends Component {
         console.log(moduleResponse.data);
 
         // send responses
-        this.renderModules(moduleResponse)
         this.renderUnit(unitResponse)
+        this.renderModules(moduleResponse)
     }
 
     renderUnit = async (response) => {
@@ -55,7 +55,7 @@ class Unit extends Component {
             })
           })
     }
-
+        
     render() {
         return (
             <div className="jumbotron align-center">
@@ -72,7 +72,7 @@ class Unit extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.modules}
+                            {this.state.modules ? this.state.modules : "  loading..."}
                         </tbody>
                     </table>
                 </section>
@@ -81,6 +81,5 @@ class Unit extends Component {
         )
     }
 }
-
 
 export default Unit
