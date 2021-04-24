@@ -55,7 +55,7 @@ const App = () => {
           <Route path="/student/:studentId" component={StudentDetail} />
           <Route path="/students" component={() => <StudentList key={getDate()} />} />
           <Route path="/module/:moduleId" component={Module} />      
-          <Route exact path="/" component={window.localStorage.getItem('isStaff') === "true" ? () => <StaffDashboard key={getDate()} /> : () => <StudentDashboard key={getDate()} />} />
+          <Route exact path="/" component={window.localStorage.getItem('isStaff') === true ? () => <StaffDashboard key={getDate()} /> : () => <StudentDashboard key={getDate()} />} />
         </Switch>
         </div>
       </BrowserRouter>
