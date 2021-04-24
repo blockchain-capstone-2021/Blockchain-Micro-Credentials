@@ -46,7 +46,7 @@ async function calculateScore(studentId, unitId, currentSemester){
 
     let modules = await dbModuleController.getModulesByUnit(unitId)
 
-    for (const module in modules)
+    for (const module of modules)
         {
             let modKey = new Module_Key(studentId, unitId, module.moduleId, currentSemester)
             let serialisedModKey = JSON.stringify(modKey)
