@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types';
+import api from '../apis/api'
+
 import"./Login.css";
 
-async function loginUser(credentials) {
-    return fetch('http://localhost:3001/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(credentials)
-    })
-      .then(data => data.json())
+async function loginUser(username, password) {
+    const response = ''
+    if (username.startsWith("e")) {
+        response = await api.post(`/staff/${username}/${password}`)
+    }
+    else {
+        response = await api.post(`/student/${username}/${password}`)
+    }
+    return response.data.loggedIn
    }
 
 const Login = ({ setToken }) => {
@@ -19,10 +21,10 @@ const Login = ({ setToken }) => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        const token = await loginUser({
+        const token = await loginUser(
           username,
           password
-        });
+        );
         
         window.localStorage.setItem('userId', username);
         // Check if user is a staff or student
