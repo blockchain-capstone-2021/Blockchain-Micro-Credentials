@@ -9,6 +9,8 @@ const questionsRouter = require('./routes/questions')
 const studentsRouter = require('./routes/students')
 const unitsRouter = require('./routes/units')
 const degreesRouter = require('./routes/degrees')
+const modulesRouter = require('./routes/modules')
+
 const app = express();
 
 // Module dependencies for express
@@ -25,6 +27,7 @@ app.use('/questions', questionsRouter);
 app.use('/student', studentsRouter)
 app.use('/unit', unitsRouter)
 app.use('/degree', degreesRouter)
+app.use('/module', modulesRouter)
 
 app.use('/login', (req, res) => {
   res.send({

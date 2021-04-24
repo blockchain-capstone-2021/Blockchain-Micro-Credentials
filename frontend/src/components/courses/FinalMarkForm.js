@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from 'react'
+import { Redirect, useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
 
 const FinalMarkForm = (props) => {
-
+    const history = useHistory();
     const [student, setStudent] = useState()
     const [finalMark, setFinalMark] = useState()
 
     useEffect(() => {
+        console.log(props);
         async function getStudent() {
             const response = await microcredapi.get(`/student/${props.match.params.studentId}`).then(response => response.data.student)
             setStudent(response)
@@ -18,13 +20,17 @@ const FinalMarkForm = (props) => {
         e.preventDefault();
         console.log(student.studentId, props.match.params.courseId,finalMark);
 
-        const response = await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`)
-        console.log(response);
+        await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`).then(response => {
+            history.push(`/courses/${props.match.params.courseId}`);
+        }
+        )
     }
+        
+
 
     return (
         <div className="container">
-            <h1 className="text-center">Final Mark Form</h1>
+            <h1 className="mt-5">Final Mark Form</h1>
             {
                 student?
                 <form>
@@ -50,7 +56,9 @@ const FinalMarkForm = (props) => {
                     <label for="finalMark" class="form-label">Final Mark</label>
                     <input type="number" id="finalMark" class="form-control" max="100" onChange={(e) => {setFinalMark(e.target.value)}}/>
                     </div>
-                    <a name="" id="" class="btn btn-primary" href="#" role="button" onClick={(e) => onSubmit(e)}>Submit</a>
+                    <div>
+                        <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center" onClick={(e) => onSubmit(e)}>Submit</button>
+                    </div>
                 </fieldset>
                 </form>:
                 "Loading"
