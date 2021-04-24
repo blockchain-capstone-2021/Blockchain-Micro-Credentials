@@ -90,7 +90,7 @@ const Header = () => {
           </SidebarContent>
           <SidebarFooter>
             <Menu iconShape="square">
-              <MenuItem icon={<FiLogOut />} onClick={() => logout}>Logout</MenuItem>
+              <MenuItem icon={<FiLogOut />} onClick={() => logout()}>Logout</MenuItem>
             </Menu>
           </SidebarFooter>
         </ProSidebar>
