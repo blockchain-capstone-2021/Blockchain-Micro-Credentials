@@ -52,14 +52,14 @@ const QuestionCreate = () => {
         <div className="col-sm-10">
           <input
             type="text"
-            class="form-control"
+            className="form-control"
             id={`answer-${number}`}
             name={`answer-${number}`}
             placeholder={`Write answer #${number} here`}
           />
         </div>
         <div className="col-sm-2">
-        <select class="form-select" name={`correct-${number}`} id={`answer-${number}`}>
+        <select className="form-select" name={`correct-${number}`} id={`answer-${number}`}>
           <option value="False">False</option>
           <option value="True">True</option>
         </select>
@@ -70,10 +70,10 @@ const QuestionCreate = () => {
 
   function renderQuestionInput(){
       return (
-        <div class="input-group my-3">
+        <div className="input-group my-3">
         <input
           type="text"
-          class="form-control"
+          className="form-control"
           placeholder="Question"
           aria-label="Recipient's username"
           aria-describedby="basic-addon2"
@@ -85,9 +85,9 @@ const QuestionCreate = () => {
   function renderUnitModuleInput(){
     return (
         <div className="col-sm-12">
-        <div class="input-group mb-3">
+        <div className="input-group mb-3">
           <select
-            class="form-select"
+            className="form-select"
             id="course"
             onChange={(e) =>
               setSelectedCourse(
@@ -100,8 +100,8 @@ const QuestionCreate = () => {
           </select>
         </div>
 
-        <div class="input-group mb-3">
-          <select class="form-select" id="course">
+        <div className="input-group mb-3">
+          <select className="form-select" id="course">
             <option>Select a module</option>
             {modules ? renderModuleOptions() : <option>Loading...</option>}
           </select>
@@ -131,7 +131,7 @@ const QuestionCreate = () => {
             {renderAnswerInput(4)}
         </div>
         <div className="row mt-4 g-3">
-        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        <button type="submit" className="btn btn-primary btn-block">Submit</button>
         </div>
       </div>
     </div>

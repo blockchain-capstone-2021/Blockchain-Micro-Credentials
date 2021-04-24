@@ -12,9 +12,8 @@ import {
 } from "react-pro-sidebar";
 
 //import icons from react icons
-import { FaList, FaQuestion, FaRegHeart, FaUser, FaUsers } from "react-icons/fa";
+import { FaQuestion, FaUsers } from "react-icons/fa";
 import { FiHome, FiLogOut, FiArrowLeftCircle, FiArrowRightCircle, FiBook } from "react-icons/fi";
-import { RiPencilLine } from "react-icons/ri";
 import { BiCog } from "react-icons/bi";
 
 
@@ -91,7 +90,7 @@ const Header = () => {
           </SidebarContent>
           <SidebarFooter>
             <Menu iconShape="square">
-              <MenuItem icon={<FiLogOut />} onClick={logout}>Logout</MenuItem>
+              <MenuItem icon={<FiLogOut />} onClick={() => logout}>Logout</MenuItem>
             </Menu>
           </SidebarFooter>
         </ProSidebar>

@@ -7,8 +7,6 @@ const getQuestions = async (req, res, next)=>{
         let module = await dbModuleController.getModule(parseInt(req.params.moduleId))
         res.locals.questions =  await dbQuestionController.getQuestions(parseInt(req.params.moduleId), module.noOfQuestions)
         res.locals.answersMap = await getAnswers(res.locals.questions)
-        console.log(module);
-        console.log(res.locals.answersMap);
         res.locals.success = true
     }
     catch(err){

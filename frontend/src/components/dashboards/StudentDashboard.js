@@ -42,7 +42,7 @@ class StudentDashboard extends Component {
         <div className="card-body">
           <h5 className="card-title">{this.state.unitMap[unitId]}</h5>
           <p className="card-text">Enrolled for:<br/>{enrolment.semOfEnrolment}</p>
-          <Link to={`/unit/${enrolment.unitId}`} className="btn btn-primary" onClick={() => {window.localStorage.setItem('enrolmentPeriod', enrolment.semOfEnrolment)}}>Go</Link>
+          <Link to={{pathname:`/unit/${enrolment.unitId}`, state:{'unitId': enrolment.unitId}}} className="btn btn-primary" onClick={() => {window.localStorage.setItem('enrolmentPeriod', enrolment.semOfEnrolment)}}>Go</Link>
         </div>
       </div>
       )

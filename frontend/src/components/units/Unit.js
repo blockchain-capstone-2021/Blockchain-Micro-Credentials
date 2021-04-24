@@ -50,13 +50,13 @@ class Unit extends Component {
                     <td>{module.moduleName}</td>
                     <td>{this.state.attempts[key+1]}</td>
                     <td>{this.state.highestScore[key+1]}</td>
-                    <td><Link to={`/module/${module.moduleId}`} className="btn btn-primary">Go</Link></td>
+                    <td><Link to={{pathname: `/module/${module.moduleId}`, attemptNumber: this.state.attempts[key+1]}} className="btn btn-primary">Go</Link></td>
                 </tr>
               )
             })
           })
     }
-        
+        // to={`/module/${module.moduleId}`}
     render() {
         return (
             <div className="jumbotron align-center">

@@ -27,7 +27,7 @@ class StudentList extends Component {
                     <td>{student.studentCreditPoints}</td>
                     <td>
                     <Link to={`/student/${student.studentId}`} className="btn btn-warning"> Edit </Link>
-                    <button type="button" className="btn btn-danger mx-2" data-bs-toggle="modal" data-bs-studentname={student.studentName} data-bs-studentid={student.studentId} data-bs-target="#deleteConf" onClick={this.displayDeleteModal(this.state.history, this.setRedirect)}>
+                    <button type="button" className="btn btn-danger mx-2" data-bs-toggle="modal" data-bs-studentname={student.studentName} data-bs-studentid={student.studentId} data-bs-target="#deleteConf" onClick={() => {this.displayDeleteModal(this.state.history, this.setRedirect)}}>
                     Delete
                 </button>
                     </td>

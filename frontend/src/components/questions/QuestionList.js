@@ -1,13 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
 const QuestionList = () => {
-
-    const [questions, setquestions] = useState([])
-
-    useEffect(() => {
-
-    }, [])
 
     return (
         <div className="containr w-75">

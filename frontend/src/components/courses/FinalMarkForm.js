@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Redirect, useHistory } from 'react-router'
+import {  useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
 
 const FinalMarkForm = (props) => {
@@ -14,6 +14,7 @@ const FinalMarkForm = (props) => {
             setStudent(response)
         }
         getStudent()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     async function onSubmit(e) {
@@ -36,25 +37,25 @@ const FinalMarkForm = (props) => {
                 <form>
                 <fieldset className="mt-5">
                     
-                    <div class="mb-3">
-                    <label for="studentId" class="form-label">Id</label>
-                    <input type="text" id="studentId" class="form-control" value={student.studentId}  disabled/>
+                    <div className="mb-3">
+                    <label htmlFor="studentId" className="form-label">Id</label>
+                    <input type="text" id="studentId" className="form-control" value={student.studentId}  disabled/>
                     </div>
-                    <div class="mb-3">
-                    <label for="studentName" class="form-label">Name</label>
-                    <input type="text" id="studentName" class="form-control" value={student.studentName}  disabled/>
+                    <div className="mb-3">
+                    <label htmlFor="studentName" className="form-label">Name</label>
+                    <input type="text" id="studentName" className="form-control" value={student.studentName}  disabled/>
                     </div>
-                    <div class="mb-3">
-                    <label for="studentEmail" class="form-label">Email</label>
-                    <input type="text" id="studentEmail" class="form-control" value={student.studentEmail}  disabled/>
+                    <div className="mb-3">
+                    <label htmlFor="studentEmail" className="form-label">Email</label>
+                    <input type="text" id="studentEmail" className="form-control" value={student.studentEmail}  disabled/>
                     </div>
-                    <div class="mb-3">
-                    <label for="studentCreditPoints" class="form-label">Credit Points</label>
-                    <input type="text" id="studentCreditPoints" class="form-control" value={student.studentCreditPoints}  disabled/>
+                    <div className="mb-3">
+                    <label htmlFor="studentCreditPoints" className="form-label">Credit Points</label>
+                    <input type="text" id="studentCreditPoints" className="form-control" value={student.studentCreditPoints}  disabled/>
                     </div>
-                    <div class="mb-3">
-                    <label for="finalMark" class="form-label">Final Mark</label>
-                    <input type="number" id="finalMark" class="form-control" max="100" onChange={(e) => {setFinalMark(e.target.value)}}/>
+                    <div className="mb-3">
+                    <label htmlFor="finalMark" className="form-label">Final Mark</label>
+                    <input type="number" id="finalMark" className="form-control" max="100" onChange={(e) => {setFinalMark(e.target.value)}}/>
                     </div>
                     <div>
                         <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center" onClick={(e) => onSubmit(e)}>Submit</button>
