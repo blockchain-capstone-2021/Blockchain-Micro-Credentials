@@ -60,7 +60,6 @@ const Module = (props) => {
             'attemptNo': props.location.attemptNumber+1,
             'qAPairs': qa_pair
         }
-        console.log(payload);
         return payload;
     }
 
@@ -80,12 +79,12 @@ const Module = (props) => {
     }
 
     return (
-        <div>
+        <div className="row justify-content-center my-3">
             <h1>Module {props.match.params.moduleId} Quiz</h1>
-            <h4>Attempt: #X</h4>
-            <form>
+            <h4>Attempt: #{props.location.attemptNumber+1}</h4>
+            <form className="w-75">
                 {questions ? renderQuestions() : 'Loading'}
-                <button type="submit" className="btn btn-primary" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
+                <button type="submit" className="btn btn-primary my-3" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
             </form>
         </div>
     )

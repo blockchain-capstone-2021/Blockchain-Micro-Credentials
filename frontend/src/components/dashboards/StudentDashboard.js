@@ -11,11 +11,10 @@ const StudentDashboard = (props) => {
   const [unavailableEnrolments, setUnavailableEnrolments] = useState()
   const [unitMap, setUnitMap] = useState()
   useEffect(() => {
-    
     async function initState(){
       await microcredapi.get(`/student/${window.localStorage.getItem('userId')}/enrolled`).then(response => {
-        setUnavailableEnrolments(response.data.enrolments.unavailable)
-        setAvailableEnrolments(response.data.enrolments.available)
+        setUnavailableEnrolments(response.data.enrolments.unavailable.length > 0 ? response.data.enrolments.unavailable: undefined)
+        setAvailableEnrolments(response.data.enrolments.available.length > 0 ? response.data.enrolments.available: undefined)
         setUnitMap(response.data.unitMap)
       })
     }
@@ -23,10 +22,10 @@ const StudentDashboard = (props) => {
   }, [])
 
   function renderEnrolments(enrolmentsArray, type) {
-    const isAvailable = type === 'AVAILABLE'? true : false
+    const isAvailable = type == 'AVAILABLE'? true : false
     return enrolmentsArray.map(enrolment => {
       return (
-        <div className={`card ${type ? 'text-white bg-success' : ''}`} style={{width: '18rem'}}>
+        <div className={`card`} style={{width: '18rem'}}>
         <div className="card-body">
           <h5 className="card-title">{unitMap ? unitMap[enrolment.unitId]: "Loading"}</h5>
           <p className="card-text">Enrolled for:<br/>{enrolment.semOfEnrolment}</p>
