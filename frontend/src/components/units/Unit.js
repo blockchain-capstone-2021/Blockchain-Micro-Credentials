@@ -44,11 +44,12 @@ class Unit extends Component {
         this.setState({attempts: response.data.numAttempts})
         this.setState({modules:
             response.data.modules.map((module, key) => {
+                console.log();
               return (
                 <tr className="py-2" key={module.moduleNo}>
                     <td>{module.moduleName}</td>
-                    <td>{}</td>
-                    <td>{}</td>
+                    <td>{this.state.attempts[key+1]}</td>
+                    <td>{this.state.highestScore[key+1]}</td>
                     <td><Link to={`/module/${module.moduleId}`} className="btn btn-primary">Go</Link></td>
                 </tr>
               )
