@@ -46,7 +46,7 @@ class Unit extends Component {
             response.data.modules.map((module, key) => {
                 console.log();
               return (
-                <tr className="py-2" key={module.moduleNo}>
+                <tr className="py-2" key={module.moduleId}>
                     <td>{module.moduleName}</td>
                     <td>{this.state.attempts[key+1]}</td>
                     <td>{this.state.highestScore[key+1]}</td>
