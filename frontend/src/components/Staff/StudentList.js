@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link, Redirect, withRouter } from 'react-router-dom';
-import api from '../../apis/api'
+import microcredapi from '../../apis/microcredapi'
 
 class StudentList extends Component {
 
@@ -16,7 +16,7 @@ class StudentList extends Component {
     }
 
     async componentDidMount(){
-        const response = await api.get('/student');
+        const response = await microcredapi.get('/student');
         this.setState({students: response.data.students.map(student => {
             return (
                 <tr key={student.studentId}>
@@ -52,7 +52,7 @@ class StudentList extends Component {
           modalTitle.innerHTML = 'Delete \'' + name + '\'?'
           modalBodyInput.innerHTML = 'Are you sure that you want to delete\'' + name + '\'? This action is irreversible.'
           deleteButton.onclick = async function() {
-            await api.post(`/student/${studentId}/delete`)
+            await microcredapi.post(`/student/${studentId}/delete`)
             redirect()
           }
         })

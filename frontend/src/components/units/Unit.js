@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import api from '../../apis/api'
+import microcredapi from '../../apis/microcredapi';
 import "../dashboards/Dashboard.css";
 
 class Unit extends Component {
@@ -25,8 +25,8 @@ class Unit extends Component {
         this.setState({unit: window.localStorage.getItem('unitId')})
 
         // Make calls
-        const moduleResponse = await api.get(`/unit/${unitId}/${this.state.studentId}`)
-        const unitResponse = await api.get(`/student/${this.state.studentId}/enrolled`)
+        const moduleResponse = await microcredapi.get(`/unit/${unitId}/${this.state.studentId}`)
+        const unitResponse = await microcredapi.get(`/student/${this.state.studentId}/enrolled`)
         console.log(moduleResponse.data);
 
         // send responses
@@ -56,7 +56,12 @@ class Unit extends Component {
             })
           })
     }
-        // to={`/module/${module.moduleId}`}
+    
+    async submitMicroCredential() {
+        await microcredapi.get(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
+
+    }
+
     render() {
         return (
             <div className="jumbotron align-center">
@@ -76,7 +81,28 @@ class Unit extends Component {
                             {this.state.modules ? this.state.modules : "  loading..."}
                         </tbody>
                     </table>
+                    <div>
+                    <button type="button" name="" id="" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
+                    </div>
                 </section>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Submit Modules?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure that you want to submit modules?<br/> Once submitted, you will no longer be able to take quizs for this course.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success" onClick={() => this.submitMicroCredential()}>Submit</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             </div>
         )

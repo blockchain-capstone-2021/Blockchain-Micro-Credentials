@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import api from '../../apis/api'
+import microcredapi from '../../apis/microcredapi'
 
 export default class StudentForm extends Component {
 
@@ -18,7 +18,7 @@ export default class StudentForm extends Component {
     }
 
     async componentDidMount() {
-        await api.get('/degree').then( degrees => {
+        await microcredapi.get('/degree').then( degrees => {
             this.setState({degrees: degrees.data.degrees.map(degree => {
                 return degree
             })})
@@ -70,7 +70,7 @@ export default class StudentForm extends Component {
     async onSubmit(e) {
         e.preventDefault();
         const route = (!this.state.student) ? '/student/create' : `/student/${this.state.student.studentId}/edit`
-        await api.post(route, {
+        await microcredapi.post(route, {
             studentId: this.state.studentId,
             studentName: this.state.studentName,
             degreeId: this.state.degreeId,
