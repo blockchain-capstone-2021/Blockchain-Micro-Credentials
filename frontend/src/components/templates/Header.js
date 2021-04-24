@@ -44,7 +44,7 @@ const Header = () => {
 
 
   const renderStaffMenu = () => {
-    if(isStaff === "true") {
+    if(isStaff) {
       return (
         <Menu iconShape="square">
         <MenuItem active={true} icon={<FiHome />}>
