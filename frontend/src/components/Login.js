@@ -7,10 +7,10 @@ import"./Login.css";
 async function loginUser(username, password) {
     const response = ''
     if (username.startsWith("e")) {
-        response = await api.post(`/staff/${username}/${password}`)
+        response = await api.post(`/login/staff/${username}/${password}`)
     }
     else {
-        response = await api.post(`/student/${username}/${password}`)
+        response = await api.post(`login/student/${username}/${password}`)
     }
     return response.data.loggedIn
    }
