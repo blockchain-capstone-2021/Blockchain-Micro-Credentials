@@ -7,6 +7,7 @@ import Answer from './Answer'
 const Module = (props) => {
 
     const [questions, setQuestions] = useState()
+    const [submitting, setSubmitting] = useState(false)
     const history = useHistory()
 
     useEffect(() => {
@@ -44,10 +45,12 @@ const Module = (props) => {
 
     async function submitModule(e) {
         e.preventDefault()
+        setSubmitting(true)
         const payload = generateModuleSubmissionPayload();
         await microcredapi.post('/module/submit', payload).then(response => {
         history.push(`/unit/${window.localStorage.getItem('unitId')}`)
         })
+        setSubmitting(false)
     }
     
     function generateModuleSubmissionPayload(e) {
@@ -82,10 +85,14 @@ const Module = (props) => {
         <div className="row justify-content-center my-3">
             <h1>Module {props.match.params.moduleId} Quiz</h1>
             <h4>Attempt: #{props.location.attemptNumber+1}</h4>
-            <form className="w-75">
+            {
+                submitting?
+                "Please hold while the quiz is processing.":
+                <form className="w-75">
                 {questions ? renderQuestions() : 'Loading'}
                 <button type="submit" className="btn btn-primary my-3" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
             </form>
+            }
         </div>
     )
 }

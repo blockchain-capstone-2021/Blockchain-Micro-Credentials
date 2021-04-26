@@ -10,6 +10,7 @@ const Unit = (props) => {
 
     const [unit, setUnit] = useState()
     const [modules, setModules] = useState()
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         // Set variables
@@ -54,13 +55,18 @@ const Unit = (props) => {
     }
 
     async function submitMicroCredential() {
+        setSubmitting(true)
         await microcredapi.get(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
+        setSubmitting(false)
         history.push('/')
     }
 
     return (
             <div className="jumbotron align-center">
-            <div className="container mt-5">
+            {
+                submitting?
+                "Please hold while micro-credential is being submitted.":
+                <div className="container mt-5">
                 {
                     unit?
                     <section>
@@ -100,12 +106,13 @@ const Unit = (props) => {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" onClick={() => submitMicroCredential()}>Submit</button>
+                            <button type="button" class="btn btn-success"  data-bs-dismiss="modal" onClick={() => submitMicroCredential()}>Submit</button>
                         </div>
                         </div>
                     </div>
                 </div>
             </div>
+            }
             </div>
     )
 }
