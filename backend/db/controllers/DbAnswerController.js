@@ -65,10 +65,18 @@ async function deleteAnswersOfQuestion(_questionId)
     })
 }
 
+async function deleteAllAnswers(questionIdentifiers){
+  for(const id of questionIdentifiers)
+  {
+    await deleteAnswersOfQuestion(id)
+  }
+}
+
 module.exports = {
     getAnswers,
     getAnswer,
     getCorrectAnswer,
     addAnswerToQuestion,
-    deleteAnswersOfQuestion
+    deleteAnswersOfQuestion,
+    deleteAllAnswers
 }
