@@ -1,91 +1,101 @@
-import React, { Component } from 'react'
-import Question from './Question'
-import api from '../../apis/api';
+import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router'
+import microcredapi from '../../apis/microcredapi'
+import Answer from './Answer'
 
-class Module extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-             moduleId: this.props.match.params.moduleId
+const Module = (props) => {
+
+    const [questions, setQuestions] = useState()
+    const [submitting, setSubmitting] = useState(false)
+    const history = useHistory()
+
+    useEffect(() => {
+        window.localStorage.setItem('moduleId', props.match.params.moduleId)
+        async function getQuestionsAndAnswers() {
+            const { moduleId } = props.match.params
+            await microcredapi.get(`/module/${moduleId}/questions`).then(response => {
+                const updatedQuestions = []
+                for (let index = 0; index < response.data.questions.length; index++) {
+                    const question = response.data.questions[index];
+                    const answer = response.data.answersMap[parseInt(question.questionId)]
+                    question.answers = answer
+                    updatedQuestions.push(question)
+                }
+                setQuestions(updatedQuestions)
+            })
+            
         }
-    }
+        getQuestionsAndAnswers()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
-    componentDidMount = async () => {
-        window.localStorage.setItem('moduleId', this.props.match.params.moduleId)
-        this.setState({header: this.renderHeaderSection(this.state.moduleId)});
-        this.setState({questions: await this.getQuestions()}); 
-        const newQuestions = []
-        await this.state.questions.map(async (question, key) => {
-            const answers = await api.get(`/questions/${question.questionId}/answers`)
-            const nQuestion = {...question, answers: answers.data.answers, key: question.questionId}
-            newQuestions.push(nQuestion)
-        });
-        this.setState({questions: newQuestions})
-        setTimeout(() => {
-            this.setState({render: this.renderQuestions(this.state.questions)})
-        }, 3000);
-        
-        }  
 
-    displayQuestions(renderData) {
-        if(renderData !== undefined) {
-            return this.state.render
-        }
-        return <p>Loading</p>
-    }
-    
-    renderQuestions(x){
-        return x.map((question) => {
+
+    function renderQuestions() {
+        return questions.map((question, key) => {
             return (
-                <Question key={question.questionId} question={question} data={question.answers} />
+                <div className="py-3 border-bottom" key={question.questionId}>
+                    <h6>#{key+1}: {question.content}</h6>
+                    {question.answers ? <Answer answers={question.answers} /> : 'Loading'}
+                </div>
             )
         })
     }
-    async getQuestions(){
-        const questions =  await api.get(`questions/${this.props.match.params.moduleId}/10`)
-        .then(response => response.data.questions)
-        return questions;
-    };
 
-    
-    async getAnswers(questionId) {
-        const answers = await api.get(`questions/${questionId}/answers`)
-        .then(response => response.data.answers)
-        return answers
+    async function submitModule(e) {
+        e.preventDefault()
+        setSubmitting(true)
+        const payload = generateModuleSubmissionPayload();
+        await microcredapi.post('/module/submit', payload).then(response => {
+        history.push(`/unit/${window.localStorage.getItem('unitId')}`)
+        })
+        setSubmitting(false)
     }
     
-    renderHeaderSection(number){
-        return (
-            <div>
-                <section>
-                    <h6 className="">{`Module ${number}`}</h6>
-                    <h6>Attempt #</h6>
-                </section>
-            </div>
-        )
-    }
-   
-
-    render() {
-        return (
-            <div className="container mt-3">
-                {this.state.header}
-                <section>
-                <form method="post">
-                {this.displayQuestions(this.state.render)}  
-                <input type="hidden" id="enrolmentPeriod" name="enrolmentPeriod" value={window.localStorage.getItem('enrolmentPeriod')}/>
-                <input type="hidden" id="moduleId" name="moduleId" value={window.localStorage.getItem('moduleId')}/>
-                <input type="hidden" id="unitId" name="unitId" value={window.localStorage.getItem('unitId')}/>
-                <input type="hidden" id="studentId" name="studentId" value={window.localStorage.getItem('userId')} />
-                <button type="submit" className="btn btn-primary">Submit</button>
-                </form>  
-                </section>
-                
-            </div>
-        )
+    function generateModuleSubmissionPayload(e) {
+        const qa_pair = generateQAPair(e)
+        const payload = {
+            'unitId': window.localStorage.getItem('unitId'),
+            'moduleId':window.localStorage.getItem('moduleId'),
+            'studentId': window.localStorage.getItem('userId'),
+            'enrolmentPeriod': window.localStorage.getItem('enrolmentPeriod'),
+            'attemptNo': props.location.attemptNumber+1,
+            'qAPairs': qa_pair
+        }
+        return payload;
     }
 
+    function generateQAPair(e) {
+        const qa_pair_list = []
+        for (let index = 0; index < questions.length; index++) {
+            const question = questions[index];
+            const qa_pair = document.getElementsByName(`qid_${question.questionId}`)
+            for (let index = 0; index < qa_pair.length; index++) {
+                const element = qa_pair[index];
+                if (element.checked) {
+                    qa_pair_list.push(element.id)
+                }
+            }
+        }
+        return qa_pair_list
+    }
+
+    return (
+        <div className="row justify-content-center my-3">
+            <h1>Module {props.match.params.moduleId} Quiz</h1>
+            <h4>Attempt: #{props.location.attemptNumber+1}</h4>
+            {
+                submitting?
+                "Please hold while the quiz is processing.":
+                <form className="w-75">
+                {questions ? renderQuestions() : 'Loading'}
+                <button type="submit" className="btn btn-primary my-3" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
+            </form>
+            }
+        </div>
+    )
 }
 
 export default Module
+

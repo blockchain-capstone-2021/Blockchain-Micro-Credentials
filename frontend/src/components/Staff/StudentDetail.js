@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import api from '../../apis/api'
+import microcredapi from '../../apis/microcredapi'
 import StudentForm from './StudentForm'
 
 class StudentDetail extends Component {
@@ -13,7 +13,7 @@ class StudentDetail extends Component {
     }
 
     async componentDidMount() {
-        const response = await api.get(`/student/${this.state.studentId}`)
+        const response = await microcredapi.get(`/student/${this.state.studentId}`)
         this.setState({student: response.data.student[0]})
         this.setState({form : <StudentForm student={response.data.student[0]} history={this.props.history} />})
     }
