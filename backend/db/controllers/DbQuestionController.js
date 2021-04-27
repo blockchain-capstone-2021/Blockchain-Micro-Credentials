@@ -47,8 +47,18 @@ async function getQuestionsCount(_moduleId){
     return count
 }
 
+async function addQuestionToModule(_moduleId, _content)
+{
+    await models.Question.create({ 
+        moduleId: _moduleId, 
+        content: _content
+    });
+}
+
+
 module.exports = {
     getQuestions,
     getQuestion,
+    addQuestionToModule,
     getQuestionsCount
 }
