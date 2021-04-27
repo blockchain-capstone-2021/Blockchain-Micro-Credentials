@@ -3,8 +3,6 @@ const SHA256 = require("crypto-js/sha256");
 
 const submitStaffLogin = async (req, res, next) => {
     res.locals.success = true;
-    next();
-    return;
 
     try{
         let _staffId = req.params.staffId.toLowerCase();
