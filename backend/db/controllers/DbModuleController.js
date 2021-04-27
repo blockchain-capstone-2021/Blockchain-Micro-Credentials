@@ -28,7 +28,27 @@ async function getModulesByUnit (_unitId)
     return _modules;
 }
 
+//updates number of questions to display to a student for a given module
+async function updateNoOfQuestions(_moduleId, _noOfQuestions)
+{
+    await models.Module.update({ noOfQuestions: _noOfQuestions}, {
+        where: {
+            moduleId: _moduleId
+        }
+    });
+}
+
+async function updateModuleState(_moduleId, _publish){
+    await models.Module.update({ published: _publish}, {
+        where: {
+            moduleId: _moduleId
+        }
+    });
+}
+
 module.exports = {
     getModule,
-    getModulesByUnit
+    getModulesByUnit,
+    updateNoOfQuestions,
+    updateModuleState
 }

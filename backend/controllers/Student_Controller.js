@@ -1,4 +1,5 @@
 const dbStudentController = require('../db/controllers/DbStudentController')
+const dbDegreeController = require('../db/controllers/DbDegreeController')
 const SHA256 = require("crypto-js/sha256");
 
 const submitStudentLogin = async (req, res, next) => {
@@ -31,6 +32,23 @@ const submitStudentLogin = async (req, res, next) => {
     }
 }
 
+const getStudent = async (req, res, next) => {
+    try{
+        let student = await dbStudentController.getStudent(req.params.studentId)
+        res.locals.student = student
+        res.locals.degree = await dbDegreeController.getDegree(student.degreeId)
+        res.locals.success = true
+    }
+    catch(err)
+    {
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
+}
+
 module.exports = {
-    submitStudentLogin
+    submitStudentLogin,
+    getStudent
 }   

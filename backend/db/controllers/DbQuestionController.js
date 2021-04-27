@@ -1,18 +1,10 @@
 const { models } = require('../models/index')
 
 //return a given number of randomised questions for a given module
-async function getQuestions (_moduleId, noOfQuestions) 
+async function getRandomizedQuestions (_moduleId, noOfQuestions) 
 {
-    let _questions;
+    let _questions = await getQuestions(_moduleId);
     let _returnQuestions = [];
-
-    await models.Question.findAll({
-        where: {
-          moduleId: _moduleId
-        }
-      }).then( questions => {
-        _questions = questions;
-    });
   
     for(var i=1; i<=noOfQuestions; i++)
     {
@@ -22,6 +14,21 @@ async function getQuestions (_moduleId, noOfQuestions)
         _returnQuestions.push(question)
     }
     return _returnQuestions;
+}
+
+async function getQuestions (_moduleId) 
+{
+    let _questions;
+
+    await models.Question.findAll({
+        where: {
+          moduleId: _moduleId
+        }
+      }).then( questions => {
+        _questions = questions;
+    });
+
+    return _questions
 }
 
 //return a question for a given questionId
@@ -36,7 +43,54 @@ async function getQuestion(_questionId)
     return _question;
 }
 
+async function getQuestionsCount(_moduleId){
+
+    const count = await models.Question.count({
+        where: {
+            moduleId: _moduleId
+        }
+      });
+
+    return count
+}
+
+//add a new question to a given module
+async function addQuestionToModule(_moduleId, _content)
+{
+    let _questionId
+    await models.Question.create({ 
+        moduleId: _moduleId, 
+        content: _content
+    }).then(question => {
+        _questionId = question.questionId
+    });
+
+    return _questionId
+}
+
+//delete question by question id
+async function deleteQuestion(_questionId)
+{
+    await models.Question.destroy({
+        where: {
+            questionId: _questionId
+        }
+    })
+}
+async function deleteAllQuestions(_moduleId){
+    await models.Question.destroy({
+        where: {
+            moduleId: _moduleId
+        }
+      })
+}
+
 module.exports = {
+    getRandomizedQuestions,
     getQuestions,
-    getQuestion
+    getQuestion,
+    addQuestionToModule,
+    getQuestionsCount,
+    deleteQuestion,
+    deleteAllQuestions
 }
