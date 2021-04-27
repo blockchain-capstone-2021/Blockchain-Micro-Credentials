@@ -19,6 +19,7 @@ const MicroCred_Key = require('../object_models/blockchain/ManualEntry_Key')
 const Unit_Key = require('../object_models/blockchain/Unit_Key')
 const MicroCred_Data = require('../object_models/ipfs/ManualEntry')
 const Unit_Data = require('../object_models/ipfs/Unit')
+const IncompleteModules = require('../exceptions/IncompleteModules')
 
 const submitMicroCred = async (req, res, next)=>{
     try{
@@ -28,6 +29,13 @@ const submitMicroCred = async (req, res, next)=>{
     }
     catch(err){
         res.locals.success = false
+        if (err.name == 'IncompleteModules') {
+            res.locals.customError = true
+            res.locals.errorMessage = err.message
+        }
+        else{
+            res.locals.customError = false
+        }
     }
     finally{
         next();
@@ -50,14 +58,22 @@ async function calculateScore(studentId, unitId, currentSemester){
         {
             let modKey = new Module_Key(studentId, unitId, module.moduleId, currentSemester)
             let serialisedModKey = JSON.stringify(modKey)
-            let index = await blockchain.getHashIndex(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedModKey)
-            moduleIndices.push(index)
-
-            let hash = await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
-                process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedModKey)
-            let modData = await ipfs.ipfsGetData(hash)
-            let deserialisedModule = JSON.parse(modData)
-            finalResult += (deserialisedModule._result * parseFloat(module.weight/100))
+            let exists = await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedModKey)
+            if (exists)
+            {
+                let index = await blockchain.getHashIndex(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedModKey)
+                moduleIndices.push(index)
+    
+                let hash = await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+                    process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedModKey)
+                let modData = await ipfs.ipfsGetData(hash)
+                let deserialisedModule = JSON.parse(modData)
+                finalResult += (deserialisedModule._result * parseFloat(module.weight/100))
+            }
+            else
+            {
+                throw new IncompleteModules("Sorry, the micro-credential cannot be submitted as there are unattempted modules. Please attempt all modules before submission!")
+            }
         }
     return {moduleIndices, finalResult};
 }
@@ -125,6 +141,8 @@ async function evaluatePerformance(studentId, unitId, finalResult){
 // {
 //     await dbStudentController.updateCreditPoints(studentId, creditPoints).then(async ()=>{console.log("finished")});
 // }
+
+submitMicroCred("s3710669", "COSC2536", "Y2021S1")
 
 module.exports = {
     submitMicroCred
