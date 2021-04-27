@@ -14,6 +14,7 @@ const CourseList = (props) => {
             setCourses(response.data.units)
             }
             getCourses()
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []
     )
 
@@ -23,7 +24,7 @@ const CourseList = (props) => {
                 <tr>
                 <th scope="row">{course.unitId}</th>
                 <td>{course.unitName}</td>
-                <td><Link to={`/courses/${course.unitId}`}  class="btn btn-primary">Go</Link></td>
+                <td><Link to={`/courses/${course.unitId}`}  className="btn btn-primary">Go</Link></td>
                 </tr>
             )
         })
@@ -33,7 +34,7 @@ const CourseList = (props) => {
         <div className="container pt-5">
             <h1>Courses</h1>
             <p>Courses currently being taught</p>
-            <table class="table mt-5">
+            <table className="table mt-5">
             <thead>
                 <tr>
                 <th scope="col">Unit Id</th>
