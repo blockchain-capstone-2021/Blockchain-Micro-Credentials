@@ -75,7 +75,7 @@ const getUnitModules = async (req, res, next) => {
     }
 }
 
-const getModules = async (req, res, next)=>{
+const getModulesForStudent = async (req, res, next)=>{
 
     try{
         let modules = await dbModuleController.getModulesByUnit(req.params.unitId)
@@ -194,7 +194,7 @@ async function submitAttempt(qAList, studentId, unitId, moduleNo, moduleId, curr
 }
 
 module.exports = {
-    getModules,
+    getModulesForStudent,
     getUnitModules,
     submitModule
 }
