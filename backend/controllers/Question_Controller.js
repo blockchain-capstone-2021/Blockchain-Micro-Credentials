@@ -37,6 +37,22 @@ const addQuestionToModule = async (req, res, next)=>{
     }
 }
 
+const deleteQuestion = async (req, res, next)=>{
+    try{
+        await dbAnswerController.deleteAnswersOfQuestion(req.params.questionId)
+        await dbQuestionController.deleteQuestion(req.params.questionId)
+
+        res.locals.success = true
+    }
+    catch(err){
+        console.log(err);
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
+}
+
 async function getAnswers(questions)
 {
     let answersMap = new Map()
@@ -50,5 +66,6 @@ async function getAnswers(questions)
 
 module.exports = {
     getQuestions,
-    addQuestionToModule
+    addQuestionToModule,
+    deleteQuestion
 }
