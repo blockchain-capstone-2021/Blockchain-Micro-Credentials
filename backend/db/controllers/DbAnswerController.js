@@ -55,9 +55,20 @@ async function addAnswerToQuestion(_questionId, _content, _isCorrect)
     });
 }
 
+//delete answers by question id
+async function deleteAnswersOfQuestion(_questionId)
+{
+    await models.Answer.destroy({
+        where: {
+            questionId: _questionId
+        }
+    })
+}
+
 module.exports = {
     getAnswers,
     getAnswer,
     getCorrectAnswer,
-    addAnswerToQuestion
+    addAnswerToQuestion,
+    deleteAnswersOfQuestion
 }
