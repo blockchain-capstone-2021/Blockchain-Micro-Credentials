@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types';
-import api from '../apis/api'
+import api from '../apis/microcredapi'
 import"./Login.css";
 
 async function loginUser(username, password) {
