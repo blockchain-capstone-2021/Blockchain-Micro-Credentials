@@ -26,7 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     unitId: DataTypes.STRING,
     moduleName: DataTypes.STRING,
     moduleNo: DataTypes.INTEGER,
-    noOfQuestions: DataTypes.INTEGER
+    noOfQuestions: DataTypes.INTEGER,
+    published: DataTypes.BOOLEAN,
+    weight: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Module',
