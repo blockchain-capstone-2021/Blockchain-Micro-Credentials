@@ -50,10 +50,15 @@ async function getQuestionsCount(_moduleId){
 //add a new question to a given module
 async function addQuestionToModule(_moduleId, _content)
 {
+    let _questionId
     await models.Question.create({ 
         moduleId: _moduleId, 
         content: _content
+    }).then(question => {
+        _questionId = question.questionId
     });
+
+    return _questionId
 }
 
 

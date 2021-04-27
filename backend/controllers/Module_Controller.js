@@ -296,5 +296,6 @@ module.exports = {
     submitModule,
     getModulesForStaff, 
     unpublishModule,
-    publishModule
+    publishModule,
+    updateModuleNoOfQuestions
 }

@@ -18,6 +18,25 @@ const getQuestions = async (req, res, next)=>{
     }
 }
 
+const addQuestionToModule = async (req, res, next)=>{
+    try{
+        let answersList = req.body.answers      
+        let questionId = await dbQuestionController.addQuestionToModule(req.body.moduleId, req.body.questionContent)
+        for (const answer of answersList){
+            await dbAnswerController.addAnswerToQuestion(questionId, answer.content, answer.isCorrect)
+        }
+
+        res.locals.success = true
+    }
+    catch(err){
+        console.log(err);
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
+}
+
 async function getAnswers(questions)
 {
     let answersMap = new Map()
@@ -30,5 +49,6 @@ async function getAnswers(questions)
 }
 
 module.exports = {
-    getQuestions
+    getQuestions,
+    addQuestionToModule
 }
