@@ -17,6 +17,7 @@ const Module_Key = require('../object_models/blockchain/Module_Key')
 const QA_Key = require('../object_models/blockchain/QA_Key')
 const QA_Data = require('../object_models/ipfs/QA')
 const Module_Data = require('../object_models/ipfs/MicroModule')
+const AttemptsExist = require('../exceptions/AttemptsExist')
 
 async function getAttemptNumbers(studentId, modules){
     let attemptsMap = new Map()
@@ -210,9 +211,41 @@ async function submitAttempt(qAList, studentId, unitId, moduleNo, moduleId, curr
     }
 }
 
+const unpublishModule = async(req, res, next)=>{ 
+    try{
+        let currentSemester = await utility.getCurrentSemester()
+
+        let attempt = await dbModule_AttemptController.checkAttemptsExist(req.params.moduleId, currentSemester)
+
+        if(attempt === null)
+        {
+            await dbModuleController.updateModuleState(req.params.moduleId, false)
+        }
+        else
+        {
+            throw new AttemptsExist("Sorry, students have already begun attempting the module. This module cannot be unpublished.")
+        }
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+        if (err.name == 'AttemptsExist') {
+            res.locals.customError = true
+            res.locals.errorMessage = err.message
+        }
+        else{
+            res.locals.customError = false
+        }
+    }
+    finally{
+        next();
+    }
+}
+
 module.exports = {
     getModulesForStudent,
     getUnitModules,
     submitModule,
-    getModulesForStaff
+    getModulesForStaff, 
+    unpublishModule
 }

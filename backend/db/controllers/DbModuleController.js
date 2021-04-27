@@ -38,8 +38,17 @@ async function updateNoOfQuestions(_moduleId, _noOfQuestions)
     });
 }
 
+async function updateModuleState(_moduleId, _publish){
+    await models.Module.update({ published: _publish}, {
+        where: {
+            moduleId: _moduleId
+        }
+    });
+}
+
 module.exports = {
     getModule,
     getModulesByUnit,
-    updateNoOfQuestions
+    updateNoOfQuestions,
+    updateModuleState
 }

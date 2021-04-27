@@ -43,7 +43,19 @@ async function incrementAttempts(_studentId, _moduleId, _semOfEnrolment)
     }   
 }
 
+async function checkAttemptsExist(_moduleId, _semOfEnrolment)
+{
+    let module_attempt = await models.Module_Attempt.findOne({
+        where: {
+            moduleId: _moduleId,
+            semOfEnrolment: _semOfEnrolment
+        }
+    })
+    return module_attempt
+}
+
 module.exports = {
     getNoOfAttempts,
-    incrementAttempts
+    incrementAttempts,
+    checkAttemptsExist 
 }
