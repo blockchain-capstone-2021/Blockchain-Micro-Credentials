@@ -20,9 +20,10 @@ const Module_Data = require('../object_models/ipfs/MicroModule')
 
 async function getAttemptNumbers(studentId, modules){
     let attemptsMap = new Map()
+    let currentSemester = await utility.getCurrentSemester()
 
     for (const module of modules){
-        attemptsMap[module.moduleId] = await dbModule_AttemptController.getNoOfAttempts(studentId, module.moduleId)
+        attemptsMap[module.moduleId] = await dbModule_AttemptController.getNoOfAttempts(studentId, module.moduleId, currentSemester)
     } 
 
     return attemptsMap;
@@ -119,7 +120,7 @@ const submitModule = async(req, res, next)=>{
         let result = await submitQAPairs(req.body.studentId, req.body.unitId, req.body.enrolmentPeriod, parseInt(req.body.attemptNo), moduleNo, parseInt(req.body.moduleId), qAList)
         await submitAttempt(result.qAIndices, req.body.studentId, req.body.unitId, moduleNo, module.moduleId, req.body.enrolmentPeriod, parseInt(req.body.attemptNo), result.score)
     
-        await dbModule_AttemptController.incrementAttempts(req.body.studentId, module.moduleId)
+        await dbModule_AttemptController.incrementAttempts(req.body.studentId, module.moduleId, req.body.enrolmentPeriod)
 
         res.locals.success = true
     }
