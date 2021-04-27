@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import api from '../../apis/api'
+import microcredapi from '../../apis/microcredapi'
 import StudentForm from './StudentForm'
 
 class StudentCreate extends Component {
@@ -14,7 +14,7 @@ class StudentCreate extends Component {
     }
 
     async componentDidMount() {
-        await api.get('/degree').then( degrees => {
+        await microcredapi.get('/degree').then( degrees => {
             this.setState({degrees: degrees.data.degrees.map(degree => {
                 return degree
             })})

@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Header from "./templates/Header";
 import Module from "./modules/Module"
 import Login from "./Login";
-import Home from './Home'
 import Unit from './units/Unit'
 import StaffDashboard from './dashboards/StaffDashboard'
 import StudentDashboard from './dashboards/StudentDashboard'
@@ -24,7 +23,7 @@ import QuestionCreate from "./questions/QuestionCreate";
 const App = () => {
 
   const [userId, setUserId] = useState()
-
+  console.log(userId);
   useEffect(() => {
     setUserId(window.localStorage.getItem('userId'))
   }, [])
@@ -56,7 +55,7 @@ const App = () => {
           <Route path="/student/:studentId" component={StudentDetail} />
           <Route path="/students" component={() => <StudentList key={getDate()} />} />
           <Route path="/module/:moduleId" component={Module} />      
-          <Route exact path="/" component={window.localStorage.getItem('isStaff') === "true" ? () => <StaffDashboard key={getDate()} /> : () => <StudentDashboard key={getDate()} />} />
+          <Route exact path="/" component={window.localStorage.getItem('isStaff') === true ? () => <StaffDashboard key={getDate()} /> : () => <StudentDashboard key={getDate()} />} />
         </Switch>
         </div>
       </BrowserRouter>

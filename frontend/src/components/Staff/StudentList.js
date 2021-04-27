@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link, Redirect, withRouter } from 'react-router-dom';
-import api from '../../apis/api'
+import microcredapi from '../../apis/microcredapi'
 
 class StudentList extends Component {
 
@@ -16,7 +16,7 @@ class StudentList extends Component {
     }
 
     async componentDidMount(){
-        const response = await api.get('/student');
+        const response = await microcredapi.get('/student');
         this.setState({students: response.data.students.map(student => {
             return (
                 <tr key={student.studentId}>
@@ -27,7 +27,7 @@ class StudentList extends Component {
                     <td>{student.studentCreditPoints}</td>
                     <td>
                     <Link to={`/student/${student.studentId}`} className="btn btn-warning"> Edit </Link>
-                    <button type="button" className="btn btn-danger mx-2" data-bs-toggle="modal" data-bs-studentname={student.studentName} data-bs-studentid={student.studentId} data-bs-target="#deleteConf" onClick={this.displayDeleteModal(this.state.history, this.setRedirect)}>
+                    <button type="button" className="btn btn-danger mx-2" data-bs-toggle="modal" data-bs-studentname={student.studentName} data-bs-studentid={student.studentId} data-bs-target="#deleteConf" onClick={() => {this.displayDeleteModal(this.state.history, this.setRedirect)}}>
                     Delete
                 </button>
                     </td>
@@ -52,7 +52,7 @@ class StudentList extends Component {
           modalTitle.innerHTML = 'Delete \'' + name + '\'?'
           modalBodyInput.innerHTML = 'Are you sure that you want to delete\'' + name + '\'? This action is irreversible.'
           deleteButton.onclick = async function() {
-            await api.post(`/student/${studentId}/delete`)
+            await microcredapi.post(`/student/${studentId}/delete`)
             redirect()
           }
         })

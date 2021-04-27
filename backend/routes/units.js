@@ -1,6 +1,8 @@
 const express = require('express')
 const { getUnitsByStaff } = require('../controllers/Unit_Controller')
 const { getEnrolmentsByUnit } = require('../controllers/Enrolment_Controller')
+const { getModules } = require('../controllers/Module_Controller')
+const { submitMicroCred } = require('../controllers/Microcredential_Controller')
 var router = express.Router()
 
 router.get('/:staffId', getUnitsByStaff, async function (req, res, next) {
@@ -27,6 +29,33 @@ router.get('/:unitId/enrolled', getEnrolmentsByUnit, async function (req, res, n
     return res.status(400).send({
         success: 'false',
         message: 'No students enrolled.'
+    })
+})
+
+router.get('/:unitId/:studentId', getModules, async function (req, res, next) {
+    if(res.locals.success) {
+        return res.status(200).send({
+            success: 'true',
+            modules: res.locals.modules,
+            highestScore: res.locals.highestScoreMap,
+            numAttempts: res.locals.attemptsMap
+        })
+    }
+    return res.status(400).send({
+        success: 'false',
+        message: 'No modules found.'
+    })
+})
+
+router.get('/submit/:studentId/:unitId/:enrolmentPeriod', submitMicroCred, async function (req, res, next) {
+    if(res.locals.success) {
+        return res.status(200).send({
+            success: res.locals.success
+        })
+    }
+    return res.status(400).send({
+        success: res.locals.success,
+        message: 'Could not submit micro-credential. Try again.'
     })
 })
 

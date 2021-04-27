@@ -6,11 +6,11 @@ const getQuestions = async (req, res, next)=>{
     try{
         let module = await dbModuleController.getModule(parseInt(req.params.moduleId))
         res.locals.questions =  await dbQuestionController.getQuestions(parseInt(req.params.moduleId), module.noOfQuestions)
-        res.locals.answersMap = await getAnswers(questions)
-
+        res.locals.answersMap = await getAnswers(res.locals.questions)
         res.locals.success = true
     }
     catch(err){
+        console.log(err);
         res.locals.success = false
     }
     finally{

@@ -15,20 +15,21 @@ const Unit_Key = require('../object_models/blockchain/Unit_Key')
 const getEnrolmentsByStudent = async (req, res, next)=>{
     try{
         let currentSemester = await utility.getCurrentSemester()
-
+        console.log(currentSemester);
         let enrolments = await dbEnrolmentController.getEnrolmentsByStudent(req.params.studentId, currentSemester)
-    
+        console.log(enrolments);
         let unitMap = new Map()
         let availableEnrolments = []
         let unavailableEnrolments = []
-    
+        
         for (const enrolment of enrolments){
             let unit  = await dbUnitController.getUnit(enrolment.unitId)
             unitMap[unit.unitId] = unit.unitName
     
-            let unitKey = new Unit_Key(req.params.studentId, enrolments.unitId, currentSemester)
+            let unitKey = new Unit_Key(enrolment.studentId, enrolment.unitId, currentSemester)
             let serialisedKey = JSON.stringify(unitKey)
             let exists = await blockchain.checkExists(unitTrackerContract, process.env.UNIT_TRACKER_ADDRESS, serialisedKey)
+            
             if (!exists)
             {
                 availableEnrolments.push(enrolment)
@@ -44,6 +45,7 @@ const getEnrolmentsByStudent = async (req, res, next)=>{
         res.locals.success = true
     }
     catch(err){
+        console.log(err);
         res.locals.success = false
     }
     finally{
