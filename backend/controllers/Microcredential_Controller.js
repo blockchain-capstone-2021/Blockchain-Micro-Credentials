@@ -142,8 +142,6 @@ async function evaluatePerformance(studentId, unitId, finalResult){
 //     await dbStudentController.updateCreditPoints(studentId, creditPoints).then(async ()=>{console.log("finished")});
 // }
 
-submitMicroCred("s3710669", "COSC2536", "Y2021S1")
-
 module.exports = {
     submitMicroCred
 }
