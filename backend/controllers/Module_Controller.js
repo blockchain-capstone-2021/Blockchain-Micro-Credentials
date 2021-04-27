@@ -95,6 +95,22 @@ const getModulesForStudent = async (req, res, next)=>{
     }
 }
 
+const getModulesForStaff = async (req, res, next)=>{
+
+    try{
+        let modules = await dbModuleController.getModulesByUnit(req.params.unitId)
+
+        res.locals.modules = modules
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
+}
+
 const submitModule = async(req, res, next)=>{
     try{
         let module = await dbModuleController.getModule(parseInt(req.body.moduleId))
@@ -196,5 +212,6 @@ async function submitAttempt(qAList, studentId, unitId, moduleNo, moduleId, curr
 module.exports = {
     getModulesForStudent,
     getUnitModules,
-    submitModule
+    submitModule,
+    getModulesForStaff
 }
