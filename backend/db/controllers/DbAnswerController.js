@@ -45,8 +45,19 @@ async function getCorrectAnswer(_questionId)
     return _answer;
 }
 
+//add an answer to a given question
+async function addAnswerToQuestion(_questionId, _content, _isCorrect)
+{
+    await models.Question.create({ 
+        questionId: _moduleId, 
+        content: _content,
+        isCorrect: _isCorrect
+    });
+}
+
 module.exports = {
     getAnswers,
     getAnswer,
-    getCorrectAnswer
+    getCorrectAnswer,
+    addAnswerToQuestion
 }
