@@ -61,10 +61,20 @@ async function addQuestionToModule(_moduleId, _content)
     return _questionId
 }
 
+//delete question by question id
+async function deleteQuestion(_questionId)
+{
+    await models.Question.destroy({
+        where: {
+            questionId: _questionId
+        }
+    })
+}
 
 module.exports = {
     getQuestions,
     getQuestion,
     addQuestionToModule,
-    getQuestionsCount
+    getQuestionsCount,
+    deleteQuestion
 }
