@@ -36,7 +36,19 @@ async function getQuestion(_questionId)
     return _question;
 }
 
+async function getQuestionsCount(_moduleId){
+
+    const count = await models.Question.count({
+        where: {
+            moduleId: _moduleId
+        }
+      });
+
+    return count
+}
+
 module.exports = {
     getQuestions,
-    getQuestion
+    getQuestion,
+    getQuestionsCount
 }

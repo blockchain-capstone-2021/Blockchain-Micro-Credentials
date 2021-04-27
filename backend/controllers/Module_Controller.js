@@ -18,6 +18,7 @@ const QA_Key = require('../object_models/blockchain/QA_Key')
 const QA_Data = require('../object_models/ipfs/QA')
 const Module_Data = require('../object_models/ipfs/MicroModule')
 const AttemptsExist = require('../exceptions/AttemptsExist')
+const InsufficientQuestions = require('../exceptions/InsufficientQuestions')
 
 async function getAttemptNumbers(studentId, modules){
     let attemptsMap = new Map()
@@ -242,10 +243,44 @@ const unpublishModule = async(req, res, next)=>{
     }
 }
 
+const publishModule = async(req, res, next)=>{ 
+    try{
+        let noOfQuestions = await dbQuestionController.getQuestionsCount(req.params.moduleId)
+
+        let module = await dbModuleController.getModule(req.params.moduleId)
+
+        if(noOfQuestions >= module.noOfQuestions)
+        {
+            await dbModuleController.updateModuleState(req.params.moduleId, true)
+        }
+        else
+        {
+            let difference = module.noOfQuestions - noOfQuestions
+            throw new InsufficientQuestions(`Sorry, this module cannot be published. This module requires ${module.noOfQuestions}, and only ${noOfQuestions} have been provided. 
+            Please add ${difference} question(s), and then retry publishing the module`)
+        }
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+        if (err.name == 'InsufficientQuestions') {
+            res.locals.customError = true
+            res.locals.errorMessage = err.message
+        }
+        else{
+            res.locals.customError = false
+        }
+    }
+    finally{
+        next();
+    }
+}
+
 module.exports = {
     getModulesForStudent,
     getUnitModules,
     submitModule,
     getModulesForStaff, 
-    unpublishModule
+    unpublishModule,
+    publishModule
 }
