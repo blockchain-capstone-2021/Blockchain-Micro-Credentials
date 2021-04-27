@@ -135,6 +135,20 @@ const submitModule = async(req, res, next)=>{
     }
 }
 
+const updateModuleNoOfQuestions = async(req, res, next)=>{
+    try{
+        await dbModuleController.updateNoOfQuestions(req.params.moduleId, req.params.noOfQuestions)
+        res.locals.success = true
+    }
+    catch(err){
+        console.log(err);
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
+}
+
 async function submitQAPairs(studentId, unitId, currentSemester, attemptNo, moduleNo, moduleId, qAList)
 {
     let score = 0
