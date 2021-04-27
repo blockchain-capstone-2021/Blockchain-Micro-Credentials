@@ -2,6 +2,7 @@ const dbStaffController = require('../db/controllers/DbStaffController')
 const SHA256 = require("crypto-js/sha256");
 
 const submitStaffLogin = async (req, res, next) => {
+    res.locals.success = true;
 
     try{
         let _staffId = req.params.staffId.toLowerCase();
