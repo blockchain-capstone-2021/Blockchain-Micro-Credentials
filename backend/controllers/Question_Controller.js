@@ -2,6 +2,19 @@ const dbQuestionController = require('../db/controllers/DbQuestionController')
 const dbModuleController = require('../db/controllers/DbModuleController')
 const dbAnswerController = require('../db/controllers/DbAnswerController')
 
+const getQuestions = async (req, res, next)=>{
+    try{
+        res.locals.questions = await dbQuestionController.getQuestions(req.params.moduleId)
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
+}
+
 const getRandomizedQuestions = async (req, res, next)=>{
     try{
         let module = await dbModuleController.getModule(parseInt(req.params.moduleId))
@@ -89,6 +102,7 @@ async function getAnswers(questions)
 }
 
 module.exports = {
+    getQuestions,
     getRandomizedQuestions,
     addQuestionToModule,
     deleteQuestion,
