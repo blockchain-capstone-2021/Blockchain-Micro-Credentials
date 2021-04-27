@@ -97,17 +97,18 @@ const getModules = async (req, res, next)=>{
 
 const submitModule = async(req, res, next)=>{
     try{
-        let module = await dbModuleController.getModule(parseInt(req.params.moduleId))
+        let module = await dbModuleController.getModule(parseInt(req.body.moduleId))
         let qAList = req.body.qAPairs
         let moduleNo = module.moduleNo
-        let result = await submitQAPairs(req.params.studentId, req.params.unitId, req.params.enrolmentPeriod, parseInt(req.params.attemptNo), moduleNo, parseInt(req.params.moduleId), qAList)
-        await submitAttempt(result.qAIndices, req.params.studentId, req.params.unitId, moduleNo, module.moduleId, req.params.enrolmentPeriod, parseInt(req.params.attemptNo), result.score)
+        let result = await submitQAPairs(req.body.studentId, req.body.unitId, req.body.enrolmentPeriod, parseInt(req.body.attemptNo), moduleNo, parseInt(req.body.moduleId), qAList)
+        await submitAttempt(result.qAIndices, req.body.studentId, req.body.unitId, moduleNo, module.moduleId, req.body.enrolmentPeriod, parseInt(req.body.attemptNo), result.score)
     
-        await dbModule_AttemptController.incrementAttempts(req.params.studentId, module.moduleId)
+        await dbModule_AttemptController.incrementAttempts(req.body.studentId, module.moduleId)
 
         res.locals.success = true
     }
     catch(err){
+        console.log(err);
         res.locals.success = false
     }
     finally{

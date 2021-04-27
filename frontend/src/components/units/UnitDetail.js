@@ -21,7 +21,7 @@ const UnitDetail = (props) => {
                 <td>{module.moduleName}</td>
                 <td>3</td>
                 <td>8</td>
-                <td><Link to={`/module/:moduleId`} className="btn btn-primary">Take quiz</Link></td>
+                <td><Link to={{pathname:'/module/:moduleId', state:{'moduleId':module.moduleId}}} className="btn btn-primary">Take quiz</Link></td>
             </tr>)
         })
 
