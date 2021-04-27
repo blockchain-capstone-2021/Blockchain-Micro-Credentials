@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types';
 import api from '../apis/api'
-
 import"./Login.css";
 
 async function loginUser(username, password) {
-    const response = ''
+    let response = ''
     if (username.startsWith("e")) {
         response = await api.post(`/login/staff/${username}/${password}`)
     }
     else {
         response = await api.post(`login/student/${username}/${password}`)
     }
+    console.log("loggedIn", response.data)
     return response.data.loggedIn
    }
 
@@ -21,16 +21,19 @@ const Login = ({ setToken }) => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        const token = await loginUser(
+        const token = {token: 'login'}
+        const login = await loginUser(
           username,
           password
         );
         
-        window.localStorage.setItem('userId', username);
-        // Check if user is a staff or student
-        username.startsWith("e") ? window.localStorage.setItem('isStaff', true) : window.localStorage.setItem('isStaff', false)
-        console.log(username)
-        setToken(token);
+        if(login == true) {
+            window.localStorage.setItem('userId', username);
+            // Check if user is a staff or student
+            username.startsWith("e") ? window.localStorage.setItem('isStaff', true) : window.localStorage.setItem('isStaff', false)
+            setToken(token);
+        }
+        else { alert('username or password is incorrect') }
     }
 
     return (

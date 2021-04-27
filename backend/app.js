@@ -10,6 +10,8 @@ const studentsRouter = require('./routes/students')
 const unitsRouter = require('./routes/units')
 const degreesRouter = require('./routes/degrees')
 const modulesRouter = require('./routes/modules')
+const loginRouter = require('./routes/login')
+
 
 const app = express();
 
@@ -28,12 +30,7 @@ app.use('/student', studentsRouter)
 app.use('/unit', unitsRouter)
 app.use('/degree', degreesRouter)
 app.use('/module', modulesRouter)
-
-app.use('/login', (req, res) => {
-  res.send({
-    token: 'test123'
-  });
-});
+app.use('/login', loginRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
