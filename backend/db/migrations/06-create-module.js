@@ -29,6 +29,14 @@ module.exports = {
       noOfQuestions: {
           type: Sequelize.DataTypes.INTEGER,
           allowNull: false
+      },
+      published: {
+        type: Sequelize.DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      weight: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false
       }
     });
   },

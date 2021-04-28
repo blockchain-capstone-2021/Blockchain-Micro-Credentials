@@ -48,9 +48,9 @@ const StudentDashboard = (props) => {
       </div>
       <section className="mb-5">
       <h2 className="mt-2">Enrolments</h2>
-      <h3 className="my-5">Available</h3>
+      <h3 className="py-5">Available</h3>
       {availableEnrolments ? renderEnrolments(availableEnrolments, 'AVAILABLE') :  "No available enrolments"}
-      <h3 className="my-5">Completed</h3>
+      <h3 className="py-5">Completed</h3>
       {unavailableEnrolments ? renderEnrolments(unavailableEnrolments, 'UNAVAILABLE') : "No unavailable enrolments"}
       </section>
     </main>

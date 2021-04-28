@@ -35,7 +35,7 @@ async function updateCreditPoints(_studentId, _creditPoints)
         where: {
             studentId: _studentId
         }
-      });
+    });
 }
 
 module.exports = {

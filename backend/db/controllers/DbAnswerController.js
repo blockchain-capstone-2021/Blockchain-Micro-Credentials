@@ -45,8 +45,38 @@ async function getCorrectAnswer(_questionId)
     return _answer;
 }
 
+//add an answer to a given question
+async function addAnswerToQuestion(_questionId, _content, _isCorrect)
+{
+    await models.Answer.create({ 
+        questionId: _questionId, 
+        content: _content,
+        isCorrect: _isCorrect
+    });
+}
+
+//delete answers by question id
+async function deleteAnswersOfQuestion(_questionId)
+{
+    await models.Answer.destroy({
+        where: {
+            questionId: _questionId
+        }
+    })
+}
+
+async function deleteAllAnswers(questionIdentifiers){
+  for(const id of questionIdentifiers)
+  {
+    await deleteAnswersOfQuestion(id)
+  }
+}
+
 module.exports = {
     getAnswers,
     getAnswer,
-    getCorrectAnswer
+    getCorrectAnswer,
+    addAnswerToQuestion,
+    deleteAnswersOfQuestion,
+    deleteAllAnswers
 }

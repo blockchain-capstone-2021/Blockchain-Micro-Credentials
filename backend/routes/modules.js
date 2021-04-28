@@ -1,6 +1,6 @@
 const express = require('express')
 const { getUnitModules, submitModule } = require('../controllers/Module_Controller')
-const { getQuestions } = require('../controllers/Question_Controller')
+const { getRandomizedQuestions } = require('../controllers/Question_Controller')
 var router = express.Router()
 
 
@@ -16,7 +16,7 @@ router.get('/:unitId', getUnitModules, async function (req,res,next) {
     })
 })
 
-router.get('/:moduleId/questions', getQuestions, async function (req,res,next) {
+router.get('/:moduleId/questions', getRandomizedQuestions, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success,

@@ -1,18 +1,18 @@
 {
   "contractName": "IterableMapping",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/daniel/Desktop/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol\":\"IterableMapping\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/daniel/Desktop/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol\":{\"keccak256\":\"0x331907850ed7fb2c7514a945dfa5a4dcdac71349af7896cbe965d8dcaedd935b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6615bb708c791722c81b7243851d22d508ece76269c044151156acc175584b7f\",\"dweb:/ipfs/QmcsXs1wNwua4f8DiDv8HyWw5DDnRLZfkdv4ju4hAms3e7\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220e3e294aa580a448bac980aaeab0d2c3918b7d8c9e364cb03900f829e8f193ac264736f6c63430008030033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220e3e294aa580a448bac980aaeab0d2c3918b7d8c9e364cb03900f829e8f193ac264736f6c63430008030033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.3+commit.8d00100c\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/shreyparekh/Documents/RMIT/YEAR 3/SEM 2/Capstone/Application/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol\":\"IterableMapping\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/shreyparekh/Documents/RMIT/YEAR 3/SEM 2/Capstone/Application/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol\":{\"keccak256\":\"0x331907850ed7fb2c7514a945dfa5a4dcdac71349af7896cbe965d8dcaedd935b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6615bb708c791722c81b7243851d22d508ece76269c044151156acc175584b7f\",\"dweb:/ipfs/QmcsXs1wNwua4f8DiDv8HyWw5DDnRLZfkdv4ju4hAms3e7\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212202a7b7b9a1aff6d2c19ff1fa17d8b5b248e8b2b3d0048e983a328985cb3834c6a64736f6c63430008030033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212202a7b7b9a1aff6d2c19ff1fa17d8b5b248e8b2b3d0048e983a328985cb3834c6a64736f6c63430008030033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
   "sourceMap": "255:801:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "255:801:0:-:0;;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.6.8 <=0.8.3;\n\nstruct IndexValue { uint keyIndex; uint value; }\nstruct KeyFlag { string key; bool deleted; }\n\nstruct itmap \n{\n    mapping(string => IndexValue) data;\n    KeyFlag[] keys;\n    uint size;\n}\n\nlibrary IterableMapping \n{\n    function insert(itmap storage self, string memory key, uint value) internal returns (bool replaced) {\n        uint keyIndex = self.data[key].keyIndex;\n        self.data[key].value = value;\n        if (keyIndex > 0)\n            return true;\n        else {\n            keyIndex = self.keys.length;\n            self.keys.push();\n            self.data[key].keyIndex = keyIndex + 1;\n            self.keys[keyIndex].key = key;\n            self.size++;\n            return false;\n        }\n    }\n\n    function contains(itmap storage self, string memory key) internal view returns (bool) {\n        return self.data[key].keyIndex > 0;\n    }\n\n    function get(itmap storage self, string memory key) internal view returns (uint value) {\n        value = self.data[key].value;\n    }\n}",
-  "sourcePath": "/Users/daniel/Desktop/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol",
+  "sourcePath": "/Users/shreyparekh/Documents/RMIT/YEAR 3/SEM 2/Capstone/Application/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol",
   "ast": {
-    "absolutePath": "/Users/daniel/Desktop/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol",
+    "absolutePath": "/Users/shreyparekh/Documents/RMIT/YEAR 3/SEM 2/Capstone/Application/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol",
     "exportedSymbols": {
       "IndexValue": [
         6
@@ -1652,7 +1652,7 @@
     "src": "32:1024:0"
   },
   "legacyAST": {
-    "absolutePath": "/Users/daniel/Desktop/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol",
+    "absolutePath": "/Users/shreyparekh/Documents/RMIT/YEAR 3/SEM 2/Capstone/Application/Blockchain-Micro-Credentials/backend/blockchain/contracts/IterableMapping.sol",
     "exportedSymbols": {
       "IndexValue": [
         6
@@ -3299,12 +3299,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x3BdE266eB8070b42695a96788dA4E79651Ab8960",
-      "transactionHash": "0xc7db1b28e53fe63144bf360915b1d20211dd533912a4e8cfb257529029b75470"
+      "address": "0x86483913bFdf2da614d1D03e20e876f7fd604bc2",
+      "transactionHash": "0x22f9efce48fc206e98924b6405cb2256ad941b318578eeee71f7380f18f0f4f0"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-21T11:36:08.680Z",
+  "updatedAt": "2021-04-27T04:02:02.038Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

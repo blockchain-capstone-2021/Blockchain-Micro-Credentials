@@ -17,12 +17,15 @@ const Module_Key = require('../object_models/blockchain/Module_Key')
 const QA_Key = require('../object_models/blockchain/QA_Key')
 const QA_Data = require('../object_models/ipfs/QA')
 const Module_Data = require('../object_models/ipfs/MicroModule')
+const AttemptsExist = require('../exceptions/AttemptsExist')
+const InsufficientQuestions = require('../exceptions/InsufficientQuestions')
 
 async function getAttemptNumbers(studentId, modules){
     let attemptsMap = new Map()
+    let currentSemester = await utility.getCurrentSemester()
 
     for (const module of modules){
-        attemptsMap[module.moduleId] = await dbModule_AttemptController.getNoOfAttempts(studentId, module.moduleId)
+        attemptsMap[module.moduleId] = await dbModule_AttemptController.getNoOfAttempts(studentId, module.moduleId, currentSemester)
     } 
 
     return attemptsMap;
@@ -75,7 +78,7 @@ const getUnitModules = async (req, res, next) => {
     }
 }
 
-const getModules = async (req, res, next)=>{
+const getModulesForStudent = async (req, res, next)=>{
 
     try{
         let modules = await dbModuleController.getModulesByUnit(req.params.unitId)
@@ -95,6 +98,22 @@ const getModules = async (req, res, next)=>{
     }
 }
 
+const getModulesForStaff = async (req, res, next)=>{
+
+    try{
+        let modules = await dbModuleController.getModulesByUnit(req.params.unitId)
+
+        res.locals.modules = modules
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
+}
+
 const submitModule = async(req, res, next)=>{
     try{
         let module = await dbModuleController.getModule(parseInt(req.body.moduleId))
@@ -103,8 +122,22 @@ const submitModule = async(req, res, next)=>{
         let result = await submitQAPairs(req.body.studentId, req.body.unitId, req.body.enrolmentPeriod, parseInt(req.body.attemptNo), moduleNo, parseInt(req.body.moduleId), qAList)
         await submitAttempt(result.qAIndices, req.body.studentId, req.body.unitId, moduleNo, module.moduleId, req.body.enrolmentPeriod, parseInt(req.body.attemptNo), result.score)
     
-        await dbModule_AttemptController.incrementAttempts(req.body.studentId, module.moduleId)
+        await dbModule_AttemptController.incrementAttempts(req.body.studentId, module.moduleId, req.body.enrolmentPeriod)
 
+        res.locals.success = true
+    }
+    catch(err){
+        console.log(err);
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
+}
+
+const updateModuleNoOfQuestions = async(req, res, next)=>{
+    try{
+        await dbModuleController.updateNoOfQuestions(req.params.moduleId, req.params.noOfQuestions)
         res.locals.success = true
     }
     catch(err){
@@ -193,8 +226,76 @@ async function submitAttempt(qAList, studentId, unitId, moduleNo, moduleId, curr
     }
 }
 
+const unpublishModule = async(req, res, next)=>{ 
+    try{
+        let currentSemester = await utility.getCurrentSemester()
+
+        let attempt = await dbModule_AttemptController.checkAttemptsExist(req.params.moduleId, currentSemester)
+
+        if(attempt === null)
+        {
+            await dbModuleController.updateModuleState(req.params.moduleId, false)
+        }
+        else
+        {
+            throw new AttemptsExist("Sorry, students have already begun attempting the module. This module cannot be unpublished.")
+        }
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+        if (err.name == 'AttemptsExist') {
+            res.locals.customError = true
+            res.locals.errorMessage = err.message
+        }
+        else{
+            res.locals.customError = false
+        }
+    }
+    finally{
+        next();
+    }
+}
+
+const publishModule = async(req, res, next)=>{ 
+    try{
+        let noOfQuestions = await dbQuestionController.getQuestionsCount(req.params.moduleId)
+
+        let module = await dbModuleController.getModule(req.params.moduleId)
+
+        if(noOfQuestions >= module.noOfQuestions)
+        {
+            await dbModuleController.updateModuleState(req.params.moduleId, true)
+        }
+        else
+        {
+            let difference = module.noOfQuestions - noOfQuestions
+            throw new InsufficientQuestions(`Sorry, this module cannot be published. This module requires ${module.noOfQuestions}, and only ${noOfQuestions} have been provided. 
+            Please add ${difference} question(s), and then retry publishing the module`)
+        }
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+        if (err.name == 'InsufficientQuestions') {
+            res.locals.customError = true
+            res.locals.errorMessage = err.message
+        }
+        else{
+            res.locals.customError = false
+        }
+    }
+    finally{
+        next();
+    }
+}
+
 module.exports = {
-    getModules,
+    getModulesForStudent,
     getUnitModules,
-    submitModule
+    submitModule,
+    getModulesForStaff, 
+    unpublishModule,
+    publishModule,
+    updateModuleNoOfQuestions
 }

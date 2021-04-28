@@ -48,7 +48,7 @@ const QuestionCreate = () => {
 
   function renderAnswerInput(number) {
       return (
-        <div className="row g-3 my-2">
+        <div className="row g-3 py-2">
         <div className="col-sm-10">
           <input
             type="text"
@@ -70,7 +70,7 @@ const QuestionCreate = () => {
 
   function renderQuestionInput(){
       return (
-        <div className="input-group my-3">
+        <div className="input-group py-3">
         <input
           type="text"
           className="form-control"

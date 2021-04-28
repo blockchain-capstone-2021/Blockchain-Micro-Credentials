@@ -15,9 +15,7 @@ const Unit_Key = require('../object_models/blockchain/Unit_Key')
 const getEnrolmentsByStudent = async (req, res, next)=>{
     try{
         let currentSemester = await utility.getCurrentSemester()
-        console.log(currentSemester);
         let enrolments = await dbEnrolmentController.getEnrolmentsByStudent(req.params.studentId, currentSemester)
-        console.log(enrolments);
         let unitMap = new Map()
         let availableEnrolments = []
         let unavailableEnrolments = []

@@ -30,7 +30,7 @@ const Login = ({ setToken }) => {
         if(login == true) {
             window.localStorage.setItem('userId', username);
             // Check if user is a staff or student
-            username.startsWith("e") ? window.localStorage.setItem('isStaff', true) : window.localStorage.setItem('isStaff', false)
+            username.startsWith("e") ? window.localStorage.setItem('isStaff', 'true') : window.localStorage.setItem('isStaff', 'false')
             setToken(token);
         }
         else { alert('username or password is incorrect') }
