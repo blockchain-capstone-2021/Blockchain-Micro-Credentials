@@ -28,6 +28,11 @@ module.exports = {
             key: 'moduleId'
             }
       },
+      semOfEnrolment: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+        validate: {is: /^[Y][0-9]{4}?[S][1-2]$/i}
+      },
       attemptNo: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false
