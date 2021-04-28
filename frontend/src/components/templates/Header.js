@@ -33,7 +33,7 @@ const Header = () => {
     const [menuCollapse, setMenuCollapse] = useState(true)
 
     // create account type state to show appropriate content
-    const [isStaff, setStaff] = useState(true)
+    const [isStaff, setStaff] = useState('true')
 
     //create a custom function that will change menucollapse state from false to true and true to false
   const menuIconClick = () => {
@@ -44,7 +44,7 @@ const Header = () => {
 
 
   const renderStaffMenu = () => {
-    if(isStaff) {
+    if(isStaff === 'true') {
       return (
         <Menu iconShape="square">
         <MenuItem active={true} icon={<FiHome />}>
@@ -90,7 +90,7 @@ const Header = () => {
           </SidebarContent>
           <SidebarFooter>
             <Menu iconShape="square">
-              <MenuItem icon={<FiLogOut />} onClick={() => logout()}>Logout</MenuItem>
+              <MenuItem icon={<FiLogOut />} onClick={() => logout()}><Link to="/">Logout</Link></MenuItem>
             </Menu>
           </SidebarFooter>
         </ProSidebar>
