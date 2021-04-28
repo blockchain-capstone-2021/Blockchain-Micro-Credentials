@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
+import InlineSearchForm from '../templates/InlineSearchForm'
 class StaffDashboard extends Component {
 
   renderCard(url, cardTitle, cardDescription, path){
@@ -17,7 +18,9 @@ class StaffDashboard extends Component {
 
   render() {
     return (
+      
       <div className="jumbotron align-center">
+        <InlineSearchForm />
          <section>
            <h1>Portals</h1>
            <div className="d-flex">

@@ -52,7 +52,7 @@ const App = () => {
         <div className="container">
         <Switch>
         <Route path="/manage/students" component={StaffStudentManage} />
-        <Route path="/manage/modules" component={StaffModuleManage} />
+        <Route path="/manage/modules" key={getDate()} component={StaffModuleManage} />
         <Route path="/manage/questions" component={StaffQuestionManage} />
           <Route path="/student/:studentId/profile" component={StudentProfile} />
           <Route path="/question/create" component={QuestionCreate} />
