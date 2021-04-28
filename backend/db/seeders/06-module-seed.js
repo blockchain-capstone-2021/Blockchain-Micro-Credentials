@@ -2,6 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    var seedData = [];
 
     let potentialNoOfQuestions = [10,15,20]
     //Security
@@ -66,6 +67,8 @@ module.exports = {
       };
       seedData.push(module);
     }
+
+    return queryInterface.bulkInsert('Modules', seedData);
   },
 
   down: async (queryInterface, Sequelize) => {
