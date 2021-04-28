@@ -13,8 +13,8 @@ const StudentDashboard = (props) => {
   useEffect(() => {
     async function initState(){
       await microcredapi.get(`/student/${window.localStorage.getItem('userId')}/enrolled`).then(response => {
-        setUnavailableEnrolments(response.data.enrolments.unavailable.length > 0 ? response.data.enrolments.unavailable: undefined)
-        setAvailableEnrolments(response.data.enrolments.available.length > 0 ? response.data.enrolments.available: undefined)
+        setUnavailableEnrolments(response.data.enrolments.unavailable ? response.data.enrolments.unavailable: undefined)
+        setAvailableEnrolments(response.data.enrolments.available ? response.data.enrolments.available: undefined)
         setUnitMap(response.data.unitMap)
       })
     }
