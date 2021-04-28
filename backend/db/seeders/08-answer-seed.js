@@ -5,7 +5,7 @@ module.exports = {
 
     var seedData = [];
     var questionCounter = 1;
-    for(let q =1; q<=200; q++)
+    for(let q =1; q<=1080; q++)
     {
       var correctAnswer = Math.floor(Math.random()*(4)+1);
       for(let a =1; a<=4; a++)
@@ -27,7 +27,7 @@ module.exports = {
         seedData.push(data);
       }
       questionCounter++;
-      if(questionCounter>20)
+      if(questionCounter>30)
       {
         questionCounter = 1;
       }
