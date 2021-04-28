@@ -1,5 +1,5 @@
 const express = require('express')
-const { createQuestion, getQuestions } = require('../controllers/Question_Controller')
+const { createQuestion, getRandomizedQuestions } = require('../controllers/Question_Controller')
 var router = express.Router()
 
 
@@ -29,7 +29,7 @@ var router = express.Router()
 //     })
 // })
 
-router.get('/:moduleId/:total', getQuestions, async function (req, res, next) {
+router.get('/:moduleId/:total', getRandomizedQuestions, async function (req, res, next) {
     if(res.locals.questions) {
         return res.status(200).send({
             success: 'true',

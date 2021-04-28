@@ -82,15 +82,15 @@ const Module = (props) => {
     }
 
     return (
-        <div className="row justify-content-center my-3">
-            <h1>Module {props.match.params.moduleId} Quiz</h1>
-            <h4>Attempt: #{props.location.attemptNumber+1}</h4>
+        <div className="row justify-content-center">
             {
                 submitting?
                 "Please hold while the quiz is processing.":
                 <form className="w-75">
+                <h1>Module {props.match.params.moduleId} Quiz</h1>
+                <h4>Attempt: #{props.location.attemptNumber+1}</h4>
                 {questions ? renderQuestions() : 'Loading'}
-                <button type="submit" className="btn btn-primary my-3" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
+                <button type="submit" className="btn btn-primary py-3" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
             </form>
             }
         </div>

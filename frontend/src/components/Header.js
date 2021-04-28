@@ -23,8 +23,8 @@ const Header = () => {
                         <li className="nav-item">
                         </li>
                     </ul>
-                    <div className="form-inline my-2 my-lg-0">
-                    <Link to="/" className="btn btn-outline-success my-2 my-sm-0">Login</Link>
+                    <div className="form-inline py-2 py-lg-0">
+                    <Link to="/" className="btn btn-outline-success py-2 py-sm-0">Login</Link>
                     </div>
                     </div>
                 </div>

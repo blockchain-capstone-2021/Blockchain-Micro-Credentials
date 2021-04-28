@@ -19,6 +19,7 @@ import StudentCreate from "./Staff/StudentCreate"
 import useToken from './useToken';
 import QuestionList from "./questions/QuestionList";
 import QuestionCreate from "./questions/QuestionCreate";
+import StudentProfile from "./student/StudentProfile";
 
 const App = () => {
 
@@ -41,9 +42,12 @@ const App = () => {
   return (
     <div>
       <BrowserRouter>
+        <div className="side-menu">
         <Header />
+        </div>
         <div className="container">
         <Switch>
+          <Route path="/student/:studentId/profile" component={StudentProfile} />
           <Route path="/question/create" component={QuestionCreate} />
           <Route path="/question" component={QuestionList} />
           <Route path="/course/staff/:staffId" component={CourseList} />
