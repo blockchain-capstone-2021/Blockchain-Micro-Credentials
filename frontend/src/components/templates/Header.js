@@ -62,9 +62,9 @@ const Header = () => {
       return (
         <Menu iconShape="square">
         <MenuItem className="menu-item" active={true} icon={<FiHome />}><Link className="menu-text" to='/'>Home</Link></MenuItem>
-        <MenuItem className="menu-item" icon={<FaUsers />}><Link to="/students" className="menu-text">Students</Link></MenuItem>
-        <MenuItem className="menu-item" icon={<FiBook />}><Link to="/modules" className="menu-text">Modules</Link></MenuItem>
-        <MenuItem className="menu-item" icon={<FaQuestion />}><Link to="/questions" className="menu-text">Questions</Link></MenuItem>
+        <MenuItem className="menu-item" icon={<FaUsers />}><Link to="/manage/students" className="menu-text">Students</Link></MenuItem>
+        <MenuItem className="menu-item" icon={<FiBook />}><Link to="/manage/modules" className="menu-text">Modules</Link></MenuItem>
+        <MenuItem className="menu-item" icon={<FaQuestion />}><Link to="/manage/questions" className="menu-text">Questions</Link></MenuItem>
       </Menu>
       )
     }

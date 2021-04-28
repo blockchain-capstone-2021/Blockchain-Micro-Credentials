@@ -20,7 +20,7 @@ router.get('/:studentId', getStudent, async function (req, res, next) {
     })
 
     router.get('/:studentId/enrolled', getEnrolmentsByStudent, async function (req, res, next) {
-        if(res.locals) {
+        if(res.locals.success) {
             return res.status(200).send({
                 success: 'true',
                 enrolments: {available: res.locals.availableEnrolments, unavailable: res.locals.unavailableEnrolments},
@@ -29,7 +29,7 @@ router.get('/:studentId', getStudent, async function (req, res, next) {
         }
         return res.status(400).send({
             success: 'false',
-            message: 'No students enrolled.'
+            message: 'Sorry, something went wrong.'
         })
     })
 
