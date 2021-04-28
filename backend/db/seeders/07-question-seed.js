@@ -4,14 +4,11 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
 
     var seedData = [];
-    let potentialQuestionPool = [20,30,40]
 
     //Security
     for(let m=1; m<=10; m++)
     {
-      let randomIndex = Math.floor(Math.random()*3)
-      let questionPool = potentialQuestionPool[randomIndex]
-      for(let i =1; i<=questionPool; i++)
+      for(let i =1; i<=30; i++)
       {
         const data = {
           moduleId:m,
@@ -24,9 +21,7 @@ module.exports = {
     //Blockchain
     for(let m=11; m<=22; m++)
     {
-      let randomIndex = Math.floor(Math.random()*3)
-      let questionPool = potentialQuestionPool[randomIndex]
-      for(let i =1; i<=questionPool; i++)
+      for(let i =1; i<=30; i++)
       {
         const data = {
           moduleId:m,
@@ -39,9 +34,7 @@ module.exports = {
     //WDT
     for(let m=23; m<=30; m++)
     {
-      let randomIndex = Math.floor(Math.random()*3)
-      let questionPool = potentialQuestionPool[randomIndex]
-      for(let i =1; i<=questionPool; i++)
+      for(let i =1; i<=30; i++)
       {
         const data = {
           moduleId:m,
@@ -54,9 +47,7 @@ module.exports = {
     //I3D
     for(let m=31; m<=36; m++)
     {
-      let randomIndex = Math.floor(Math.random()*3)
-      let questionPool = potentialQuestionPool[randomIndex]
-      for(let i =1; i<=questionPool; i++)
+      for(let i =1; i<=30; i++)
       {
         const data = {
           moduleId:m,
@@ -65,7 +56,6 @@ module.exports = {
         seedData.push(data);
       }
     }
-
 
     return queryInterface.bulkInsert('Questions', seedData);
   },
