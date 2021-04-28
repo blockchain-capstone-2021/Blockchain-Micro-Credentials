@@ -36,8 +36,8 @@ const InlineSearchForm = (props) => {
     return (
     <div>
         <h5>Selection Area</h5>
-        <form class="row row-cols-lg-auto g-3 align-items-center">
-            <div class="col-lg-5">
+        <form class="row row-cols-lg-auto g-3 align-items-center py-2">
+            <div class="col-lg-6">
                 <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
                 <select class="form-select" id="inlineFormSelectPref">
                     <option selected>Choose Course</option>
@@ -47,7 +47,7 @@ const InlineSearchForm = (props) => {
 
             {
                 modules ?
-                <div class="col-lg-5">
+                <div class="col-lg-6">
                 <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
                 <select class="form-select" id="inlineFormSelectPref">
                     <option>Choose Module</option>
@@ -57,9 +57,6 @@ const InlineSearchForm = (props) => {
             ""
             }
 
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
         </form>
     </div>
     )

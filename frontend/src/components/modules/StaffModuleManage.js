@@ -65,7 +65,10 @@ function StaffModuleManage() {
 
     return (
         <div>
-            {courses ? <InlineSearchForm courses={courses} onClickCourse={setSelectedCourse} selectedCourse={selectedCourse} /> : ""}
+            <div className="pb-4">
+                <h1 className="py-5">Modules Management</h1>
+                {courses ? <InlineSearchForm courses={courses} onClickCourse={setSelectedCourse} selectedCourse={selectedCourse} /> : ""}
+            </div>
             <table class="table">
                 <thead>
                     <tr>
