@@ -10,7 +10,7 @@ module.exports = {
         creditPointsPerSem: 48
       },
       {
-        degreeId: 'BBP096',
+        degreeId: 'BP096',
         degreeName: 'Bachelor of Software Engineering',
         totalCreditPoints: 384,
         creditPointsPerSem: 48
