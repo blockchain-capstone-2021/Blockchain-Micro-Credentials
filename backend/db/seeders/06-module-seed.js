@@ -26,7 +26,7 @@ module.exports = {
       randomIndex = Math.floor(Math.random()*3)
       const module = {
         unitId: 'INTE2554',
-        moduleName: 'Blockchain Module '+i,
+        moduleName: 'Blockchain Applications Module '+i,
         moduleNo: i,
         noOfQuestions: potentialNoOfQuestions[randomIndex],
         published: true,
