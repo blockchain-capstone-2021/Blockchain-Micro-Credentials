@@ -86,7 +86,13 @@ const getModulesForStudent = async (req, res, next)=>{
         res.locals.modules = modules
         
         res.locals.attemptsMap = await getAttemptNumbers(req.params.studentId, modules)
-        res.locals.highestScoreMap = await getHighestScores(req.params.studentId, req.params.unitId, modules)
+
+        let highestScoreMap = await getHighestScores(req.params.studentId, req.params.unitId, modules)
+        res.locals.highestScoreMap = highestScoreMap
+
+        let cumulativeScore = await getCumulativeScore(highestScoreMap)
+        res.locals.cumulativeScore = cumulativeScore
+        res.locals.finalGrade = await getFinalGrade(cumulativeScore)
 
         res.locals.success = true
     }
@@ -96,6 +102,34 @@ const getModulesForStudent = async (req, res, next)=>{
     finally{
         next();
     }
+}
+
+async function getCumulativeScore(highestScoreMap){  
+    let grade = 0
+    for(const [moduleId, highestScore] of highestScoreMap.entries()){
+        let module = await dbModuleController.getModule(moduleId)
+        let scores = highestScore.split("/")
+        let modulePercentageScore = parseFloat(scores[0])/parseFloat(scores[1])
+        grade += (modulePercentageScore * parseFloat(module.weight))
+    }
+    grade = grade.toFixed(2)
+
+    return grade
+}
+
+async function getFinalGrade(score){
+    let grade = "NN"
+    if(score>=80){
+        grade = "HD"
+    }else if(score>=70){
+        grade = "DI"
+    }else if(score>=60){
+        grade = "CR"
+    }else if(score>=50){
+        grade = "PA"
+    }
+
+    return grade
 }
 
 const getModulesForStaff = async (req, res, next)=>{
