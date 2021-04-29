@@ -2,6 +2,14 @@ require('dotenv').config({
     path: ('../.env'),
     debug: process.env.DEBUG
   })
+
+let ejs = require("ejs");
+let pdf = require("html-pdf");
+const fs = require("fs");
+
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+
 const dbEnrolmentController = require('../db/controllers/DbEnrolmentController')
 const dbStudentController = require('../db/controllers/DbStudentController')
 const dbUnitController = require('../db/controllers/DbUnitController')
@@ -101,4 +109,31 @@ function compare( currentRow, nextRow ) {
       return 1;
     }
     return 0;
+}
+
+async function sendDegreeEmail()
+{
+
+}
+
+async function sendYearEmail()
+{
+
+}
+
+async function sendSemesterEmail()
+{
+
+}
+
+async function sendUnitEmail()
+{
+
+}
+
+module.exports = {
+    sendDegreeEmail,
+    sendYearEmail,
+    sendSemesterEmail,
+    sendUnitEmail
 }
