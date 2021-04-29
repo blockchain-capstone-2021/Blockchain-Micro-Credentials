@@ -111,29 +111,222 @@ function compare( currentRow, nextRow ) {
     return 0;
 }
 
-async function sendDegreeEmail()
+async function sendDegreeEmail(_studentId, _unitId)
 {
+    let student = await dbStudentController.getStudent(_studentId)
+    let degree = await dbDegreeController.getDegree(student.degreeId)
+    let unit = await dbUnitController.getUnit(_unitId) 
 
+    const msg = {
+        to: student.studentEmail, // Change to your recipient
+        from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
+        fromname: "notification@rmit.edu.au (No-Reply)",
+        subject: 'CONGRATULATIONS - Your Degree is Complete',
+        text: `Dear ${student.studentName}, on behalf of the entire RMIT team, we congratulate you on completing the ${degree.degreeName}. Please find attached the following: Your Degree Transcript 
+        Your Micro-Credential Certificate for: ${_unitId - unit.unitName} Last but not the least, your ${degree.degreeName} Degree 
+        We hope you had a wonderful time at the Royal Melbourne Institute of Technology, and we would like to wish you luck for your future endeavours. Sincerely, The RMIT Team.`,
+        attachments: [
+          {
+            content: attachment1,
+            filename: "report.pdf",
+            type: "application/pdf",
+            disposition: "attachment"
+          },
+          {
+            content: attachment2,
+            filename: "report1.pdf",
+            type: "application/pdf",
+            disposition: "attachment"
+          },
+          {
+            content: attachment3,
+            filename: "report1.pdf",
+            type: "application/pdf",
+            disposition: "attachment"
+          }
+        ],
+        html: `Dear <strong>${student.studentName}</strong>, <br><br> on behalf of the entire RMIT team, we congratulate you on completing the <strong>${degree.degreeName}</strong>. 
+        <br><br>Please find attached the following: <ul><li><strong>Your Degree Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li>
+        <li>Last but not the least, <strong>your ${degree.degreeName} Degree</strong</li></ul> We hope you had a wonderful time at the Royal Melbourne Institute of Technology, and
+        we would like to wish you luck for your future endeavours. <br><br><strong>Sincerely, <br>The RMIT Team.</strong>`
+      }
+
+    sgMail.send(msg).then((response) => {
+      console.log(response[0].statusCode)
+      console.log(response[0].headers)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
 }
 
-async function sendYearEmail()
+async function sendYearEmail(_studentId, _unitId)
 {
+    let student = await dbStudentController.getStudent(_studentId)
+    let degree = await dbDegreeController.getDegree(student.degreeId)
+    let unit = await dbUnitController.getUnit(_unitId) 
+    let year = (student.studentCreditPoints / degree.creditPointsPerSem)/2
 
+    const msg = {
+        to: student.studentEmail, // Change to your recipient
+        from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
+        fromname: "notification@rmit.edu.au (No-Reply)",
+        subject: `CONGRATULATIONS - Year ${year} is Complete`,
+        text: `Dear ${student.studentName}, on behalf of the entire RMIT team, congratulations on completing Year ${year} of the ${degree.degreeName}. Please find attached the following: Your Updated Transcript 
+        Your Micro-Credential Certificate for: ${_unitId - unit.unitName} 
+        Sincerely, The RMIT Team.`,
+        attachments: [
+          {
+            content: attachment1,
+            filename: "report.pdf",
+            type: "application/pdf",
+            disposition: "attachment"
+          },
+          {
+            content: attachment2,
+            filename: "report1.pdf",
+            type: "application/pdf",
+            disposition: "attachment"
+          }
+        ],
+        html: `Dear <strong>${student.studentName}</strong>, <br><br> on behalf of the entire RMIT team, congratulations on completing Year ${year} of the <strong>${degree.degreeName}</strong>. 
+        <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li></ul> 
+        <br><strong>Sincerely, <br>The RMIT Team.</strong>`
+      }
+
+    sgMail.send(msg).then((response) => {
+      console.log(response[0].statusCode)
+      console.log(response[0].headers)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
 }
 
-async function sendSemesterEmail()
+async function sendSemesterEmail(_studentId, _unitId)
 {
+    let student = await dbStudentController.getStudent(_studentId)
+    let degree = await dbDegreeController.getDegree(student.degreeId)
+    let unit = await dbUnitController.getUnit(_unitId) 
+    let year = ((student.studentCreditPoints - degree.creditPointsPerSem) / degree.creditPointsPerSem)/2
 
+    const msg = {
+        to: student.studentEmail, // Change to your recipient
+        from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
+        fromname: "notification@rmit.edu.au (No-Reply)",
+        subject: `CONGRATULATIONS - Semeseter 1 of ${year} is Complete`,
+        text: `Dear ${student.studentName}, on behalf of the entire RMIT team, congratulations on completing Semeseter 1 of Year ${year} of the ${degree.degreeName}. Please find attached the following: Your Updated Transcript 
+        Your Micro-Credential Certificate for: ${_unitId - unit.unitName} 
+        Sincerely, The RMIT Team.`,
+        attachments: [
+          {
+            content: attachment1,
+            filename: "report.pdf",
+            type: "application/pdf",
+            disposition: "attachment"
+          },
+          {
+            content: attachment2,
+            filename: "report1.pdf",
+            type: "application/pdf",
+            disposition: "attachment"
+          }
+        ],
+        html: `Dear <strong>${student.studentName}</strong>, <br><br> on behalf of the entire RMIT team, congratulations on completing Semeseter 1 of Year ${year} of the <strong>${degree.degreeName}</strong>. 
+        <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li></ul> 
+        <br><strong>Sincerely, <br>The RMIT Team.</strong>`
+      }
+
+    sgMail.send(msg).then((response) => {
+      console.log(response[0].statusCode)
+      console.log(response[0].headers)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
 }
 
-async function sendUnitEmail()
+async function sendUnitEmail(_studentId, _unitId)
 {
+    let student = await dbStudentController.getStudent(_studentId)
+    let degree = await dbDegreeController.getDegree(student.degreeId)
+    let unit = await dbUnitController.getUnit(_unitId) 
 
+    const msg = {
+        to: student.studentEmail, // Change to your recipient
+        from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
+        fromname: "notification@rmit.edu.au (No-Reply)",
+        subject: 'CONGRATULATIONS - Your Micro-Credential is Complete',
+        text: `Dear ${student.studentName}, on behalf of the entire RMIT team, we congratulate you on completing ${unit.unitId} - ${unit.unitName}. Please find attached the following: Your Updated Transcript 
+        Your Micro-Credential Certificate for: ${_unitId - unit.unitName}
+        Sincerely, The RMIT Team.`,
+        attachments: [
+          {
+            content: attachment1,
+            filename: "report.pdf",
+            type: "application/pdf",
+            disposition: "attachment"
+          },
+          {
+            content: attachment2,
+            filename: "report1.pdf",
+            type: "application/pdf",
+            disposition: "attachment"
+          }
+        ],
+        html: `Dear <strong>${student.studentName}</strong>, <br><br> on behalf of the entire RMIT team, we congratulate you on completing <strong>${unit.unitId} - ${unit.unitName}</strong>. 
+        <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li></ul> 
+        <br><strong>Sincerely, <br>The RMIT Team.</strong>`
+      }
+
+    sgMail.send(msg).then((response) => {
+      console.log(response[0].statusCode)
+      console.log(response[0].headers)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
+
+async function sendFailEmail(_studentId, _unitId){
+    let student = await dbStudentController.getStudent(_studentId)
+    let degree = await dbDegreeController.getDegree(student.degreeId)
+    let unit = await dbUnitController.getUnit(_unitId) 
+
+    const msg = {
+        to: student.studentEmail, // Change to your recipient
+        from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
+        fromname: "notification@rmit.edu.au (No-Reply)",
+        subject: 'Micro-Credential Unsuccessfull',
+        text: `Dear ${student.studentName}, we regret to inform you that you have not completed ${unit.unitId} - ${unit.unitName}. Please find attached the following: Your Updated Transcript 
+        Sincerely, The RMIT Team.`,
+        attachments: [
+          {
+            content: attachment1,
+            filename: "report.pdf",
+            type: "application/pdf",
+            disposition: "attachment"
+          },
+        ],
+        html: `Dear <strong>${student.studentName}</strong>, <br><br> we regret to inform you that you have not completed <strong>${unit.unitId} - ${unit.unitName}</strong>. . 
+        <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li></ul>
+        <br><strong>Sincerely, <br>The RMIT Team.</strong>`
+      }
+
+    sgMail.send(msg).then((response) => {
+      console.log(response[0].statusCode)
+      console.log(response[0].headers)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
 }
 
 module.exports = {
     sendDegreeEmail,
     sendYearEmail,
     sendSemesterEmail,
-    sendUnitEmail
+    sendUnitEmail, 
+    sendFailEmail
 }
+
