@@ -68,7 +68,8 @@ async function calculateScore(studentId, unitId, currentSemester){
                     process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedModKey)
                 let modData = await ipfs.ipfsGetData(hash)
                 let deserialisedModule = JSON.parse(modData)
-                finalResult += (deserialisedModule._result * parseFloat(module.weight/100))
+                let result = parseFloat(deserialisedModule._result)/parseFloat(module.noOfQuestions)
+                finalResult += (result * parseFloat(module.weight))
             }
             else
             {
