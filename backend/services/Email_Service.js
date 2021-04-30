@@ -117,6 +117,31 @@ function compare( currentRow, nextRow ) {
     return 0;
 }
 
+async function uploadToS3(_bucket, _body, _key)
+{
+  let success = false
+  let params = {
+    Bucket: _bucket,
+    Body : _body,
+    Key : _key
+  };
+
+  s3.upload(params, function (err, data) {
+    //handle error
+    if (err) {
+      console.log("Error", err);
+    }
+
+    //success
+    if (data) {
+      console.log("Uploaded in:", data.Location);
+      success = true;
+    }
+  });
+
+  return success
+}
+
 async function sendEmail(_studentEmail, _subject, _text, _attachments, _html)
 {
   let success = false
