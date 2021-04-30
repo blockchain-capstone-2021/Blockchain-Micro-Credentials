@@ -7,6 +7,8 @@ let ejs = require("ejs");
 let pdf = require("html-pdf");
 const fs = require("fs");
 const AWS = require('aws-sdk');
+const Promise = require('bluebird');
+const path = require('path');
 
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -124,136 +126,145 @@ function compare( currentRow, nextRow ) {
 async function generateTranscript(_studentId, transcriptRows, _student, _degree)
 {
   let success = false
-  let path = "../templates/transcript-template.ejs"
-  ejs.renderFile(path, { students: students }, (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      let options = {
-        "fomart": "A4",
-        "orientation": "Portrait",
-        "header": {
-          "height": "28mm"
-        },
-        "footer": {
-          "height": "28mm",
-        },
-      };
-      pdf.create(data, options).toFile(`../attachments/${_studentId}_Transcript.pdf`, function (err, data) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(data);
-          success = true
-        }
-      });
-    }
-  });
+  let fileContent = fs.readFileSync("../templates/transcript-template.ejs")
+  let data =  ejs.render(fileContent.toString(), { student: _student, degree: _degree, transcript: transcriptRows })
+  let options = {
+    "fomart": "A4",
+    "filename": `../attachments/${_studentId}_Transcript.pdf`,
+    "orientation": "Landscape",
+    "header": {
+      "height": "28mm"
+    },
+    "footer": {
+      "height": "28mm",
+    },
+  };
+
+  let createResult = pdf.create(data, options);
+  let pdfToFile = Promise.promisify(createResult.__proto__.toFile, { context: createResult });
+
+  let bufferResult = await pdfToFile()
+
+  if(!bufferResult.filename || bufferResult.filename.length === 0)
+  {
+    success = false;
+  }
+  else
+  {
+    success = true;
+  }
+
   return success 
 }
 
 async function generateDegree(_studentId, _degreeId, _student, _degree)
 {
-  let success = false
-  let path = "./degree-template.ejs"
-  ejs.renderFile(path, { students: students }, (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      let options = {
-        "fomart": "A4",
-        "orientation": "Landscape",
-        "header": {
-          "height": "28mm"
-        },
-        "footer": {
-          "height": "28mm",
-        },
-      };
-      pdf.create(data, options).toFile(`../attachments/${_studentId}_${_degreeId}.pdf`, function (err, data) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(data);
-          success = true
-        }
-      });
-    }
-  });
+  let success
+  let fileContent = fs.readFileSync("../templates/degree-template.ejs")
+  let data =  ejs.render(fileContent.toString(), { student: _student, degree: _degree })
+  let options = {
+    "fomart": "A4",
+    "filename": `../attachments/${_studentId}_${_degreeId}.pdf`,
+    "orientation": "Landscape",
+    "header": {
+      "height": "28mm"
+    },
+    "footer": {
+      "height": "28mm",
+    },
+  };
+
+  let createResult = pdf.create(data, options);
+  let pdfToFile = Promise.promisify(createResult.__proto__.toFile, { context: createResult });
+
+  let bufferResult = await pdfToFile()
+
+  if(!bufferResult.filename || bufferResult.filename.length === 0)
+  {
+    success = false;
+  }
+  else
+  {
+    success = true;
+  }
+
   return success 
 }
 
 async function generateCertificate(_studentId, _unitId, _student, _unit)
 {
   let success = false
-  let path = "./certificate-template.ejs"
-  ejs.renderFile(path, { students: students }, (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      let options = {
-        "fomart": "A4",
-        "orientation": "Landscape",
-        "header": {
-          "height": "28mm"
-        },
-        "footer": {
-          "height": "28mm",
-        },
-      };
-      pdf.create(data, options).toFile(`../attachments/${_studentId}_${_unitId}.pdf`, function (err, data) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(data);
-          success = true
-        }
-      });
-    }
-  });
+  let fileContent = fs.readFileSync("../templates/certificate-template.ejs")
+  let data =  ejs.render(fileContent.toString(), { student: _student, unit: _unit })
+  let options = {
+    "fomart": "A4",
+    "filename": `../attachments/${_studentId}_${_unitId}.pdf`,
+    "orientation": "Landscape",
+    "header": {
+      "height": "28mm"
+    },
+    "footer": {
+      "height": "28mm",
+    },
+  };
+
+  let createResult = pdf.create(data, options);
+  let pdfToFile = Promise.promisify(createResult.__proto__.toFile, { context: createResult });
+
+  let bufferResult = await pdfToFile()
+
+  if(!bufferResult.filename || bufferResult.filename.length === 0)
+  {
+    success = false;
+  }
+  else
+  {
+    success = true;
+  }
+
   return success 
 }
 
-async function uploadToS3(_bucket, _body, _key)
+async function uploadToS3(_bucket, filePath)
 {
   let params = {
     Bucket: _bucket,
-    Body : _body,
-    Key : _key
+    Body : fs.createReadStream(filePath),
+    Key : path.basename(filePath)
   };
 
-  s3.upload(params, function (err, data) {
-    //handle error
-    if (err) {
-      console.log("Error", err);
-    }
+  let s3Upload = Promise.promisify(s3.upload, {context: s3});
+  let uploadResult = await s3Upload(params)
 
-    //success
-    if (data) {
-      console.log("Uploaded in:", data.Location);
-    }
-  });
+  if(!uploadResult.Location || uploadResult.Location.length === 0)
+  {
+    console.log(uploadResult.err)
+  }
+  else
+  {
+    console.log(uploadResult.Location)
+  }
 }
 
 async function sendEmail(_studentEmail, _subject, _text, _attachments, _html)
 {
   const msg = {
     to: _studentEmail, // Change to your recipient
-    from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
-    fromname: "notification@rmit.edu.au (No-Reply)",
+    from: { email: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
+            name: "notification@rmit.edu.au (No-Reply)" },
     subject: _subject,
     text: _text,
     attachments: _attachments,
     html: _html
   }
 
-  sgMail.send(msg).then((response) => {
-      console.log(response[0].statusCode)
-      console.log(response[0].headers)
-  })
-  .catch((error) => {
+  let response = await sgMail.send(msg).catch((error) => {
     console.error(error)
+    throw error
   })
+
+  console.log(response[0].statusCode)
+  console.log(response[0].headers)
 }
 
 async function sendDegreeEmail(_studentId, _unitId)
@@ -272,11 +283,15 @@ async function sendDegreeEmail(_studentId, _unitId)
     let certificatePath = `../attachments/${_studentId}_${unit.unitId}.pdf`
     let degreePath = `../attachments/${_studentId}_${student.degreeId}.pdf`
 
+    console.log(transcriptSuccess)
+    console.log(certificateSuccess)
+    console.log(degreeSuccess)
+
     if(transcriptSuccess && certificateSuccess && degreeSuccess)
     {
-      await uploadToS3(transcriptBucket, fs.createReadStream(transcriptPath), path.basename(transcriptPath))
-      await uploadToS3(certificateBucket, fs.createReadStream(certificatePath), path.basename(certificatePath))
-      await uploadToS3(degreeBucket, fs.createReadStream(degreePath), path.basename(degreePath))
+      await uploadToS3(transcriptBucket, transcriptPath)
+      await uploadToS3(certificateBucket, certificatePath)
+      await uploadToS3(degreeBucket, degreePath)
     }
     else
     {
@@ -310,12 +325,12 @@ async function sendDegreeEmail(_studentId, _unitId)
 
     let subject = 'CONGRATULATIONS - Your Degree is Complete'
     let text = `Dear ${student.studentName}, on behalf of the entire RMIT team, we congratulate you on completing the ${degree.degreeName}. Please find attached the following: Your Degree Transcript 
-    Your Micro-Credential Certificate for: ${_unitId - unit.unitName} Last but not the least, your ${degree.degreeName} Degree 
+    Your Micro-Credential Certificate for: ${_unitId} - ${unit.unitName} Last but not the least, your ${degree.degreeName} Degree 
     We hope you had a wonderful time at the Royal Melbourne Institute of Technology, and we would like to wish you luck for your future endeavours. Sincerely, The RMIT Team.`
 
     let html = `Dear <strong>${student.studentName}</strong>, <br><br> on behalf of the entire RMIT team, we congratulate you on completing the <strong>${degree.degreeName}</strong>. 
-    <br><br>Please find attached the following: <ul><li><strong>Your Degree Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li>
-    <li>Last but not the least, <strong>your ${degree.degreeName} Degree</strong</li></ul> We hope you had a wonderful time at the Royal Melbourne Institute of Technology, and
+    <br><br>Please find attached the following: <ul><li><strong>Your Degree Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId} - ${unit.unitName}</strong></li>
+    <li>Last but not the least, <strong>your ${degree.degreeName} Degree</strong></li></ul> We hope you had a wonderful time at the Royal Melbourne Institute of Technology, and
     we would like to wish you luck for your future endeavours. <br><br><strong>Sincerely, <br>The RMIT Team.</strong>`
     
     await sendEmail(student.studentEmail, subject, text, attachments, html)
@@ -340,8 +355,8 @@ async function sendYearEmail(_studentId, _unitId)
 
     if(transcriptSuccess && certificateSuccess)
     {
-      await uploadToS3(transcriptBucket, fs.createReadStream(transcriptPath), path.basename(transcriptPath))
-      await uploadToS3(certificateBucket, fs.createReadStream(certificatePath), path.basename(certificatePath))
+      await uploadToS3(transcriptBucket, transcriptPath)
+      await uploadToS3(certificateBucket, certificatePath)
     }
     else
     {
@@ -368,11 +383,11 @@ async function sendYearEmail(_studentId, _unitId)
 
     let subject = `CONGRATULATIONS - Year ${year} is Complete`
     let text = `Dear ${student.studentName}, on behalf of the entire RMIT team, congratulations on completing Year ${year} of the ${degree.degreeName}. Please find attached the following: Your Updated Transcript 
-    Your Micro-Credential Certificate for: ${_unitId - unit.unitName} 
+    Your Micro-Credential Certificate for: ${_unitId} - ${unit.unitName}
     Sincerely, The RMIT Team.`
 
     let html = `Dear <strong>${student.studentName}</strong>, <br><br> on behalf of the entire RMIT team, congratulations on completing Year ${year} of the <strong>${degree.degreeName}</strong>. 
-    <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li></ul> 
+    <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId} - ${unit.unitName}</strong></li></ul> 
     <br><strong>Sincerely, <br>The RMIT Team.</strong>`
 
     await sendEmail(student.studentEmail, subject, text, attachments, html)
@@ -397,8 +412,8 @@ async function sendSemesterEmail(_studentId, _unitId)
 
     if(transcriptSuccess && certificateSuccess)
     {
-      await uploadToS3(transcriptBucket, fs.createReadStream(transcriptPath), path.basename(transcriptPath))
-      await uploadToS3(certificateBucket, fs.createReadStream(certificatePath), path.basename(certificatePath))
+      await uploadToS3(transcriptBucket, transcriptPath)
+      await uploadToS3(certificateBucket, certificatePath)
     }
     else
     {
@@ -425,11 +440,11 @@ async function sendSemesterEmail(_studentId, _unitId)
 
     let subject = `CONGRATULATIONS - Semeseter 1 of ${year} is Complete`
     let text = `Dear ${student.studentName}, on behalf of the entire RMIT team, congratulations on completing Semeseter 1 of Year ${year} of the ${degree.degreeName}. Please find attached the following: Your Updated Transcript 
-    Your Micro-Credential Certificate for: ${_unitId - unit.unitName} 
+    Your Micro-Credential Certificate for: ${_unitId} - ${unit.unitName} 
     Sincerely, The RMIT Team.`
 
     let html = `Dear <strong>${student.studentName}</strong>, <br><br> on behalf of the entire RMIT team, congratulations on completing Semeseter 1 of Year ${year} of the <strong>${degree.degreeName}</strong>. 
-    <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li></ul> 
+    <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId} - ${unit.unitName}</strong></li></ul> 
     <br><strong>Sincerely, <br>The RMIT Team.</strong>`
 
     await sendEmail(student.studentEmail, subject, text, attachments, html)
@@ -453,8 +468,8 @@ async function sendUnitEmail(_studentId, _unitId)
 
     if(transcriptSuccess && certificateSuccess)
     {
-      await uploadToS3(transcriptBucket, fs.createReadStream(transcriptPath), path.basename(transcriptPath))
-      await uploadToS3(certificateBucket, fs.createReadStream(certificatePath), path.basename(certificatePath))
+      await uploadToS3(transcriptBucket, transcriptPath)
+      await uploadToS3(certificateBucket, certificatePath)
     }
     else
     {
@@ -480,12 +495,12 @@ async function sendUnitEmail(_studentId, _unitId)
     ]
 
     let subject = 'CONGRATULATIONS - Your Micro-Credential is Complete'
-    let text = `Dear ${student.studentName}, on behalf of the entire RMIT team, we congratulate you on completing ${unit.unitId} - ${unit.unitName}. Please find attached the following: Your Updated Transcript 
-    Your Micro-Credential Certificate for: ${_unitId - unit.unitName}
+    let text = `Dear ${student.studentName}, on behalf of the entire RMIT team, we congratulate you on completing ${_unitId} - ${unit.unitName}. Please find attached the following: Your Updated Transcript 
+    Your Micro-Credential Certificate for: ${_unitId} - ${unit.unitName}
     Sincerely, The RMIT Team.`
 
-    let html = `Dear <strong>${student.studentName}</strong>, <br><br> on behalf of the entire RMIT team, we congratulate you on completing <strong>${unit.unitId} - ${unit.unitName}</strong>. 
-    <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li></ul> 
+    let html = `Dear <strong>${student.studentName}</strong>, <br><br> on behalf of the entire RMIT team, we congratulate you on completing <strong>${_unitId} - ${unit.unitName}</strong>. 
+    <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId} - ${unit.unitName}</strong></li></ul> 
     <br><strong>Sincerely, <br>The RMIT Team.</strong>`
     
     await sendEmail(student.studentEmail, subject, text, attachments, html)
@@ -506,8 +521,7 @@ async function sendFailEmail(_studentId, _unitId){
 
     if(transcriptSuccess)
     {
-      await uploadToS3(transcriptBucket, fs.createReadStream(transcriptPath), path.basename(transcriptPath))
-      await uploadToS3(certificateBucket, fs.createReadStream(certificatePath), path.basename(certificatePath))
+      await uploadToS3(transcriptBucket, transcriptPath)
     }
     else
     {
@@ -525,11 +539,11 @@ async function sendFailEmail(_studentId, _unitId){
       }
     ]
 
-    let subject = 'Micro-Credential Unsuccessfull'
-    let text = `Dear ${student.studentName}, we regret to inform you that you have not completed ${unit.unitId} - ${unit.unitName}. Please find attached the following: Your Updated Transcript 
+    let subject = 'Micro-Credential Unsuccessful'
+    let text = `Dear ${student.studentName}, we regret to inform you that you have not completed ${_unitId} - ${unit.unitName}. Please find attached the following: Your Updated Transcript 
     Sincerely, The RMIT Team.`
 
-    let html = `Dear <strong>${student.studentName}</strong>, <br><br> we regret to inform you that you have not completed <strong>${unit.unitId} - ${unit.unitName}</strong>. . 
+    let html = `Dear <strong>${student.studentName}</strong>, <br><br> we regret to inform you that you have not completed <strong>${_unitId} - ${unit.unitName}</strong>. 
     <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li></ul>
     <br><strong>Sincerely, <br>The RMIT Team.</strong>`
       
@@ -545,6 +559,8 @@ async function deleteFiles(filePaths)
     fs.unlinkSync(path)
   }
 }
+
+sendDegreeEmail("s3710669", "COSC2536")
 
 module.exports = {
     sendDegreeEmail,
