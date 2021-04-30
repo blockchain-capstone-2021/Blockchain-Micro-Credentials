@@ -123,6 +123,7 @@ function compare( currentRow, nextRow ) {
 
 async function generateTranscript(_studentId, transcriptRows, _student, _degree)
 {
+  let success = false
   let path = "../templates/transcript-template.ejs"
   ejs.renderFile(path, { students: students }, (err, data) => {
     if (err) {
@@ -143,14 +144,17 @@ async function generateTranscript(_studentId, transcriptRows, _student, _degree)
           console.log(err);
         } else {
           console.log(data);
+          success = true
         }
       });
     }
   });
+  return success 
 }
 
 async function generateDegree(_studentId, _degreeId, _student, _degree)
 {
+  let success = false
   let path = "./degree-template.ejs"
   ejs.renderFile(path, { students: students }, (err, data) => {
     if (err) {
@@ -171,14 +175,17 @@ async function generateDegree(_studentId, _degreeId, _student, _degree)
           console.log(err);
         } else {
           console.log(data);
+          success = true
         }
       });
     }
   });
+  return success 
 }
 
 async function generateCertificate(_studentId, _unitId, _student, _unit)
 {
+  let success = false
   let path = "./certificate-template.ejs"
   ejs.renderFile(path, { students: students }, (err, data) => {
     if (err) {
@@ -199,10 +206,12 @@ async function generateCertificate(_studentId, _unitId, _student, _unit)
           console.log(err);
         } else {
           console.log(data);
+          success = true
         }
       });
     }
   });
+  return success 
 }
 
 async function uploadToS3(_bucket, _body, _key)
