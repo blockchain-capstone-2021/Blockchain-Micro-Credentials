@@ -32,7 +32,7 @@ const transcriptBucket =  'capstone-transcript-bucket'
 const certificateBucket = 'capstone-certificate-bucket'
 const degreeBucket = 'capstone-degree-bucket'
 
-async function generateTranscript(_studentId){
+async function generateTranscriptRows(_studentId){
 
     let enrolments = await dbEnrolmentController.getAllEnrolments(_studentId)
     let enrolmentMap = new Map()
@@ -121,6 +121,90 @@ function compare( currentRow, nextRow ) {
     return 0;
 }
 
+async function generateTranscript(_studentId, transcriptRows, _student, _degree)
+{
+  let path = "../templates/transcript-template.ejs"
+  ejs.renderFile(path, { students: students }, (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      let options = {
+        "fomart": "A4",
+        "orientation": "Portrait",
+        "header": {
+          "height": "28mm"
+        },
+        "footer": {
+          "height": "28mm",
+        },
+      };
+      pdf.create(data, options).toFile(`../attachments/${_studentId}_Transcript.pdf`, function (err, data) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(data);
+        }
+      });
+    }
+  });
+}
+
+async function generateDegree(_studentId, _degreeId, _student, _degree)
+{
+  let path = "./degree-template.ejs"
+  ejs.renderFile(path, { students: students }, (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      let options = {
+        "fomart": "A4",
+        "orientation": "Landscape",
+        "header": {
+          "height": "28mm"
+        },
+        "footer": {
+          "height": "28mm",
+        },
+      };
+      pdf.create(data, options).toFile(`../attachments/${_studentId}_${_degreeId}.pdf`, function (err, data) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(data);
+        }
+      });
+    }
+  });
+}
+
+async function generateCertificate(_studentId, _unitId, _student, _unit)
+{
+  let path = "./certificate-template.ejs"
+  ejs.renderFile(path, { students: students }, (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      let options = {
+        "fomart": "A4",
+        "orientation": "Landscape",
+        "header": {
+          "height": "28mm"
+        },
+        "footer": {
+          "height": "28mm",
+        },
+      };
+      pdf.create(data, options).toFile(`../attachments/${_studentId}_${_unitId}.pdf`, function (err, data) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(data);
+        }
+      });
+    }
+  });
+}
+
 async function uploadToS3(_bucket, _body, _key)
 {
   let success = false
@@ -178,9 +262,9 @@ async function sendDegreeEmail(_studentId, _unitId)
     let degree = await dbDegreeController.getDegree(student.degreeId)
     let unit = await dbUnitController.getUnit(_unitId) 
 
-    let transcript = fs.readFileSync(`./attachments/${_studentId}_Transcript.pdf`).toString("base64");
-    let degreePdf = fs.readFileSync(`./attachments/${_studentId}_${student.degreeId}.pdf`).toString("base64");
-    let certificate = fs.readFileSync(`./attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+    let transcript = fs.readFileSync(`../attachments/${_studentId}_Transcript.pdf`).toString("base64");
+    let degreePdf = fs.readFileSync(`../attachments/${_studentId}_${student.degreeId}.pdf`).toString("base64");
+    let certificate = fs.readFileSync(`../attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
 
     let attachments = [
       {
@@ -223,8 +307,8 @@ async function sendYearEmail(_studentId, _unitId)
     let unit = await dbUnitController.getUnit(_unitId) 
     let year = (student.studentCreditPoints / degree.creditPointsPerSem)/2
 
-    let transcript = fs.readFileSync(`./attachments/${_studentId}_Transcript.pdf`).toString("base64");
-    let certificate = fs.readFileSync(`./attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+    let transcript = fs.readFileSync(`../attachments/${_studentId}_Transcript.pdf`).toString("base64");
+    let certificate = fs.readFileSync(`../attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
 
     let attachments = [
       {
@@ -260,8 +344,8 @@ async function sendSemesterEmail(_studentId, _unitId)
     let unit = await dbUnitController.getUnit(_unitId) 
     let year = ((student.studentCreditPoints - degree.creditPointsPerSem) / degree.creditPointsPerSem)/2
 
-    let transcript = fs.readFileSync(`./attachments/${_studentId}_Transcript.pdf`).toString("base64");
-    let certificate = fs.readFileSync(`./attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+    let transcript = fs.readFileSync(`../attachments/${_studentId}_Transcript.pdf`).toString("base64");
+    let certificate = fs.readFileSync(`../attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
 
     let attachments = [
       {
@@ -296,8 +380,8 @@ async function sendUnitEmail(_studentId, _unitId)
     let degree = await dbDegreeController.getDegree(student.degreeId)
     let unit = await dbUnitController.getUnit(_unitId) 
 
-    let transcript = fs.readFileSync(`./attachments/${_studentId}_Transcript.pdf`).toString("base64");
-    let certificate = fs.readFileSync(`./attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+    let transcript = fs.readFileSync(`../attachments/${_studentId}_Transcript.pdf`).toString("base64");
+    let certificate = fs.readFileSync(`../attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
 
     let attachments = [
       {
@@ -331,7 +415,7 @@ async function sendFailEmail(_studentId, _unitId){
     let degree = await dbDegreeController.getDegree(student.degreeId)
     let unit = await dbUnitController.getUnit(_unitId) 
 
-    let transcript = fs.readFileSync(`./attachments/${_studentId}_Transcript.pdf`).toString("base64");
+    let transcript = fs.readFileSync(`../attachments/${_studentId}_Transcript.pdf`).toString("base64");
 
     let attachments = [
       {
