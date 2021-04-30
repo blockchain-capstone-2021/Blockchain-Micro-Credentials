@@ -28,6 +28,10 @@ const blockchain = require('../middleware/blockchain')
 const ipfs = require('../middleware/ipfs')
 const Unit_Key = require('../object_models/blockchain/Unit_Key')
 
+const transcriptBucket =  'capstone-transcript-bucket'
+const certificateBucket = 'capstone-certificate-bucket'
+const degreeBucket = 'capstone-degree-bucket'
+
 async function generateTranscript(_studentId){
 
     let enrolments = await dbEnrolmentController.getAllEnrolments(_studentId)
