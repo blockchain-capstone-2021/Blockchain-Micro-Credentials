@@ -6,6 +6,14 @@ require('dotenv').config({
 let ejs = require("ejs");
 let pdf = require("html-pdf");
 const fs = require("fs");
+const AWS = require('aws-sdk');
+
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY
+  });
+
+var s3 = new AWS.S3();
 
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
