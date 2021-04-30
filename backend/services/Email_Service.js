@@ -283,10 +283,6 @@ async function sendDegreeEmail(_studentId, _unitId)
     let certificatePath = `../attachments/${_studentId}_${unit.unitId}.pdf`
     let degreePath = `../attachments/${_studentId}_${student.degreeId}.pdf`
 
-    console.log(transcriptSuccess)
-    console.log(certificateSuccess)
-    console.log(degreeSuccess)
-
     if(transcriptSuccess && certificateSuccess && degreeSuccess)
     {
       await uploadToS3(transcriptBucket, transcriptPath)
