@@ -556,8 +556,6 @@ async function deleteFiles(filePaths)
   }
 }
 
-sendDegreeEmail("s3710669", "COSC2536")
-
 module.exports = {
     sendDegreeEmail,
     sendYearEmail,
