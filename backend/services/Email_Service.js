@@ -117,6 +117,10 @@ async function sendDegreeEmail(_studentId, _unitId)
     let degree = await dbDegreeController.getDegree(student.degreeId)
     let unit = await dbUnitController.getUnit(_unitId) 
 
+    let transcript = fs.readFileSync(`./attachments/${_studentId}_Transcript.pdf`).toString("base64");
+    let degreePdf = fs.readFileSync(`./attachments/${_studentId}_${student.degreeId}.pdf`).toString("base64");
+    let certificate = fs.readFileSync(`./attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+  
     const msg = {
         to: student.studentEmail, // Change to your recipient
         from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
@@ -127,20 +131,20 @@ async function sendDegreeEmail(_studentId, _unitId)
         We hope you had a wonderful time at the Royal Melbourne Institute of Technology, and we would like to wish you luck for your future endeavours. Sincerely, The RMIT Team.`,
         attachments: [
           {
-            content: attachment1,
-            filename: "report.pdf",
+            content: transcript,
+            filename: `${_studentId}_Transcript.pdf`,
             type: "application/pdf",
             disposition: "attachment"
           },
           {
-            content: attachment2,
-            filename: "report1.pdf",
+            content: certificate,
+            filename: `${_studentId}_${unit.unitId}_Certificate.pdf`,
             type: "application/pdf",
             disposition: "attachment"
           },
           {
-            content: attachment3,
-            filename: "report1.pdf",
+            content: degreePdf,
+            filename: `${_studentId}_${degree.degreeName}.pdf`,
             type: "application/pdf",
             disposition: "attachment"
           }
@@ -167,6 +171,9 @@ async function sendYearEmail(_studentId, _unitId)
     let unit = await dbUnitController.getUnit(_unitId) 
     let year = (student.studentCreditPoints / degree.creditPointsPerSem)/2
 
+    let transcript = fs.readFileSync(`./attachments/${_studentId}_Transcript.pdf`).toString("base64");
+    let certificate = fs.readFileSync(`./attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+
     const msg = {
         to: student.studentEmail, // Change to your recipient
         from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
@@ -177,14 +184,14 @@ async function sendYearEmail(_studentId, _unitId)
         Sincerely, The RMIT Team.`,
         attachments: [
           {
-            content: attachment1,
-            filename: "report.pdf",
+            content: transcript,
+            filename: `${_studentId}_Transcript.pdf`,
             type: "application/pdf",
             disposition: "attachment"
           },
           {
-            content: attachment2,
-            filename: "report1.pdf",
+            content: certificate,
+            filename: `${_studentId}_${unit.unitId}_Certificate.pdf`,
             type: "application/pdf",
             disposition: "attachment"
           }
@@ -210,6 +217,9 @@ async function sendSemesterEmail(_studentId, _unitId)
     let unit = await dbUnitController.getUnit(_unitId) 
     let year = ((student.studentCreditPoints - degree.creditPointsPerSem) / degree.creditPointsPerSem)/2
 
+    let transcript = fs.readFileSync(`./attachments/${_studentId}_Transcript.pdf`).toString("base64");
+    let certificate = fs.readFileSync(`./attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+
     const msg = {
         to: student.studentEmail, // Change to your recipient
         from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
@@ -220,14 +230,14 @@ async function sendSemesterEmail(_studentId, _unitId)
         Sincerely, The RMIT Team.`,
         attachments: [
           {
-            content: attachment1,
-            filename: "report.pdf",
+            content: transcript,
+            filename: `${_studentId}_Transcript.pdf`,
             type: "application/pdf",
             disposition: "attachment"
           },
           {
-            content: attachment2,
-            filename: "report1.pdf",
+            content: certificate,
+            filename: `${_studentId}_${unit.unitId}_Certificate.pdf`,
             type: "application/pdf",
             disposition: "attachment"
           }
@@ -252,6 +262,9 @@ async function sendUnitEmail(_studentId, _unitId)
     let degree = await dbDegreeController.getDegree(student.degreeId)
     let unit = await dbUnitController.getUnit(_unitId) 
 
+    let transcript = fs.readFileSync(`./attachments/${_studentId}_Transcript.pdf`).toString("base64");
+    let certificate = fs.readFileSync(`./attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+
     const msg = {
         to: student.studentEmail, // Change to your recipient
         from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
@@ -262,14 +275,14 @@ async function sendUnitEmail(_studentId, _unitId)
         Sincerely, The RMIT Team.`,
         attachments: [
           {
-            content: attachment1,
-            filename: "report.pdf",
+            content: transcript,
+            filename: `${_studentId}_Transcript.pdf`,
             type: "application/pdf",
             disposition: "attachment"
           },
           {
-            content: attachment2,
-            filename: "report1.pdf",
+            content: certificate,
+            filename: `${_studentId}_${unit.unitId}_Certificate.pdf`,
             type: "application/pdf",
             disposition: "attachment"
           }
@@ -293,6 +306,8 @@ async function sendFailEmail(_studentId, _unitId){
     let degree = await dbDegreeController.getDegree(student.degreeId)
     let unit = await dbUnitController.getUnit(_unitId) 
 
+    let transcript = fs.readFileSync(`./attachments/${_studentId}_Transcript.pdf`).toString("base64");
+
     const msg = {
         to: student.studentEmail, // Change to your recipient
         from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
@@ -302,11 +317,11 @@ async function sendFailEmail(_studentId, _unitId){
         Sincerely, The RMIT Team.`,
         attachments: [
           {
-            content: attachment1,
-            filename: "report.pdf",
+            content: transcript,
+            filename: `${_studentId}_Transcript.pdf`,
             type: "application/pdf",
             disposition: "attachment"
-          },
+          }
         ],
         html: `Dear <strong>${student.studentName}</strong>, <br><br> we regret to inform you that you have not completed <strong>${unit.unitId} - ${unit.unitName}</strong>. . 
         <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li></ul>
