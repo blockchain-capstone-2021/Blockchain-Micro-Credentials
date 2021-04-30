@@ -102,13 +102,11 @@ async function generateTranscript(_studentId){
 }
 
 function compare( currentRow, nextRow ) {
-    currentRowSem = currentRow.semester.charAt(9)
-    currentRowYear = currentRow.semester.substr(11, currentRow.semester.length-1)
-    currentRowDate = currentRowYear+currentRowSem
+    let currentRowData = currentRow.semester.split(" ")
+    currentRowDate = currentRowData[2]+currentRowData[1]
 
-    nextRowSem = nextRow.semester.charAt(9)
-    nextRowYear = nextRow.semester.substr(11, nextRow.semester.length-1)
-    nextRowDate = nextRowYear+nextRowSem
+    let nextRowData = nextRow.semester.split(" ")
+    nextRowDate = nextRowData[2]+nextRowData[1]
 
     if ( currentRowDate < nextRowDate ){
       return -1;
@@ -344,6 +342,8 @@ async function sendFailEmail(_studentId, _unitId){
       console.error(error)
     })
 }
+
+generateTranscript("s3710669")
 
 module.exports = {
     sendDegreeEmail,
