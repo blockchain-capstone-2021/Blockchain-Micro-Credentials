@@ -353,6 +353,14 @@ async function sendFailEmail(_studentId, _unitId){
     let success = await sendEmail(student.studentEmail, subject, text, attachments, html)
 }
 
+async function deleteFile(filePaths)
+{
+  for(const path of filePaths)
+  {
+    fs.unlinkSync(path)
+  }
+}
+
 module.exports = {
     sendDegreeEmail,
     sendYearEmail,
