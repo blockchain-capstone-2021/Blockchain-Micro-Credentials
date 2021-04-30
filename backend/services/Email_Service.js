@@ -216,7 +216,6 @@ async function generateCertificate(_studentId, _unitId, _student, _unit)
 
 async function uploadToS3(_bucket, _body, _key)
 {
-  let success = false
   let params = {
     Bucket: _bucket,
     Body : _body,
@@ -232,17 +231,12 @@ async function uploadToS3(_bucket, _body, _key)
     //success
     if (data) {
       console.log("Uploaded in:", data.Location);
-      success = true;
     }
   });
-
-  return success
 }
 
 async function sendEmail(_studentEmail, _subject, _text, _attachments, _html)
 {
-  let success = false
-
   const msg = {
     to: _studentEmail, // Change to your recipient
     from: process.env.SENDGRID_FROM_EMAIL, // Change to your verified sender
@@ -256,13 +250,10 @@ async function sendEmail(_studentEmail, _subject, _text, _attachments, _html)
   sgMail.send(msg).then((response) => {
       console.log(response[0].statusCode)
       console.log(response[0].headers)
-      success = true
   })
   .catch((error) => {
     console.error(error)
   })
-
-  return success
 }
 
 async function sendDegreeEmail(_studentId, _unitId)
@@ -271,9 +262,30 @@ async function sendDegreeEmail(_studentId, _unitId)
     let degree = await dbDegreeController.getDegree(student.degreeId)
     let unit = await dbUnitController.getUnit(_unitId) 
 
-    let transcript = fs.readFileSync(`../attachments/${_studentId}_Transcript.pdf`).toString("base64");
-    let degreePdf = fs.readFileSync(`../attachments/${_studentId}_${student.degreeId}.pdf`).toString("base64");
-    let certificate = fs.readFileSync(`../attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+    let transcriptRows = await generateTranscriptRows(_studentId)
+    
+    let transcriptSuccess = await generateTranscript(_studentId, transcriptRows, student, degree)
+    let certificateSuccess = await generateCertificate(_studentId, _unitId, student, unit)
+    let degreeSuccess = await generateDegree(_studentId, student.degreeId, student, degree)
+    
+    let transcriptPath = `../attachments/${_studentId}_Transcript.pdf`
+    let certificatePath = `../attachments/${_studentId}_${unit.unitId}.pdf`
+    let degreePath = `../attachments/${_studentId}_${student.degreeId}.pdf`
+
+    if(transcriptSuccess && certificateSuccess && degreeSuccess)
+    {
+      await uploadToS3(transcriptBucket, fs.createReadStream(transcriptPath), path.basename(transcriptPath))
+      await uploadToS3(certificateBucket, fs.createReadStream(certificatePath), path.basename(certificatePath))
+      await uploadToS3(degreeBucket, fs.createReadStream(degreePath), path.basename(degreePath))
+    }
+    else
+    {
+      return 
+    }
+
+    let transcript = fs.readFileSync(transcriptPath).toString("base64");
+    let degreePdf = fs.readFileSync(degreePath).toString("base64");
+    let certificate = fs.readFileSync(certificatePath).toString("base64");
 
     let attachments = [
       {
@@ -306,7 +318,9 @@ async function sendDegreeEmail(_studentId, _unitId)
     <li>Last but not the least, <strong>your ${degree.degreeName} Degree</strong</li></ul> We hope you had a wonderful time at the Royal Melbourne Institute of Technology, and
     we would like to wish you luck for your future endeavours. <br><br><strong>Sincerely, <br>The RMIT Team.</strong>`
     
-    let success = await sendEmail(student.studentEmail, subject, text, attachments, html)
+    await sendEmail(student.studentEmail, subject, text, attachments, html)
+
+    await deleteFiles([transcriptPath, certificatePath, degreePath])
 }
 
 async function sendYearEmail(_studentId, _unitId)
@@ -316,8 +330,26 @@ async function sendYearEmail(_studentId, _unitId)
     let unit = await dbUnitController.getUnit(_unitId) 
     let year = (student.studentCreditPoints / degree.creditPointsPerSem)/2
 
-    let transcript = fs.readFileSync(`../attachments/${_studentId}_Transcript.pdf`).toString("base64");
-    let certificate = fs.readFileSync(`../attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+    let transcriptRows = await generateTranscriptRows(_studentId)
+    
+    let transcriptSuccess = await generateTranscript(_studentId, transcriptRows, student, degree)
+    let certificateSuccess = await generateCertificate(_studentId, _unitId, student, unit)
+    
+    let transcriptPath = `../attachments/${_studentId}_Transcript.pdf`
+    let certificatePath = `../attachments/${_studentId}_${unit.unitId}.pdf`
+
+    if(transcriptSuccess && certificateSuccess)
+    {
+      await uploadToS3(transcriptBucket, fs.createReadStream(transcriptPath), path.basename(transcriptPath))
+      await uploadToS3(certificateBucket, fs.createReadStream(certificatePath), path.basename(certificatePath))
+    }
+    else
+    {
+      return 
+    }
+
+    let transcript = fs.readFileSync(transcriptPath).toString("base64");
+    let certificate = fs.readFileSync(certificatePath).toString("base64");
 
     let attachments = [
       {
@@ -343,7 +375,9 @@ async function sendYearEmail(_studentId, _unitId)
     <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li></ul> 
     <br><strong>Sincerely, <br>The RMIT Team.</strong>`
 
-    let success = await sendEmail(student.studentEmail, subject, text, attachments, html)
+    await sendEmail(student.studentEmail, subject, text, attachments, html)
+
+    await deleteFiles([transcriptPath, certificatePath])
 }
 
 async function sendSemesterEmail(_studentId, _unitId)
@@ -353,8 +387,26 @@ async function sendSemesterEmail(_studentId, _unitId)
     let unit = await dbUnitController.getUnit(_unitId) 
     let year = ((student.studentCreditPoints - degree.creditPointsPerSem) / degree.creditPointsPerSem)/2
 
-    let transcript = fs.readFileSync(`../attachments/${_studentId}_Transcript.pdf`).toString("base64");
-    let certificate = fs.readFileSync(`../attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+    let transcriptRows = await generateTranscriptRows(_studentId)
+    
+    let transcriptSuccess = await generateTranscript(_studentId, transcriptRows, student, degree)
+    let certificateSuccess = await generateCertificate(_studentId, _unitId, student, unit)
+    
+    let transcriptPath = `../attachments/${_studentId}_Transcript.pdf`
+    let certificatePath = `../attachments/${_studentId}_${unit.unitId}.pdf`
+
+    if(transcriptSuccess && certificateSuccess)
+    {
+      await uploadToS3(transcriptBucket, fs.createReadStream(transcriptPath), path.basename(transcriptPath))
+      await uploadToS3(certificateBucket, fs.createReadStream(certificatePath), path.basename(certificatePath))
+    }
+    else
+    {
+      return 
+    }
+
+    let transcript = fs.readFileSync(transcriptPath).toString("base64");
+    let certificate = fs.readFileSync(certificatePath).toString("base64");
 
     let attachments = [
       {
@@ -380,7 +432,9 @@ async function sendSemesterEmail(_studentId, _unitId)
     <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li></ul> 
     <br><strong>Sincerely, <br>The RMIT Team.</strong>`
 
-    let success = await sendEmail(student.studentEmail, subject, text, attachments, html)
+    await sendEmail(student.studentEmail, subject, text, attachments, html)
+
+    await deleteFiles([transcriptPath, certificatePath])
 }
 
 async function sendUnitEmail(_studentId, _unitId)
@@ -389,8 +443,26 @@ async function sendUnitEmail(_studentId, _unitId)
     let degree = await dbDegreeController.getDegree(student.degreeId)
     let unit = await dbUnitController.getUnit(_unitId) 
 
-    let transcript = fs.readFileSync(`../attachments/${_studentId}_Transcript.pdf`).toString("base64");
-    let certificate = fs.readFileSync(`../attachments/${_studentId}_${unit.unitId}.pdf`).toString("base64");
+    let transcriptRows = await generateTranscriptRows(_studentId)
+    
+    let transcriptSuccess = await generateTranscript(_studentId, transcriptRows, student, degree)
+    let certificateSuccess = await generateCertificate(_studentId, _unitId, student, unit)
+    
+    let transcriptPath = `../attachments/${_studentId}_Transcript.pdf`
+    let certificatePath = `../attachments/${_studentId}_${unit.unitId}.pdf`
+
+    if(transcriptSuccess && certificateSuccess)
+    {
+      await uploadToS3(transcriptBucket, fs.createReadStream(transcriptPath), path.basename(transcriptPath))
+      await uploadToS3(certificateBucket, fs.createReadStream(certificatePath), path.basename(certificatePath))
+    }
+    else
+    {
+      return 
+    }
+
+    let transcript = fs.readFileSync(transcriptPath).toString("base64");
+    let certificate = fs.readFileSync(certificatePath).toString("base64");
 
     let attachments = [
       {
@@ -416,7 +488,9 @@ async function sendUnitEmail(_studentId, _unitId)
     <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li><li><strong>Your Micro-Credential Certificate for: ${_unitId - unit.unitName}</strong></li></ul> 
     <br><strong>Sincerely, <br>The RMIT Team.</strong>`
     
-    let success = await sendEmail(student.studentEmail, subject, text, attachments, html)
+    await sendEmail(student.studentEmail, subject, text, attachments, html)
+
+    await deleteFiles([transcriptPath, certificatePath])
 }
 
 async function sendFailEmail(_studentId, _unitId){
@@ -424,7 +498,23 @@ async function sendFailEmail(_studentId, _unitId){
     let degree = await dbDegreeController.getDegree(student.degreeId)
     let unit = await dbUnitController.getUnit(_unitId) 
 
-    let transcript = fs.readFileSync(`../attachments/${_studentId}_Transcript.pdf`).toString("base64");
+    let transcriptRows = await generateTranscriptRows(_studentId)
+    
+    let transcriptSuccess = await generateTranscript(_studentId, transcriptRows, student, degree)
+    
+    let transcriptPath = `../attachments/${_studentId}_Transcript.pdf`
+
+    if(transcriptSuccess)
+    {
+      await uploadToS3(transcriptBucket, fs.createReadStream(transcriptPath), path.basename(transcriptPath))
+      await uploadToS3(certificateBucket, fs.createReadStream(certificatePath), path.basename(certificatePath))
+    }
+    else
+    {
+      return 
+    }
+
+    let transcript = fs.readFileSync(transcriptPath).toString("base64");
 
     let attachments = [
       {
@@ -443,10 +533,12 @@ async function sendFailEmail(_studentId, _unitId){
     <br><br>Please find attached the following: <ul><li><strong>Your Updated Transcript</strong></li></ul>
     <br><strong>Sincerely, <br>The RMIT Team.</strong>`
       
-    let success = await sendEmail(student.studentEmail, subject, text, attachments, html)
+    await sendEmail(student.studentEmail, subject, text, attachments, html)
+
+    await deleteFiles([transcriptPath])
 }
 
-async function deleteFile(filePaths)
+async function deleteFiles(filePaths)
 {
   for(const path of filePaths)
   {
