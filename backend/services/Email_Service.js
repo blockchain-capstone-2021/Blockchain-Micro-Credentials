@@ -324,8 +324,6 @@ async function sendFailEmail(_studentId, _unitId){
     let success = await sendEmail(student.studentEmail, subject, text, attachments, html)
 }
 
-generateTranscript("s3710669")
-
 module.exports = {
     sendDegreeEmail,
     sendYearEmail,
@@ -333,4 +331,3 @@ module.exports = {
     sendUnitEmail, 
     sendFailEmail
 }
-
