@@ -238,11 +238,7 @@ async function uploadToS3(_bucket, filePath)
 
   if(!uploadResult.Location || uploadResult.Location.length === 0)
   {
-    console.log(uploadResult.err)
-  }
-  else
-  {
-    console.log(uploadResult.Location)
+    throw Error(uploadResult.err)
   }
 }
 
@@ -259,12 +255,8 @@ async function sendEmail(_studentEmail, _subject, _text, _attachments, _html)
   }
 
   let response = await sgMail.send(msg).catch((error) => {
-    console.error(error)
-    throw error
+    throw Error(error)
   })
-
-  console.log(response[0].statusCode)
-  console.log(response[0].headers)
 }
 
 async function sendDegreeEmail(_studentId, _unitId)
