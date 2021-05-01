@@ -34,6 +34,10 @@ const transcriptBucket =  'capstone-transcript-bucket'
 const certificateBucket = 'capstone-certificate-bucket'
 const degreeBucket = 'capstone-degree-bucket'
 
+const degreeAttachmentOption = 0
+const transcriptAttachmentOption = 1
+const certificateAttachmentOption = 2
+
 async function generateTranscriptRows(_studentId){
 
     let enrolments = await dbEnrolmentController.getAllEnrolments(_studentId)
@@ -123,83 +127,33 @@ function compare( currentRow, nextRow ) {
     return 0;
 }
 
-async function generateTranscript(_studentId, transcriptRows, _student, _degree)
-{
-  let success = false
-  let fileContent = fs.readFileSync("../templates/transcript-template.ejs")
-  let data =  ejs.render(fileContent.toString(), { student: _student, degree: _degree, transcript: transcriptRows })
-  let options = {
-    "fomart": "A4",
-    "filename": `../attachments/${_studentId}_Transcript.pdf`,
-    "orientation": "Landscape",
-    "header": {
-      "height": "28mm"
-    },
-    "footer": {
-      "height": "28mm",
-    },
-  };
-
-  let createResult = pdf.create(data, options);
-  let pdfToFile = Promise.promisify(createResult.__proto__.toFile, { context: createResult });
-
-  let bufferResult = await pdfToFile()
-
-  if(!bufferResult.filename || bufferResult.filename.length === 0)
-  {
-    success = false;
-  }
-  else
-  {
-    success = true;
-  }
-
-  return success 
-}
-
-async function generateDegree(_studentId, _degreeId, _student, _degree)
+async function generateAttachment(_studentId, _degreeId, _unitId, transcriptRows, _student, _degree, _unit, attachmentOption)
 {
   let success
-  let fileContent = fs.readFileSync("../templates/degree-template.ejs")
-  let data =  ejs.render(fileContent.toString(), { student: _student, degree: _degree })
+  let fileContent
+  let fileName
+  let data
+  let orientation = "Landscape"
+
+  if(attachmentOption === degreeAttachmentOption){
+    fileContent = fs.readFileSync("../templates/degree-template.ejs")
+    data =  ejs.render(fileContent.toString(), { student: _student, degree: _degree })
+    fileName = `../attachments/${_studentId}_${_degreeId}.pdf`
+  }else if(attachmentOption === transcriptAttachmentOption){
+    fileContent = fs.readFileSync("../templates/transcript-template.ejs")
+    data =  ejs.render(fileContent.toString(), { student: _student, degree: _degree, transcript: transcriptRows })
+    fileName = `../attachments/${_studentId}_Transcript.pdf`
+    orientation = "Portrait"
+  }else if(attachmentOption === certificateAttachmentOption){
+    fileContent = fs.readFileSync("../templates/certificate-template.ejs")
+    data =  ejs.render(fileContent.toString(), { student: _student, unit: _unit })
+    fileName = `../attachments/${_studentId}_${_unitId}.pdf`
+  }
+  
   let options = {
     "fomart": "A4",
-    "filename": `../attachments/${_studentId}_${_degreeId}.pdf`,
-    "orientation": "Landscape",
-    "header": {
-      "height": "28mm"
-    },
-    "footer": {
-      "height": "28mm",
-    },
-  };
-
-  let createResult = pdf.create(data, options);
-  let pdfToFile = Promise.promisify(createResult.__proto__.toFile, { context: createResult });
-
-  let bufferResult = await pdfToFile()
-
-  if(!bufferResult.filename || bufferResult.filename.length === 0)
-  {
-    success = false;
-  }
-  else
-  {
-    success = true;
-  }
-
-  return success 
-}
-
-async function generateCertificate(_studentId, _unitId, _student, _unit)
-{
-  let success = false
-  let fileContent = fs.readFileSync("../templates/certificate-template.ejs")
-  let data =  ejs.render(fileContent.toString(), { student: _student, unit: _unit })
-  let options = {
-    "fomart": "A4",
-    "filename": `../attachments/${_studentId}_${_unitId}.pdf`,
-    "orientation": "Landscape",
+    "filename": fileName,
+    "orientation": orientation,
     "header": {
       "height": "28mm"
     },
@@ -267,9 +221,9 @@ async function sendDegreeEmail(_studentId, _unitId)
 
     let transcriptRows = await generateTranscriptRows(_studentId)
     
-    let transcriptSuccess = await generateTranscript(_studentId, transcriptRows, student, degree)
-    let certificateSuccess = await generateCertificate(_studentId, _unitId, student, unit)
-    let degreeSuccess = await generateDegree(_studentId, student.degreeId, student, degree)
+    let transcriptSuccess = await generateAttachment(_studentId, student.degreeId, _unitId, transcriptRows, student, degree, unit, transcriptAttachmentOption)
+    let certificateSuccess = await generateAttachment(_studentId, student.degreeId, _unitId, transcriptRows, student, degree, unit, certificateAttachmentOption)
+    let degreeSuccess = await generateAttachment(_studentId, student.degreeId, _unitId, transcriptRows, student, degree, unit, degreeAttachmentOption)
     
     let transcriptPath = `../attachments/${_studentId}_Transcript.pdf`
     let certificatePath = `../attachments/${_studentId}_${unit.unitId}.pdf`
@@ -335,8 +289,8 @@ async function sendYearEmail(_studentId, _unitId)
 
     let transcriptRows = await generateTranscriptRows(_studentId)
     
-    let transcriptSuccess = await generateTranscript(_studentId, transcriptRows, student, degree)
-    let certificateSuccess = await generateCertificate(_studentId, _unitId, student, unit)
+    let transcriptSuccess = await generateAttachment(_studentId, student.degreeId, _unitId, transcriptRows, student, degree, unit, transcriptAttachmentOption)
+    let certificateSuccess = await generateAttachment(_studentId, student.degreeId, _unitId, transcriptRows, student, degree, unit, certificateAttachmentOption)
     
     let transcriptPath = `../attachments/${_studentId}_Transcript.pdf`
     let certificatePath = `../attachments/${_studentId}_${unit.unitId}.pdf`
@@ -392,8 +346,8 @@ async function sendSemesterEmail(_studentId, _unitId)
 
     let transcriptRows = await generateTranscriptRows(_studentId)
     
-    let transcriptSuccess = await generateTranscript(_studentId, transcriptRows, student, degree)
-    let certificateSuccess = await generateCertificate(_studentId, _unitId, student, unit)
+    let transcriptSuccess = await generateAttachment(_studentId, student.degreeId, _unitId, transcriptRows, student, degree, unit, transcriptAttachmentOption)
+    let certificateSuccess = await generateAttachment(_studentId, student.degreeId, _unitId, transcriptRows, student, degree, unit, certificateAttachmentOption)
     
     let transcriptPath = `../attachments/${_studentId}_Transcript.pdf`
     let certificatePath = `../attachments/${_studentId}_${unit.unitId}.pdf`
@@ -448,8 +402,8 @@ async function sendUnitEmail(_studentId, _unitId)
 
     let transcriptRows = await generateTranscriptRows(_studentId)
     
-    let transcriptSuccess = await generateTranscript(_studentId, transcriptRows, student, degree)
-    let certificateSuccess = await generateCertificate(_studentId, _unitId, student, unit)
+    let transcriptSuccess = await generateAttachment(_studentId, student.degreeId, _unitId, transcriptRows, student, degree, unit, transcriptAttachmentOption)
+    let certificateSuccess = await generateAttachment(_studentId, student.degreeId, _unitId, transcriptRows, student, degree, unit, certificateAttachmentOption)
     
     let transcriptPath = `../attachments/${_studentId}_Transcript.pdf`
     let certificatePath = `../attachments/${_studentId}_${unit.unitId}.pdf`
@@ -503,7 +457,7 @@ async function sendFailEmail(_studentId, _unitId){
 
     let transcriptRows = await generateTranscriptRows(_studentId)
     
-    let transcriptSuccess = await generateTranscript(_studentId, transcriptRows, student, degree)
+    let transcriptSuccess = await generateAttachment(_studentId, student.degreeId, _unitId, transcriptRows, student, degree, unit, transcriptAttachmentOption)
     
     let transcriptPath = `../attachments/${_studentId}_Transcript.pdf`
 
