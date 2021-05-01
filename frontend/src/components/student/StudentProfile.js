@@ -23,14 +23,22 @@ const StudentProfile = (props) => {
                     <section>
                         <h1>Hello, {student.name}!</h1>
                         <form>
-                        <p>Student ID:</p>  
-                        <input type='text' disabled = {true} defaultValue={student.id} />
-                        <p>Email:</p> 
-                        <input type='email' disabled = {true} defaultValue={student.email} />
-                        <p>Degree:</p> 
-                        <input type='text' disabled = {true} defaultValue={student.degree} />
-                        <p>Credits:</p> 
-                        <input type='text' disabled = {true} defaultValue={student.credits} />
+                        <div class="mb-3">
+                            <label for="inputID" class="form-label">Student ID:</label>
+                            <input type="text" class="form-control" id="id" disabled = {true} defaultValue={student.id}></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label">Email address:</label>
+                            <input type="email" class="form-control" id="email" disabled = {true} defaultValue={student.email}></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputDegree" class="form-label">Degree:</label>
+                            <input type="text" class="form-control" id="degree" disabled = {true} defaultValue={student.degree}></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputCredits" class="form-label">Credits:</label>
+                            <input type="text" class="form-control" id="credits" disabled = {true} defaultValue={student.credits}></input>
+                        </div>
                         </form>
                         
                     </section>:
