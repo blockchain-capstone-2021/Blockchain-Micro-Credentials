@@ -17,6 +17,21 @@ async function getEnrolmentsByStudent(_studentId, _semOfEnrol)
     return _enrolments;
 }
 
+async function getAllEnrolments(_studentId)
+{
+  let _enrolments;
+
+  await models.Enrolment.findAll({
+      where: {
+        studentId: _studentId,
+      }
+    }).then( enrolments => {
+      _enrolments = enrolments;
+  });
+
+  return _enrolments;
+}
+
 //return all enrollments for a given unitId
 async function getEnrolmentsByUnit(_unitId, _semOfEnrol) 
 {
@@ -36,5 +51,6 @@ async function getEnrolmentsByUnit(_unitId, _semOfEnrol)
 
 module.exports = {
     getEnrolmentsByStudent,
-    getEnrolmentsByUnit
+    getEnrolmentsByUnit,
+    getAllEnrolments
 }

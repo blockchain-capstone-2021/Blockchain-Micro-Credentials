@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        table {
+            border-collapse: separate;
+        }
+        table, th, td {
+            border: 0px solid black;
+        }
+        </style>
+    </head>
+    <body>
+        <div style="width: 85%; margin: 0 7.5%;">
+            
+            <h3><%= student.studentName %></h3>           
+            <h3><%= degree.degreeName %></h3>           
+            
+                <div style="text-align: center; ">
+                    <h3>Academic record</h3>
+                    <br>
+                    <table style= "margin-left:auto;margin-right:auto;">
+                        <% if (transcript.length > 0) { %>
+                            <tr><td style="padding:0 15px 0 15px;">Semester</td><td style="padding:0 15px 0 15px;">Course</td><td style="padding:0 15px 0 15px;">Course Name</td><td style="padding:0 15px 0 15px;">Grade</td><td style="padding:0 15px 0 15px;">Unit Value</td></tr>
+                            <tr><td><br></td></tr>
+                            <% transcript.forEach( row=> {%>
+                            <tr><td style="padding:0 15px 0 15px;"><%= row.semester %></td><td style="padding:0 15px 0 15px;"><%= row.course %></td><td style="padding:0 15px 0 15px;"><%= row.courseName %></td><td style="padding:0 15px 0 15px;"><%= row.grade %></td><td style="padding:0 15px 0 15px;"><%=row.unitValue %></td></tr>
+                            <%  });%>
+                        <% }%>
+                    </table>
+                </div>
+        </div>
+    </body>
+</html>
