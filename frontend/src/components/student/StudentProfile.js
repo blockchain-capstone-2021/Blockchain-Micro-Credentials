@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import microcredapi from '../../apis/microcredapi'
+import "../dashboards/Dashboard.css";
 
 const StudentProfile = (props) => {
 
@@ -17,7 +18,7 @@ const StudentProfile = (props) => {
     console.log(student)
 
     return (
-        <div className="container mt-5">
+        <div className="jumbotron align-center" >
                 {
                     student?
                     <section>
