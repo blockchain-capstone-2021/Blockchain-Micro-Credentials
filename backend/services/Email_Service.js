@@ -130,7 +130,7 @@ async function generateTranscript(_studentId, transcriptRows, _student, _degree)
   let data =  ejs.render(fileContent.toString(), { student: _student, degree: _degree, transcript: transcriptRows })
   let options = {
     "fomart": "A4",
-    // "filename": `../attachments/${_studentId}_Transcript.pdf`,
+    "filename": `../attachments/${_studentId}_Transcript.pdf`,
     "orientation": "Landscape",
     "header": {
       "height": "28mm"
