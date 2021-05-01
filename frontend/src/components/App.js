@@ -18,12 +18,13 @@ import StudentCreate from "./Staff/StudentCreate"
 
 import useToken from './useToken';
 import QuestionList from "./questions/QuestionList";
-import QuestionCreate from "./questions/QuestionCreate";
+import StaffQuestionAdd from "./questions/StaffQuestionAdd";
 import StudentProfile from "./student/StudentProfile";
 
 import StaffStudentManage from './student/StaffStudentManage'
 import StaffModuleManage from './modules/StaffModuleManage'
 import StaffQuestionManage from './questions/StaffQuestionManage'
+import StaffQuestionView from "./questions/StaffQuestionView";
 
 const App = () => {
 
@@ -55,8 +56,10 @@ const App = () => {
         <Route path="/manage/modules" key={getDate()} component={StaffModuleManage} />
         <Route path="/manage/questions" component={StaffQuestionManage} />
           <Route path="/student/:studentId/profile" component={StudentProfile} />
-          <Route path="/question/create" component={QuestionCreate} />
+          <Route path="/question/create" component={StaffQuestionAdd} />
+          <Route path="/question/:questionId" component={StaffQuestionView} />
           <Route path="/question" component={QuestionList} />
+          
           <Route path="/course/staff/:staffId" component={CourseList} />
           <Route path="/course/:courseId/final/:studentId" component={FinalMarkForm} />
           <Route path="/course/:courseId" component={CourseDetail} />

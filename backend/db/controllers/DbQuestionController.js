@@ -71,6 +71,7 @@ async function addQuestionToModule(_moduleId, _content)
 //delete question by question id
 async function deleteQuestion(_questionId)
 {
+    console.log('DB CONTROLLER');
     await models.Question.destroy({
         where: {
             questionId: _questionId
