@@ -12,6 +12,7 @@ const manualTrackerContract = require('../blockchain/build/contracts/Manual_Entr
 const blockchain = require('../middleware/blockchain')
 const ipfs = require('../middleware/ipfs')
 const utility = require('../utilities/Utility')
+const emailService = require('../services/Email_Service')
 const ManualEntry_Key = require('../object_models/blockchain/ManualEntry_Key')
 const Unit_Key = require('../object_models/blockchain/Unit_Key')
 const ManualEntry_Data = require('../object_models/ipfs/ManualEntry')
@@ -75,18 +76,33 @@ async function evaluatePerformance(studentId, unitId, finalResult){
 
     if(student.studentCreditPoints >= degree.totalCreditPoints){ 
         //if student has enough credit points to complete degree
+        emailService.sendDegreeEmail(studentId, unitId).catch(err => {
+            console.log("Email Service Error")
+        })
         console.log("Degree complete")
     }else if (student.studentCreditPoints % (degree.creditPointsPerSem * 2) == 0){ 
         //if student has enough credit points to complete  year
+        emailService.sendYearEmail(studentId, unitId).catch(err => {
+            console.log("Email Service Error")
+        })
         console.log("Year complete")
     }else if(student.studentCreditPoints % degree.creditPointsPerSem == 0){ 
         //if student has enough credit points to complete semester
+        emailService.sendSemesterEmail(studentId, unitId).catch(err => {
+            console.log("Email Service Error")
+        })
         console.log("Semester complete")
     }else if(creditPoints > 0){ 
         //if student completed unit
+        emailService.sendUnitEmail(studentId, unitId).catch(err => {
+            console.log("Email Service Error")
+        })
         console.log("Unit complete")
     }else{ 
         //if student failed unit
+        emailService.sendFailEmail(studentId, unitId).catch(err => {
+            console.log("Email Service Error")
+        })
         console.log("Unit failed")
     }
 }
