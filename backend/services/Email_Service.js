@@ -130,7 +130,7 @@ async function generateTranscript(_studentId, transcriptRows, _student, _degree)
   let data =  ejs.render(fileContent.toString(), { student: _student, degree: _degree, transcript: transcriptRows })
   let options = {
     "fomart": "A4",
-    "filename": `../attachments/${_studentId}_Transcript.pdf`,
+    // "filename": `../attachments/${_studentId}_Transcript.pdf`,
     "orientation": "Landscape",
     "header": {
       "height": "28mm"
@@ -283,7 +283,7 @@ async function sendDegreeEmail(_studentId, _unitId)
     }
     else
     {
-      return 
+      throw Error("Email Service Error") 
     }
 
     let transcript = fs.readFileSync(transcriptPath).toString("base64");
@@ -348,7 +348,7 @@ async function sendYearEmail(_studentId, _unitId)
     }
     else
     {
-      return 
+      throw Error("Email Service Error")  
     }
 
     let transcript = fs.readFileSync(transcriptPath).toString("base64");
@@ -405,7 +405,7 @@ async function sendSemesterEmail(_studentId, _unitId)
     }
     else
     {
-      return 
+      throw Error("Email Service Error")  
     }
 
     let transcript = fs.readFileSync(transcriptPath).toString("base64");
@@ -461,7 +461,7 @@ async function sendUnitEmail(_studentId, _unitId)
     }
     else
     {
-      return 
+      throw Error("Email Service Error")  
     }
 
     let transcript = fs.readFileSync(transcriptPath).toString("base64");
@@ -513,7 +513,7 @@ async function sendFailEmail(_studentId, _unitId){
     }
     else
     {
-      return 
+      throw Error("Email Service Error")  
     }
 
     let transcript = fs.readFileSync(transcriptPath).toString("base64");
