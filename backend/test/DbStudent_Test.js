@@ -45,11 +45,7 @@ describe('Db Student Controller', () => {
         it('should return the correct credit points', async () => {
             let expectedCreditPoints = 264
 
-            await StudentMock.update({ studentCreditPoints: 264}, {
-                where: {
-                    studentId: "s3710669"
-                }
-            });
+            await updateCreditPoints("s3710669", 264)
 
             StudentMock.findOne({
                 where: {
@@ -62,3 +58,15 @@ describe('Db Student Controller', () => {
         }).timeout(10000);
     })
 });
+
+async function updateCreditPoints(_studentId, _creditPoints)
+{
+    let student = await dbStudentController.getStudent(_studentId)
+    let currentPoints = student.studentCreditPoints
+    let updatedPoints = currentPoints + _creditPoints
+    await StudentMock.update({ studentCreditPoints: updatedPoints}, {
+        where: {
+            studentId: _studentId
+        }
+    });
+}
