@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
-class StaffDashboard extends Component {
 
-  renderCard(url, cardTitle, cardDescription, path){
+const StaffDashboard = () => {
+
+  function renderCard(url, cardTitle, cardDescription, path){
     return (
       <div className="card mx-2" style={{width: "18rem"}}>
         <img src={url} className="card-img-top" alt="..." style={{height:"190px", width:"286px"}} />
@@ -15,7 +16,6 @@ class StaffDashboard extends Component {
     )
   }
 
-  render() { 
     return (
       <div className="jumbotron align-center">
          <section>
@@ -23,14 +23,13 @@ class StaffDashboard extends Component {
             <h1 className="h2">Dashboard</h1>
            </div>
            <div className="d-flex">
-            {this.renderCard("https://images.unsplash.com/photo-1491308056676-205b7c9a7dc1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1053&q=80%201053w,%20", "Students", "View, update and create student records.", "/manage/students")}
-            {this.renderCard("https://images.unsplash.com/photo-1546521343-4eb2c01aa44b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1275&q=80", "Modules", "View and manage modules for your courses.", "/manage/modules")}
-            {this.renderCard("https://images.unsplash.com/photo-1557318041-1ce374d55ebf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80 1000w", "Questions", "View, create and delete questions.", "/manage/questions")}
+            {renderCard("https://images.unsplash.com/photo-1491308056676-205b7c9a7dc1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1053&q=80%201053w,%20", "Students", "View, update and create student records.", "/manage/students")}
+            {renderCard("https://images.unsplash.com/photo-1546521343-4eb2c01aa44b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1275&q=80", "Modules", "View and manage modules for your courses.", "/manage/modules")}
+            {renderCard("https://images.unsplash.com/photo-1557318041-1ce374d55ebf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80 1000w", "Questions", "View, create and delete questions.", "/manage/questions")}
            </div>
          </section>
       </div>
   )
-  }
 }
 
 export default StaffDashboard

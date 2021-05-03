@@ -13,13 +13,13 @@ import StudentDashboard from './dashboards/StudentDashboard'
 
 import QuestionList from "./questions/QuestionList";
 import QuestionCreate from "./questions/QuestionCreate";
+import StaffQuestionManage from './questions/StaffQuestionManage'
 
 import StudentProfile from "./student/StudentProfile";
 import StaffStudentManage from './student/StaffStudentManage'
 import StudentMarkEntry from './student/StudentMarkEntry'
 
 import StaffModuleManage from './modules/StaffModuleManage'
-import StaffQuestionManage from './questions/StaffQuestionManage'
 
 const App = () => {
 
