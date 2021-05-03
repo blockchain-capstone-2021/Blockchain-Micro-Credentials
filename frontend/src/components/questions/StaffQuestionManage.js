@@ -15,6 +15,8 @@ const StaffQuestionManage = () => {
   const [deleteAllFlag, setDeleteAllFlag] = useState()
 
   useEffect(() => {
+    setSelectedCourse(window.localStorage.getItem('selectedCourse') ? window.localStorage.getItem('selectedCourse') : undefined)
+    setSelectedModule(window.localStorage.getItem('selectedModule') ? window.localStorage.getItem('selectedModule') : undefined)
     async function getCourses() {
       const units = await microcredapi
         .get(`/unit/${window.localStorage.getItem("userId")}`)
@@ -32,6 +34,7 @@ const StaffQuestionManage = () => {
         .then((response) => setModules(response.data.modules));
     }
     getModules();
+    window.localStorage.setItem('selectedCourse',selectedCourse)
   }, [selectedCourse]);
 
   useEffect(() => {
@@ -41,12 +44,14 @@ const StaffQuestionManage = () => {
         .then((response) => setQuestions(response.data.questions));
     }
     if(selectedModule){getQuestions();}
+    window.localStorage.setItem('selectedModule',selectedModule)
   }, [selectedModule]);
 
   function renderUnitOptions() {
+    const courseSelected =  window.localStorage.getItem('selectedCourse') ? true : false
     return courses.map((course) => {
       return (
-        <option key={course.unitId} value={course.unitId}>
+        <option key={course.unitId} value={course.unitId} selected={courseSelected}>
           {course.unitName}
         </option>
       );
@@ -54,9 +59,10 @@ const StaffQuestionManage = () => {
   }
 
   function renderModuleOptions() {
+    const moduleSelected =  window.localStorage.getItem('selectedModule') ? true : false
     return modules.map((_module) => {
       return (
-        <option key={_module.moduleId} value={_module.moduleId} disabled={_module.published}>
+        <option key={_module.moduleId} value={_module.moduleId} disabled={_module.published} selected={moduleSelected}>
           {_module.moduleName}
         </option>
       );
