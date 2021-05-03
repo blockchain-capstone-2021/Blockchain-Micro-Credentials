@@ -105,7 +105,7 @@ function displayDeleteModal(type, history, redirect) {
             modalBodyInput.innerHTML = 'Are you sure that you want to delete question \'' + qid + '\' from module \''+ mid +'\'? This action is irreversible.'
             deleteButton.onclick = async function() {
               const response = await microcredapi.post(`/questions/${qid}/delete`).then(
-                  window.location.reload()
+                window.location.reload()
               ) 
             }
           } else if (mid) {
@@ -113,9 +113,7 @@ function displayDeleteModal(type, history, redirect) {
             modalBodyInput.innerHTML = 'Are you sure you want to delete all the questions in this module? This action is irreversible.'
             deleteButton.onclick = async function() {
             await microcredapi.post(`/questions/${mid}/deleteAll`).then(
-                setTimeout(() => {
-                  window.location.reload()
-                }, 1000)
+                window.location.reload()
               )
             }
           }
