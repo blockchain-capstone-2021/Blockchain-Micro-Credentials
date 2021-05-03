@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import microcredapi from '../../apis/microcredapi'
-
+import { Link } from 'react-router-dom'
 const StaffQuestionView = (props) => {
 
     const [question, setQuestion] = useState()
@@ -76,6 +76,9 @@ const StaffQuestionView = (props) => {
                             {question.answers ? renderAnswers() : "Loading"}
                         </div>
                         </form>
+                        <div className="d-flex">
+                            <Link to='/manage/questions' class="btn btn-primary align-button-right">Back</Link>
+                        </div>
                         </div>:
                   "Loading"
                 }

@@ -9,7 +9,6 @@ const StudentMarkEntry = (props) => {
     const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
-        console.log(props);
         async function getStudent() {
             const response = await microcredapi.get(`/student/${props.match.params.studentId}`).then(response => response.data.student)
             setStudent(response)
@@ -20,7 +19,6 @@ const StudentMarkEntry = (props) => {
     async function onSubmit(e) {
         e.preventDefault();
         setSubmitting(true)
-        console.log(student.studentId, props.match.params.courseId,finalMark);
 
         await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`).then(response => {
             history.push(`/manage/students`);
@@ -58,8 +56,8 @@ const StudentMarkEntry = (props) => {
                     <label htmlFor="finalMark" className="form-label">Final Mark</label>
                     <input type="number" id="finalMark" className="form-control" max="100" onChange={(e) => {setFinalMark(e.target.value)}}/>
                     </div>
-                    <div>
-                        <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center" onClick={(e) => onSubmit(e)}>Submit</button>
+                    <div className="d-flex">
+                        <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center align-button-right" onClick={(e) => onSubmit(e)}>Submit</button>
                     </div>
                 </fieldset>
                 </form> :

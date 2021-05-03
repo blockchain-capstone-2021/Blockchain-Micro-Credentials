@@ -19,11 +19,11 @@ import StaffModuleManage from './modules/StaffModuleManage'
 import StaffQuestionManage from './questions/StaffQuestionManage'
 import StaffQuestionView from "./questions/StaffQuestionView";
 import StaffQuestionAdd from "./questions/StaffQuestionAdd";
+import StaffModuleEdit from "./modules/StaffModuleEdit";
 
 const App = () => {
 
   const [userId, setUserId] = useState()
-  console.log(userId);
   useEffect(() => {
     setUserId(window.localStorage.getItem('userId'))
   }, [])
@@ -54,6 +54,7 @@ const App = () => {
         <Route path="/question/create" component={StaffQuestionAdd} />
         <Route path="/mark/:courseId/:studentId" component={StudentMarkEntry} />
         <Route path="/unit/:unitId" component={Unit} />
+        <Route path="/module/edit/:moduleId" component={StaffModuleEdit} />
         <Route path="/module/:moduleId" component={Module} />      
         <Route exact path="/" component={window.localStorage.getItem('isStaff') === 'true' ? () => <StaffDashboard key={getDate()} /> : () => <StudentDashboard key={getDate()} />} />
         </Switch>
