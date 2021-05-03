@@ -3,11 +3,12 @@ import {Link} from 'react-router-dom'
 
 const StaffDashboard = () => {
 
+  // renders each card with the information in the function imports
   function renderCard(url, cardTitle, cardDescription, path){
     return (
       <div className="card mx-2" style={{width: "18rem"}}>
         <img src={url} className="card-img-top" alt="..." style={{height:"190px", width:"286px"}} />
-        <div className="card-body">
+        <div id="card-body" className="card-body">
           <h5 className="card-title">{cardTitle}</h5>
           <p className="card-text">{cardDescription}</p>
           <Link to={path} className="btn btn-primary">Go</Link>
@@ -16,6 +17,7 @@ const StaffDashboard = () => {
     )
   }
 
+    // Render the dashboard
     return (
       <div className="jumbotron align-center">
          <section>
