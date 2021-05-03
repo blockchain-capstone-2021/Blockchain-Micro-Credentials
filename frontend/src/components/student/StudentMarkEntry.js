@@ -6,6 +6,7 @@ const StudentMarkEntry = (props) => {
     const history = useHistory();
     const [student, setStudent] = useState()
     const [finalMark, setFinalMark] = useState()
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         console.log(props);
@@ -14,24 +15,26 @@ const StudentMarkEntry = (props) => {
             setStudent(response)
         }
         getStudent()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     async function onSubmit(e) {
         e.preventDefault();
+        setSubmitting(true)
         console.log(student.studentId, props.match.params.courseId,finalMark);
 
         await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`).then(response => {
             history.push(`/manage/students`);
-        }
-        )
+        })
+        setSubmitting(false)
     }
         
     return (
         <div className="container">
             <h1 className="mt-5">Final Mark Form</h1>
             {
-                student?
+                submitting ?
+                "Please hold while the form is processing." :
+                student ?
                 <form>
                 <fieldset className="mt-5">
                     
@@ -59,8 +62,8 @@ const StudentMarkEntry = (props) => {
                         <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center" onClick={(e) => onSubmit(e)}>Submit</button>
                     </div>
                 </fieldset>
-                </form>:
-                "Loading..."
+                </form> :
+                "Loading..." 
             }
         </div>
     )
