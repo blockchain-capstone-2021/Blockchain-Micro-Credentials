@@ -9,6 +9,7 @@ const Unit = (props) => {
     const history = useHistory()
     const [unit, setUnit] = useState()
     const [modules, setModules] = useState()
+    const [grade, setGrade] = useState()
     const [submitting, setSubmitting] = useState(false) // Set to false as should only be true when button clicked
 
     useEffect(() => {
@@ -20,16 +21,23 @@ const Unit = (props) => {
         async function getModules(){
             await microcredapi.get(`/unit/${unitId}/${window.localStorage.getItem('userId')}`).then(response => {
                 const updatedModules = []
+                console.log(response.data)
+                const grade = {
+                    finalGrade: response.data.finalGrade,
+                    cumulativeScore: response.data.cumulativeScore
+                }
                 response.data.modules.map((module, key) => {
                     const newModule = {
                         ...module, 
                         // use Object.keys() to handle key value mismatch
                         numAttempts: response.data.numAttempts[key+ parseInt(Object.keys(response.data.numAttempts)[0])],
-                        highestScore: response.data.highestScore[key+ parseInt(Object.keys(response.data.highestScore)[0])] 
-                        }
-                        updatedModules.push(newModule)
+                        highestScore: response.data.highestScore[key+ parseInt(Object.keys(response.data.highestScore)[0])],
+                        
+                    }
+                    updatedModules.push(newModule)
                 })
                 setModules(updatedModules)
+                setGrade(grade)
             })
         }
         getModules()
@@ -45,6 +53,14 @@ const Unit = (props) => {
         if(modules){getUnit();}
     }, [modules])
     
+    // Post method to submit microcredential
+    async function submitMicroCredential() {
+        setSubmitting(true)
+        await microcredapi.get(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
+        setSubmitting(false)
+        history.push('/')
+    }
+    
     // Renders modules in table format
     function renderModules() {
         return modules.map(module => {
@@ -57,14 +73,6 @@ const Unit = (props) => {
                 </tr>
             )
         })
-    }
-
-    // Post method to submit microcredential
-    async function submitMicroCredential() {
-        setSubmitting(true)
-        await microcredapi.get(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
-        setSubmitting(false)
-        history.push('/')
     }
 
     return (
@@ -81,6 +89,7 @@ const Unit = (props) => {
                     </section>:
                     ""
                 }
+
                 <section>
                     <table className="table">
                         <thead>
@@ -96,7 +105,19 @@ const Unit = (props) => {
                         </tbody>
                     </table>
                     <div>
-                    <button type="button" name="" id="" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
+                        <h4>Current Grade:  
+                        {
+                            grade? grade.cumulativeScore : ""
+                        }
+                        ,   
+                        {
+                            grade? grade.finalGrade : ""
+                        } </h4>
+                    </div>
+                    <div className="d-flex">
+                        <div style={{marginLeft:'auto', marginRight:'4em', paddingBottom:'5%'}}>
+                            <button type="button" name="" id="" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
+                        </div>
                     </div>
                 </section>
 
