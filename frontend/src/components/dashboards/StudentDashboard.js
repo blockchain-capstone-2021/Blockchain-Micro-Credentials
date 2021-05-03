@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import microcredapi from '../../apis/microcredapi'
-import "./Dashboard.css";
-
 
 const StudentDashboard = (props) => {
   const history = useHistory()

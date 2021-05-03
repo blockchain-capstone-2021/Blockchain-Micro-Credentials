@@ -3,3 +3,10 @@
     position: sticky;
     top: 0;
 }
+
+.align-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+    padding-left: 12%;
+    padding-top: 3%;
+}

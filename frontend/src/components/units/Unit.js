@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import microcredapi from '../../apis/microcredapi';
-import "../dashboards/Dashboard.css";
 
 
 const Unit = (props) => {
