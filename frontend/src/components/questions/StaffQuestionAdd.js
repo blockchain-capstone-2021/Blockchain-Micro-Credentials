@@ -68,7 +68,7 @@ const StaffQuestionAdd = (props) => {
             className="form-control"
             id={`answer-${number}`}
             name={`answer-${number}`}
-            placeholder={number === 1 ? 'Write CORRECT answer here.' : 'Write INCORRECT answer here.'}
+            placeholder={number === 0 ? 'Write CORRECT answer here.' : 'Write INCORRECT answer here.'}
             onChange={e => onAnswerChange(e, number)}
           />
         </div>
