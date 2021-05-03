@@ -30,7 +30,7 @@ const StudentDashboard = (props) => {
         <td>{enrolment.semOfEnrolment}</td>
         <td>          {
             isAvailable?
-            <Link to={`/unit/${enrolment.unitId}`} className="btn btn-primary" onClick={() => {window.localStorage.setItem('enrolmentPeriod', enrolment.semOfEnrolment)}}>Go</Link>:
+            <Link to={{pathname:`/unit/${enrolment.unitId}`, state: {enrolment, unitName: unitMap ? unitMap[enrolment.unitId]: "Loading"}}} className="btn btn-primary" onClick={() => {window.localStorage.setItem('enrolmentPeriod', enrolment.semOfEnrolment)}}>Go</Link>:
             ""
           }</td>
       </tr>

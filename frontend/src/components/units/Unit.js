@@ -70,8 +70,8 @@ const Unit = (props) => {
                 {
                     unit?
                     <section>
-                        <h1>{unit.name}</h1>
-                        <h4>{unit.code}</h4>
+                        <h1>{props.location.state.unitName}</h1>
+                        <h4>{props.location.state.enrolment.unitId}</h4>
                     </section>:
                     ""
                 }
