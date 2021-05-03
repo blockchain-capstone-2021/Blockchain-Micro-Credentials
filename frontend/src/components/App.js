@@ -12,7 +12,6 @@ import "../style.css";
 import CourseList from "./courses/CourseList";
 import CourseDetail from "./courses/CourseDetail";
 import FinalMarkForm from './courses/FinalMarkForm'
-import StudentList from "./Staff/StudentList";
 import StudentDetail from "./Staff/StudentDetail";
 import StudentCreate from "./Staff/StudentCreate"
 
@@ -63,7 +62,6 @@ const App = () => {
           <Route path="/unit/:unitId" component={Unit} />
           <Route path="/student/create" component={StudentCreate} />
           <Route path="/student/:studentId" component={StudentDetail} />
-          <Route path="/student" component={() => <StudentList key={getDate()} />} />
           <Route path="/module/:moduleId" component={Module} />      
           <Route exact path="/" component={window.localStorage.getItem('isStaff') === 'true' ? () => <StaffDashboard key={getDate()} /> : () => <StudentDashboard key={getDate()} />} />
         </Switch>
