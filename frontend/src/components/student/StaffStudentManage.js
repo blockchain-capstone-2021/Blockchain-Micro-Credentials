@@ -71,7 +71,6 @@ const StaffStudentManage = () => {
     }
 
     function renderStudents(students, type) {
-        // const { courseId } = props.match.params
         return students.map(student => {
             return (
                 <tr key={student.studentId} className={type === 'available' ? "" : "table-secondary"}>
