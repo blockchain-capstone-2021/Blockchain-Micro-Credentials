@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {  useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
 
-const FinalMarkForm = (props) => {
+const StudentMarkEntry = (props) => {
     const history = useHistory();
     const [student, setStudent] = useState()
     const [finalMark, setFinalMark] = useState()
@@ -22,13 +22,11 @@ const FinalMarkForm = (props) => {
         console.log(student.studentId, props.match.params.courseId,finalMark);
 
         await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`).then(response => {
-            history.push(`/courses/${props.match.params.courseId}`);
+            history.push(`/manage/students`);
         }
         )
     }
         
-
-
     return (
         <div className="container">
             <h1 className="mt-5">Final Mark Form</h1>
@@ -62,10 +60,10 @@ const FinalMarkForm = (props) => {
                     </div>
                 </fieldset>
                 </form>:
-                "Loading"
+                "Loading..."
             }
         </div>
     )
 }
 
-export default FinalMarkForm
+export default StudentMarkEntry

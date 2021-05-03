@@ -78,7 +78,7 @@ const StaffStudentManage = () => {
                 <th scope="row">{student.studentId}</th>
                 <td>{student.studentName}</td>
                 <td>{type === 'available' ? "Enrolled" : "Completed"}</td>
-                <td>{type === 'available' ? <Link to={`/courses/${selectedCourse}/final/${student.studentId}`} className="btn btn-primary">Go</Link> : "" }</td>
+                <td>{type === 'available' ? <Link to={`/mark/${selectedCourse}/${student.studentId}`} className="btn btn-primary">Enter Mark</Link> : "" }</td>
                 </tr>
             )
         })
