@@ -8,6 +8,7 @@ const marksRouter = require('./routes/marks')
 const questionsRouter = require('./routes/questions')
 const studentsRouter = require('./routes/students')
 const unitsRouter = require('./routes/units')
+// const degreesRouter = require('./routes/degrees')
 const modulesRouter = require('./routes/modules')
 const loginRouter = require('./routes/login')
 
@@ -27,6 +28,7 @@ app.use('/marks', marksRouter);
 app.use('/questions', questionsRouter);
 app.use('/student', studentsRouter)
 app.use('/unit', unitsRouter)
+// app.use('/degree', degreesRouter)
 app.use('/module', modulesRouter)
 app.use('/login', loginRouter)
 
