@@ -6,13 +6,18 @@ import Adapter from "enzyme-adapter-react-16";
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const wrapper = shallow(<StaffDashboard />);
+
 describe('testing Staff Dashboard component', () => {
-    it('Page renders', () => {
-        const wrapper = shallow(<StaffDashboard />);
+    it('should be defined on render', () => {
+        expect(StaffDashboard).toBeDefined();
     });
     
     it('renders 3 cards', () => {
-        const wrapper = shallow(<StaffDashboard />);
         expect(wrapper.find("#card-body")).toHaveLength(3);
+    });
+
+    it('Has 3 link buttons', () => {
+        expect(wrapper.find("Link")).toHaveLength(3);
     });
 })
