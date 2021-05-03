@@ -58,9 +58,12 @@ const StudentMarkEntry = (props) => {
                     <label htmlFor="finalMark" className="form-label">Final Mark</label>
                     <input type="number" id="finalMark" className="form-control" max="100" onChange={(e) => {setFinalMark(e.target.value)}}/>
                     </div>
-                    <div>
-                        <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center" onClick={(e) => onSubmit(e)}>Submit</button>
+                    <div className="d-flex">
+                        <div style={{marginLeft:'auto', marginRight:'1em'}}>
+                            <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center" onClick={(e) => onSubmit(e)}>Submit</button>
+                        </div>
                     </div>
+                    
                 </fieldset>
                 </form> :
                 "Loading..." 
