@@ -53,7 +53,6 @@ const Header = () => {
           current[0].className = current[0].className.replace(" active", "");
           this.className += " active";
         });
-        console.log(btns[i]);
       } 
   }
 

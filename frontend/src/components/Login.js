@@ -11,7 +11,6 @@ async function loginUser(username, password) {
     else {
         response = await api.post(`login/student/${username}/${password}`)
     }
-    console.log("loggedIn", response.data)
     return response.data.loggedIn
    }
 

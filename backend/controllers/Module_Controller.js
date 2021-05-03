@@ -58,25 +58,21 @@ async function getHighestScores(studentId, unitId, modules){
     return highestScoreMap
 }
 
-const getUnitModules = async (req, res, next) => {
-    // Method that doesnt tie in student ID
+const getModule = async(req,res,next) => {
     try {
-
-        const modules = await dbModuleController.getModulesByUnit(req.params.unitId)
-        res.locals = {
-            success: true,
-            modules: modules
-        }
-        res.locals.modules = modules
+        let _module = await dbModuleController.getModule(parseInt(req.params.moduleId))
+        
+        res.locals.module = _module
         res.locals.success = true
-
-    } catch (err) {
+    }
+    catch(err){
         console.log(err);
         res.locals.success = false
     } finally {
         next();
     }
 }
+
 
 const getModulesForStudent = async (req, res, next)=>{
 
@@ -270,7 +266,7 @@ const publishModule = async(req, res, next)=>{
         else
         {
             let difference = module.noOfQuestions - noOfQuestions
-            throw new InsufficientQuestions(`Sorry, this module cannot be published. This module requires ${module.noOfQuestions}, and only ${noOfQuestions} have been provided. 
+            throw new InsufficientQuestions(`Sorry, this module cannot be published. This module requires ${module.noOfQuestions} questions, and only ${noOfQuestions} have been provided. 
             Please add ${difference} question(s), and then retry publishing the module`)
         }
         res.locals.success = true
@@ -291,8 +287,8 @@ const publishModule = async(req, res, next)=>{
 }
 
 module.exports = {
+    getModule,
     getModulesForStudent,
-    getUnitModules,
     submitModule,
     getModulesForStaff, 
     unpublishModule,

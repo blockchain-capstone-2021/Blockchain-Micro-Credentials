@@ -24,11 +24,13 @@ import StudentProfile from "./student/StudentProfile";
 import StaffStudentManage from './student/StaffStudentManage'
 import StaffModuleManage from './modules/StaffModuleManage'
 import StaffQuestionManage from './questions/StaffQuestionManage'
+import StaffQuestionView from "./questions/StaffQuestionView";
+import StaffQuestionAdd from "./questions/StaffQuestionAdd";
+import StaffModuleEdit from "./modules/StaffModuleEdit";
 
 const App = () => {
 
   const [userId, setUserId] = useState()
-  console.log(userId);
   useEffect(() => {
     setUserId(window.localStorage.getItem('userId'))
   }, [])
@@ -54,18 +56,14 @@ const App = () => {
         <Route path="/manage/students" component={StaffStudentManage} />
         <Route path="/manage/modules" key={getDate()} component={StaffModuleManage} />
         <Route path="/manage/questions" component={StaffQuestionManage} />
-          <Route path="/student/:studentId/profile" component={StudentProfile} />
-          <Route path="/question/create" component={QuestionCreate} />
-          <Route path="/question" component={QuestionList} />
-          <Route path="/course/staff/:staffId" component={CourseList} />
-          <Route path="/course/:courseId/final/:studentId" component={FinalMarkForm} />
-          <Route path="/course/:courseId" component={CourseDetail} />
-          <Route path="/unit/:unitId" component={Unit} />
-          <Route path="/student/create" component={StudentCreate} />
-          <Route path="/student/:studentId" component={StudentDetail} />
-          <Route path="/student" component={() => <StudentList key={getDate()} />} />
-          <Route path="/module/:moduleId" component={Module} />      
-          <Route exact path="/" component={window.localStorage.getItem('isStaff') === 'true' ? () => <StaffDashboard key={getDate()} /> : () => <StudentDashboard key={getDate()} />} />
+        <Route path="/student/:studentId/profile" component={StudentProfile} />
+        <Route path="/question/create" component={StaffQuestionAdd} />
+        <Route path="/question/:questionId" component={StaffQuestionView} />
+        <Route path="/mark/:courseId/:studentId" component={StudentMarkEntry} />
+        <Route path="/unit/:unitId" component={Unit} />
+        <Route path="/module/edit/:moduleId" component={StaffModuleEdit} />
+        <Route path="/module/:moduleId" component={Module} />      
+        <Route exact path="/" component={window.localStorage.getItem('isStaff') === 'true' ? () => <StaffDashboard key={getDate()} /> : () => <StudentDashboard key={getDate()} />} />
         </Switch>
         </div>
       </BrowserRouter>
