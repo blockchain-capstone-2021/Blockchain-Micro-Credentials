@@ -50,8 +50,8 @@ const App = () => {
         <Route path="/manage/modules" key={getDate()} component={StaffModuleManage} />
         <Route path="/manage/questions" component={StaffQuestionManage} />
         <Route path="/student/:studentId/profile" component={StudentProfile} />
-        <Route path="/question/:questionId" component={StaffQuestionView} />
         <Route path="/question/create" component={StaffQuestionAdd} />
+        <Route path="/question/:questionId" component={StaffQuestionView} />
         <Route path="/mark/:courseId/:studentId" component={StudentMarkEntry} />
         <Route path="/unit/:unitId" component={Unit} />
         <Route path="/module/:moduleId" component={Module} />      

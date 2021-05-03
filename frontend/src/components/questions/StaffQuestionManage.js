@@ -74,7 +74,6 @@ const StaffQuestionManage = () => {
     const moduleSelected =  window.localStorage.getItem('selectedModule') ? true : false
     return modules.map((_module) => {
       const modPicked = parseInt(window.localStorage.getItem('selectedModule')) === _module.moduleId ? true : false
-      console.log('CORRECT:', modPicked, 'LS: ', parseInt(window.localStorage.getItem('selectedModule')), 'ITER_MOD: ',_module.moduleId);
       return (
         <option key={_module.moduleId} value={_module.moduleId} disabled={_module.published} selected={modPicked}>
           {_module.moduleName}
@@ -92,7 +91,7 @@ const StaffQuestionManage = () => {
                 <td>{_question.content}</td>
                 <td>
                 <Link to={`/question/${_question.questionId}`} class="btn btn-warning mx-1">View</Link>
-                <button type="button" className="btn btn-danger mx-2" data-bs-questionid={_question.questionId} data-bs-moduleid={_question.moduleId} data-bs-toggle="modal"  data-bs-target="#deleteConf" onClick={() => {displayDeleteModal('DELETE', history, redirect)}}>
+                <button type="button" className="btn btn-danger mx-2" data-bs-questionid={_question.questionId} data-bs-moduleid={_question.moduleId} data-bs-toggle="modal"  data-bs-target="#deleteConf" onClick={displayDeleteModal('DELETE', history, redirect)}>
                     Delete
                 </button>   
                 </td>
@@ -127,7 +126,9 @@ function displayDeleteModal(type, history, redirect) {
             modalBodyInput.innerHTML = 'Are you sure you want to delete all the questions in this module? This action is irreversible.'
             deleteButton.onclick = async function() {
             await microcredapi.post(`/questions/${mid}/deleteAll`).then(
+              setTimeout(() => {
                 window.location.reload()
+              }, 2000)
               )
             }
           }
@@ -213,7 +214,7 @@ function displayDeleteModal(type, history, redirect) {
                           <Link to={{pathname: '/question/create', state:{module: selectedModule, course: selectedCourse}}} class="btn btn-success">Add</Link>  
                         </div>
                         <div>
-                        <Link to={linkTarget} class="btn btn-danger" data-bs-toggle="modal"  data-bs-target="#deleteConfAll" data-bs-moduleid={selectedModule} onClick={() => {displayDeleteModal('DELETE_ALL', history, redirect)}}>Delete all</Link>
+                        <Link to={linkTarget} class="btn btn-danger" data-bs-toggle="modal"  data-bs-target="#deleteConfAll" data-bs-moduleid={selectedModule} onClick={displayDeleteModal('DELETE_ALL', history, redirect)}>Delete all</Link>
                         </div>
                       </div>:
                       ""}
