@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import microcredapi from '../../apis/microcredapi'
 
-const StaffStudentManage = (props) => {
+const StaffStudentManage = () => {
 
-    const history = useHistory()
     const [courses, setCourses] = useState();
     const [selectedCourse, setSelectedCourse] = useState();
-    const [students, setStudents] = useState();
-    const [availableStudents, setAvailableStudents] = useState([])
-    const [unavailableStudents, setUnavailableStudents] = useState([])
+    const [availableStudents, setAvailableStudents] = useState();
+    const [unavailableStudents, setUnavailableStudents] = useState();
 
     useEffect(() => {
         async function getCourses() {
@@ -22,14 +20,23 @@ const StaffStudentManage = (props) => {
     }, []);
 
     useEffect(() => {
-        // const {courseId} = props.match.params
-        async function getEnrolledStudents() {
-                const response = await microcredapi.get(`/unit/${selectedCourse}/enrolled`)
-                setAvailableStudents(response.data.students.available)
-                setUnavailableStudents(response.data.students.unavailable)
-            }
-            getEnrolledStudents()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        async function getAvailableStudents() {
+            const available = await microcredapi
+                .get(`/unit/${selectedCourse}/enrolled`)
+                .then((response) => response.data.students.available);
+            setAvailableStudents(available);
+        }
+        if(selectedCourse){getAvailableStudents();}
+    }, [selectedCourse]);
+
+    useEffect(() => {
+        async function getUnavailableStudents() {
+            const unavailable = await microcredapi
+                .get(`/unit/${selectedCourse}/enrolled`)
+                .then((response) => response.data.students.unavailable);
+            setUnavailableStudents(unavailable);
+        }
+        if(selectedCourse){getUnavailableStudents();}
     }, [selectedCourse]);
 
     function renderUnitOptions() {
@@ -86,6 +93,7 @@ const StaffStudentManage = (props) => {
               <h6>Select a Course</h6>
                 {renderUnitInput()}
             </div>
+            <h2>Enrolled Students</h2>
             <div className="mt-4">
               <div className="col-sm-12">
                 <table class="table">
@@ -98,11 +106,29 @@ const StaffStudentManage = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {courses ? renderStudents(availableStudents, 'available'): <tr><td colSpan="4" className="p-5 text-center">There are no students for this course.</td></tr>}
+                        {availableStudents && (availableStudents.length > 0) ? renderStudents(availableStudents, 'available'): <tr><td colSpan="4" className="p-5 text-center">There are no enrolled students for this course.</td></tr>}
                     </tbody>
                 </table>
               </div>
-          </div>
+            </div>
+            <h2>Completed Students</h2>
+            <div className="mt-4">
+              <div className="col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Manage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        { unavailableStudents && (unavailableStudents.length > 0) ? renderStudents(unavailableStudents, 'unavailable'): <tr><td colSpan="4" className="p-5 text-center">There are no completed students for this course.</td></tr>}
+                    </tbody>
+                </table>
+              </div>
+            </div>
         </div>
         </div>
     );
