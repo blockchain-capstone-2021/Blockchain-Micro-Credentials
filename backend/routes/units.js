@@ -38,7 +38,10 @@ router.get('/:unitId/:studentId', getModulesForStudent, async function (req, res
             success: 'true',
             modules: res.locals.modules,
             highestScore: res.locals.highestScoreMap,
-            numAttempts: res.locals.attemptsMap
+            numAttempts: res.locals.attemptsMap,
+            cumulativeScore: res.locals.cumulativeScore,
+            finalGrade: res.locals.finalGrade
+
         })
     }
     return res.status(400).send({
