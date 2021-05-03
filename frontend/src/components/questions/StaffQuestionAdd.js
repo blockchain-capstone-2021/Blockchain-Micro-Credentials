@@ -111,7 +111,9 @@ const StaffQuestionAdd = (props) => {
     if (validate.question && validate.answers) {
       microcredapi.post('/questions/create', payload)
     }
-    history.push('/manage/questions')
+    setTimeout(() => {
+      history.push('/manage/questions')
+    }, 1000);
   }
 
   function renderQuestionInput(){
