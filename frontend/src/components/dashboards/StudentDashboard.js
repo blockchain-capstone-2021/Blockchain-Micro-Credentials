@@ -25,17 +25,15 @@ const StudentDashboard = (props) => {
     const isAvailable = type == 'AVAILABLE'? true : false
     return enrolmentsArray.map(enrolment => {
       return (
-        <div className={`card`} style={{width: '18rem'}}>
-        <div className="card-body">
-          <h5 className="card-title">{unitMap ? unitMap[enrolment.unitId]: "Loading"}</h5>
-          <p className="card-text">Enrolled for:<br/>{enrolment.semOfEnrolment}</p>
-          {
+        <tr>
+        <td scope="row">{unitMap ? unitMap[enrolment.unitId]: "Loading"}</td>
+        <td>{enrolment.semOfEnrolment}</td>
+        <td>          {
             isAvailable?
             <Link to={`/unit/${enrolment.unitId}`} className="btn btn-primary" onClick={() => {window.localStorage.setItem('enrolmentPeriod', enrolment.semOfEnrolment)}}>Go</Link>:
             ""
-          }
-        </div>
-      </div>
+          }</td>
+      </tr>
       )
     })
   }
@@ -50,13 +48,38 @@ const StudentDashboard = (props) => {
       <section className="mb-5">
       <h2 className="mt-2">Enrolments</h2>
       <h3 className="py-5">Available</h3>
-      {availableEnrolments ? renderEnrolments(availableEnrolments, 'AVAILABLE') :  "No available enrolments"}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Enrolled</th>
+            <th>Manage</th>
+          </tr>
+        </thead>
+        <tbody>
+        {availableEnrolments && availableEnrolments.length > 0 ? renderEnrolments(availableEnrolments, 'AVAILABLE') :  <tr><td colSpan="3" className="text-center p-5">There are no available enrolments.</td></tr>}
+        </tbody>
+      </table>
+      
       <h3 className="py-5">Completed</h3>
-      {unavailableEnrolments ? renderEnrolments(unavailableEnrolments, 'UNAVAILABLE') : "No unavailable enrolments"}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Enrolled</th>
+            <th>Manage</th>
+          </tr>
+        </thead>
+        <tbody>
+        {unavailableEnrolments && unavailableEnrolments.length > 0 ? renderEnrolments(unavailableEnrolments, 'UNAVAILABLE') :  <tr><td colSpan="3" className="text-center p-5">There are no unavailable enrolments.</td></tr>}
+        </tbody>
+      </table>
       </section>
     </main>
   </div>
   )
+
+  
 }
 
 export default StudentDashboard

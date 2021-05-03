@@ -39,7 +39,6 @@ function StaffModuleManage() {
     // Publish a module if conditions are met
     async function publishModule(moduleId){
         let response;
-        setUpdating(true)
         try {
             response = await microcredapi.get(`/module/${moduleId}/publish`)
             if (response.data.message) {
@@ -47,7 +46,8 @@ function StaffModuleManage() {
                 setTimeout(() => {
                     setError({status: false, message: undefined})
                 }, 5000);
-            } else {
+            } else if(response.data.success){
+                setUpdating(true)
                 setTimeout(() => {
                     window.location.reload()
                 }, 1000);
@@ -61,7 +61,6 @@ function StaffModuleManage() {
     //unpublish a module if conditions are met
     async function unPublishModule(moduleId){
         let response;
-        setUpdating(true)
         try {
             response = await microcredapi.get(`/module/${moduleId}/unpublish`)
             if (response.data.message) {
@@ -69,7 +68,8 @@ function StaffModuleManage() {
                 setTimeout(() => {
                     setError({status: false, message: undefined})
                 }, 5000);
-            } else {
+            } else if (response.data.success) {
+                setUpdating(true)
                 setTimeout(() => {
                     window.location.reload()
                 }, 1000);
