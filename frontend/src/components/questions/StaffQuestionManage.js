@@ -32,9 +32,21 @@ const StaffQuestionManage = () => {
       await microcredapi
         .get(`module/${selectedCourse}`)
         .then((response) => setModules(response.data.modules));
+    } 
+    try {
+      getModules();
+      window.localStorage.setItem('selectedCourse',selectedCourse)
+      if (window.localStorage.getItem('selectedCourse').startsWith('S')) {
+        console.log(window.localStorage.getItem('selectedCourse'))
+        setSelectedCourse(undefined)
+        setSelectedModule(undefined)
+        setModules(undefined)
+        setQuestions(undefined)        
+      }
+    } catch (error) {
+      console.log(error)
     }
-    getModules();
-    window.localStorage.setItem('selectedCourse',selectedCourse)
+
   }, [selectedCourse]);
 
   useEffect(() => {
