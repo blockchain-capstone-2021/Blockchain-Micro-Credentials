@@ -4,11 +4,13 @@ import microcredapi from '../../apis/microcredapi'
 
 const StaffStudentManage = () => {
 
+    // Set state variables for component
     const [courses, setCourses] = useState();
     const [selectedCourse, setSelectedCourse] = useState();
     const [availableStudents, setAvailableStudents] = useState();
     const [unavailableStudents, setUnavailableStudents] = useState();
 
+    // Pull courses from database and set as courses variable
     useEffect(() => {
         async function getCourses() {
           const units = await microcredapi
@@ -19,6 +21,7 @@ const StaffStudentManage = () => {
         getCourses();
     }, []);
 
+    // Pull available students from database and set as availableStudents variable
     useEffect(() => {
         async function getAvailableStudents() {
             const available = await microcredapi
@@ -26,9 +29,10 @@ const StaffStudentManage = () => {
                 .then((response) => response.data.students.available);
             setAvailableStudents(available);
         }
-        if(selectedCourse){getAvailableStudents();}
+        if(selectedCourse){getAvailableStudents();} //Only runs when selectedCourse has been set
     }, [selectedCourse]);
 
+    // Pull unavailable students from database and set as unavailableStudents variable
     useEffect(() => {
         async function getUnavailableStudents() {
             const unavailable = await microcredapi
@@ -36,9 +40,10 @@ const StaffStudentManage = () => {
                 .then((response) => response.data.students.unavailable);
             setUnavailableStudents(unavailable);
         }
-        if(selectedCourse){getUnavailableStudents();}
+        if(selectedCourse){getUnavailableStudents();} //Only runs when selectedCourse has been set
     }, [selectedCourse]);
 
+    // render courses as map for dropdown menu
     function renderUnitOptions() {
         return courses.map((course) => {
           return (
@@ -49,6 +54,7 @@ const StaffStudentManage = () => {
         });
       }
 
+    // render dropdown menu with available courses 
     function renderUnitInput(){
         return (
             <div className="row row-cols-lg-auto g-3 align-items-center py-2">
@@ -70,6 +76,7 @@ const StaffStudentManage = () => {
         )
     }
 
+    // render available or unavailable students based on import 
     function renderStudents(students, type) {
         return students.map(student => {
             return (
@@ -83,7 +90,6 @@ const StaffStudentManage = () => {
         })
     }
 
-
     return (
         <div className="container w-75">
           <h1 className="pt-5 mb-5">Student Management</h1>
@@ -95,7 +101,7 @@ const StaffStudentManage = () => {
             <h2>Enrolled Students</h2>
             <div className="mt-4">
               <div className="col-sm-12">
-                <table class="table">
+                <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -113,7 +119,7 @@ const StaffStudentManage = () => {
             <h2>Completed Students</h2>
             <div className="mt-4">
               <div className="col-sm-12">
-                <table class="table">
+                <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
