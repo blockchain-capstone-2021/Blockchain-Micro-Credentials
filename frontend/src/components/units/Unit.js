@@ -16,11 +16,13 @@ const Unit = (props) => {
         // Save unitId to localStorage
         const {unitId} = props.match.params
         window.localStorage.setItem('unitId', unitId)
+        console.log(unitId)
 
-        // Make calls
+        // Retrive modules from database and save as state variable
         async function getModules(){
             await microcredapi.get(`/unit/${unitId}/${window.localStorage.getItem('userId')}`).then(response => {
                 const updatedModules = []
+                console.log("modules", response.data)
                 response.data.modules.map((module, key) => {
                     const newModule = {
                         ...module, 
@@ -32,14 +34,21 @@ const Unit = (props) => {
                 setModules(updatedModules)
             })
         }
-
-        async function getUnit() {
-            const unitResponse = await microcredapi.get(`/student/${window.localStorage.getItem('userId')}/enrolled`)
-            setUnit({'code': Object.keys(unitResponse.data.unitMap)[0], 'name': Object.values(unitResponse.data.unitMap)[0]})
-        }
         getModules()
-        getUnit()
     }, [])
+
+    useEffect(() => {
+        console.log("unitId", window.localStorage.getItem('unitId'))
+
+        // Make calls
+        async function getUnit() {
+                const unitResponse = await microcredapi.get(`/student/${window.localStorage.getItem('userId')}/enrolled`)
+                console.log("response", unitResponse.data)
+                setUnit({'code': window.localStorage.getItem('unitId'), 'name': unitResponse.data.unitMap[window.localStorage.getItem('unitId')]})
+        }
+        if(modules){getUnit();}
+    }, [modules])
+    
 
     function renderModules() {
         return modules.map(module => {
