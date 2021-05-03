@@ -1,4 +1,7 @@
-import React, {useState,useEffect} from 'react'
+import React, { useState, useEffect } from "react";
+import microcredapi from "../../apis/microcredapi";
+import { Link, useHistory } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 const StaffQuestionManage = () => {
 
@@ -34,6 +37,7 @@ const StaffQuestionManage = () => {
       getModules();
       window.localStorage.setItem('selectedCourse',selectedCourse)
       if (window.localStorage.getItem('selectedCourse').startsWith('S')) {
+        console.log(window.localStorage.getItem('selectedCourse'))
         setSelectedCourse(undefined)
         setSelectedModule(undefined)
         setModules(undefined)
@@ -70,6 +74,7 @@ const StaffQuestionManage = () => {
     const moduleSelected =  window.localStorage.getItem('selectedModule') ? true : false
     return modules.map((_module) => {
       const modPicked = parseInt(window.localStorage.getItem('selectedModule')) === _module.moduleId ? true : false
+      console.log('CORRECT:', modPicked, 'LS: ', parseInt(window.localStorage.getItem('selectedModule')), 'ITER_MOD: ',_module.moduleId);
       return (
         <option key={_module.moduleId} value={_module.moduleId} disabled={_module.published} selected={modPicked}>
           {_module.moduleName}
@@ -85,11 +90,9 @@ const StaffQuestionManage = () => {
                 <td>{_question.questionId}</td>
                 <td>{_question.moduleId}</td>
                 <td>{_question.content}</td>
-                <td class="d-flex">
-                  <div className="align-button-right">
-                  </div>
+                <td>
                 <Link to={`/question/${_question.questionId}`} class="btn btn-warning mx-1">View</Link>
-                <button type="button" className="btn btn-danger mx-2" data-bs-questionid={_question.questionId} data-bs-moduleid={_question.moduleId} data-bs-toggle="modal"  data-bs-target="#deleteConf" onClick={displayDeleteModal('DELETE', history, redirect)}>
+                <button type="button" className="btn btn-danger mx-2" data-bs-questionid={_question.questionId} data-bs-moduleid={_question.moduleId} data-bs-toggle="modal"  data-bs-target="#deleteConf" onClick={() => {displayDeleteModal('DELETE', history, redirect)}}>
                     Delete
                 </button>   
                 </td>
@@ -124,9 +127,7 @@ function displayDeleteModal(type, history, redirect) {
             modalBodyInput.innerHTML = 'Are you sure you want to delete all the questions in this module? This action is irreversible.'
             deleteButton.onclick = async function() {
             await microcredapi.post(`/questions/${mid}/deleteAll`).then(
-              setTimeout(() => {
                 window.location.reload()
-              }, 2000)
               )
             }
           }
@@ -169,10 +170,76 @@ function displayDeleteModal(type, history, redirect) {
 
   function renderUnitModuleInput(){
     return (
-        <div>
-            StaffQuestionManage
+        <div className="row row-cols-lg-auto g-3 align-items-center py-2">
+        <div className="input-group col-lg-5">
+          <select
+            className="form-select"
+            id="course"
+            onChange={(e) =>
+              setSelectedCourse(
+                e.target.options[e.target.selectedIndex].value
+              )
+            }
+          >
+            <option>Select a Course</option>
+            {courses ? renderUnitOptions() : <option>Loading...</option>}
+          </select>
         </div>
-    )
-}
 
-export default StaffQuestionManage
+        <div className="input-group col-lg-5">
+          <select className="form-select" id="course"
+            onChange={(e) =>
+            setSelectedModule(
+                e.target.options[e.target.selectedIndex].value
+            )
+            }>
+            <option>Select a module</option>
+            {modules ? renderModuleOptions() : <option>Loading...</option>}
+          </select>
+        </div>
+      </div>
+    )
+  }
+  return (
+    <div className="container w-75">
+      <h1 className="pt-5 mb-5">Question management</h1>
+      <div className="row g-3">
+        <div className="my-4">
+          <h6>Unit/Module Selection</h6>
+            {renderUnitModuleInput()}
+            {selectedModule?
+                        <div className="d-flex">
+                        <div style={{marginLeft:'auto', marginRight:'1em'}}>
+                          <Link to={{pathname: '/question/create', state:{module: selectedModule, course: selectedCourse}}} class="btn btn-success">Add</Link>  
+                        </div>
+                        <div>
+                        <Link to={linkTarget} class="btn btn-danger" data-bs-toggle="modal"  data-bs-target="#deleteConfAll" data-bs-moduleid={selectedModule} onClick={() => {displayDeleteModal('DELETE_ALL', history, redirect)}}>Delete all</Link>
+                        </div>
+                      </div>:
+                      ""}
+        </div>
+        <div className="mt-4">
+          <div className="col-sm-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Module</th>
+                        <th>Content</th>
+                        <th>Manage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {questions ? renderQuestions(): <tr><td colSpan="4" className="p-5 text-center">There are no questions for this module</td></tr>}
+                </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+    {renderModal('DELETE_ALL')}
+    {renderModal('DELETE')}
+    </div>
+  );
+};
+
+export default StaffQuestionManage;

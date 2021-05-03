@@ -8,6 +8,7 @@ function displayQuestionDataModal(questionId) {
             const answers = microcredapi.post(`/questions/${questionId}/answers`).then(res => {
                 question.answers = res.data.answers
             })
+            console.log(question);
         })
     }
     const question = getQuestion()
