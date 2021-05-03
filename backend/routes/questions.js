@@ -67,7 +67,7 @@ router.post('/create', addQuestionToModule, async function (req, res, next) {
     })
 })
 
-router.post('/deleteAll', deleteAllQuestions, async function (req, res, next) {
+router.post('/:moduleId/deleteAll', deleteAllQuestions, async function (req, res, next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: 'true'

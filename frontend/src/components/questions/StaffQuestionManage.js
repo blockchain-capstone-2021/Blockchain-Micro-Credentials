@@ -61,8 +61,10 @@ const StaffQuestionManage = () => {
   function renderModuleOptions() {
     const moduleSelected =  window.localStorage.getItem('selectedModule') ? true : false
     return modules.map((_module) => {
+      const modPicked = parseInt(window.localStorage.getItem('selectedModule')) === _module.moduleId ? true : false
+      console.log('CORRECT:', modPicked, 'LS: ', parseInt(window.localStorage.getItem('selectedModule')), 'ITER_MOD: ',_module.moduleId);
       return (
-        <option key={_module.moduleId} value={_module.moduleId} disabled={_module.published} selected={moduleSelected}>
+        <option key={_module.moduleId} value={_module.moduleId} disabled={_module.published} selected={modPicked}>
           {_module.moduleName}
         </option>
       );
@@ -103,15 +105,17 @@ function displayDeleteModal(type, history, redirect) {
             modalBodyInput.innerHTML = 'Are you sure that you want to delete question \'' + qid + '\' from module \''+ mid +'\'? This action is irreversible.'
             deleteButton.onclick = async function() {
               const response = await microcredapi.post(`/questions/${qid}/delete`).then(
-                  history.push('/')
+                  window.location.reload()
               ) 
             }
           } else if (mid) {
             modalTitle.innerHTML = 'Delete all questions?'
             modalBodyInput.innerHTML = 'Are you sure you want to delete all the questions in this module? This action is irreversible.'
             deleteButton.onclick = async function() {
-              const response = await microcredapi.post(`/questions/${mid}/deleteAll`).then(
-                  history.push('/')
+            await microcredapi.post(`/questions/${mid}/deleteAll`).then(
+                setTimeout(() => {
+                  window.location.reload()
+                }, 1000)
               )
             }
           }
