@@ -95,7 +95,8 @@ async function getAnswers(questions)
     let answersMap = new Map()
 
     for (const question of questions){
-        answersMap[question.questionId] = await dbAnswerController.getAnswers(question.questionId)
+        let answers = await dbAnswerController.getAnswers(question.questionId)
+        answersMap.set(question.questionId, answers)
     } 
 
     return answersMap;
