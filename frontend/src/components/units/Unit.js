@@ -17,7 +17,7 @@ const Unit = (props) => {
         const {unitId} = props.match.params
         window.localStorage.setItem('unitId', unitId)
 
-        // Retrieve modules from database and set as state variable
+        // Retrive modules from database and set as state variable
         async function getModules(){
             await microcredapi.get(`/unit/${unitId}/${window.localStorage.getItem('userId')}`).then(response => {
                 const updatedModules = []
@@ -91,8 +91,8 @@ const Unit = (props) => {
                 {
                     unit?
                     <section>
-                        <h1>{props.location.state.unitName}</h1>
-                        <h4>{props.location.state.enrolment.unitId}</h4>
+                        <h1>{unit.name}</h1>
+                        <h4>{unit.code}</h4>
                     </section>:
                     ""
                 }
