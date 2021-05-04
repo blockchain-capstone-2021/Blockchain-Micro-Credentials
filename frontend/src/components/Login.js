@@ -1,24 +1,14 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types';
 import api from '../apis/microcredapi'
-import"./Login.css";
-
-async function loginUser(username, password) {
-    let response = ''
-    if (username.startsWith("e")) {
-        response = await api.post(`/login/staff/${username}/${password}`)
-    }
-    else {
-        response = await api.post(`login/student/${username}/${password}`)
-    }
-    console.log("loggedIn", response.data)
-    return response.data.loggedIn
-   }
 
 const Login = ({ setToken }) => {
+
+    // set state variables for the component
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
 
+    // sets token if login is authenticated
     const handleSubmit = async e => {
         e.preventDefault();
         const token = {token: 'login'}
@@ -36,6 +26,19 @@ const Login = ({ setToken }) => {
         else { alert('username or password is incorrect') }
     }
 
+    // sends the post request with login credentials
+    async function loginUser(username, password) {
+        let response = ''
+        if (username.startsWith("e")) {
+            response = await api.post(`/login/staff/${username}/${password}`)
+        }
+        else {
+            response = await api.post(`login/student/${username}/${password}`)
+        }
+        return response.data.loggedIn
+    }
+
+    // Render the login form
     return (
         <div className="jumbotron vertical-center">
         <div className="vertical-center">
