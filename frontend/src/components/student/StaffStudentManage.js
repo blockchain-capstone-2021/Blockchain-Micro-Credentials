@@ -4,13 +4,13 @@ import microcredapi from '../../apis/microcredapi'
 
 const StaffStudentManage = () => {
 
-    // Set state variables for component
+    // set state variables for component
     const [courses, setCourses] = useState();
     const [selectedCourse, setSelectedCourse] = useState();
     const [availableStudents, setAvailableStudents] = useState();
     const [unavailableStudents, setUnavailableStudents] = useState();
 
-    // Pull courses from database and set as courses variable
+    // retrieve courses from database and set as courses variable
     useEffect(() => {
         async function getCourses() {
           const units = await microcredapi
@@ -21,7 +21,7 @@ const StaffStudentManage = () => {
         getCourses();
     }, []);
 
-    // Pull available students from database and set as availableStudents variable
+    // retrieve available students from database and set as availableStudents variable
     useEffect(() => {
         async function getAvailableStudents() {
             const available = await microcredapi
@@ -32,7 +32,7 @@ const StaffStudentManage = () => {
         if(selectedCourse){getAvailableStudents();} //Only runs when selectedCourse has been set
     }, [selectedCourse]);
 
-    // Pull unavailable students from database and set as unavailableStudents variable
+    // retrieve unavailable students from database and set as unavailableStudents variable
     useEffect(() => {
         async function getUnavailableStudents() {
             const unavailable = await microcredapi
@@ -90,6 +90,7 @@ const StaffStudentManage = () => {
         })
     }
 
+    // render content as tables
     return (
         <div className="container w-75">
           <h1 className="pt-5 mb-5">Student Management</h1>

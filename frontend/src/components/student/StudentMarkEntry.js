@@ -3,11 +3,14 @@ import {  useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
 
 const StudentMarkEntry = (props) => {
+
+    // set state variables for component
     const history = useHistory();
     const [student, setStudent] = useState()
     const [finalMark, setFinalMark] = useState()
     const [submitting, setSubmitting] = useState(false)
 
+    // retrieve student data from database and set as student variable
     useEffect(() => {
         console.log(props);
         async function getStudent() {
@@ -17,6 +20,7 @@ const StudentMarkEntry = (props) => {
         getStudent()
     }, [])
 
+    // submit final mark using post method
     async function onSubmit(e) {
         e.preventDefault();
         setSubmitting(true)
@@ -28,8 +32,9 @@ const StudentMarkEntry = (props) => {
         setSubmitting(false)
     }
         
+    // render page as form
     return (
-        <div className="container">
+        <div className="container align-center">
             <h1 className="mt-5">Final Mark Form</h1>
             {
                 submitting ?
