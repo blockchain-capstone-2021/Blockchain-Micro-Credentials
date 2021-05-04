@@ -19,7 +19,7 @@ const Login = ({ setToken }) => {
         
         if(login == true) {
             window.localStorage.setItem('userId', username);
-            // Check if user is a staff or student
+            // check if user is a staff or student
             username.startsWith("e") ? window.localStorage.setItem('isStaff', 'true') : window.localStorage.setItem('isStaff', 'false')
             setToken(token);
         }
@@ -38,7 +38,7 @@ const Login = ({ setToken }) => {
         return response.data.loggedIn
     }
 
-    // Render the login form
+    // render the login form
     return (
         <div className="jumbotron vertical-center">
         <div className="vertical-center">
