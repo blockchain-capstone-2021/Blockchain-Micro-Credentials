@@ -12,7 +12,6 @@ const StudentMarkEntry = (props) => {
 
     // retrieve student data from database and set as student variable
     useEffect(() => {
-        console.log(props);
         async function getStudent() {
             const response = await microcredapi.get(`/student/${props.match.params.studentId}`).then(response => response.data.student)
             setStudent(response)
@@ -24,7 +23,6 @@ const StudentMarkEntry = (props) => {
     async function onSubmit(e) {
         e.preventDefault();
         setSubmitting(true)
-        console.log(student.studentId, props.match.params.courseId,finalMark);
 
         await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`).then(response => {
             history.push(`/manage/students`);
