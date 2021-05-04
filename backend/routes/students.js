@@ -24,7 +24,7 @@ router.get('/:studentId', getStudent, async function (req, res, next) {
             return res.status(200).send({
                 success: 'true',
                 enrolments: {available: res.locals.availableEnrolments, unavailable: res.locals.unavailableEnrolments},
-                unitMap: res.locals.unitMap 
+                unitMap: Object.fromEntries(res.locals.unitMap)
             })
         }
         return res.status(400).send({
