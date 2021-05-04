@@ -25,7 +25,8 @@ async function getAttemptNumbers(studentId, modules){
     let currentSemester = await utility.getCurrentSemester()
 
     for (const module of modules){
-        attemptsMap[module.moduleId] = await dbModule_AttemptController.getNoOfAttempts(studentId, module.moduleId, currentSemester)
+        let attemptNo = await dbModule_AttemptController.getNoOfAttempts(studentId, module.moduleId, currentSemester)
+        attemptsMap.set(module.moduleId, attemptNo)
     } 
 
     return attemptsMap;
@@ -43,7 +44,7 @@ async function getHighestScores(studentId, unitId, modules){
 
         if (!exists)
         {
-            highestScoreMap[module.moduleId] = `0/${module.noOfQuestions}`
+            highestScoreMap.set(module.moduleId, `0/${module.noOfQuestions}`)
         }
         else
         {
@@ -51,7 +52,7 @@ async function getHighestScores(studentId, unitId, modules){
                 process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey)
             let data = await ipfs.ipfsGetData(hash)
             let deserialisedModule = JSON.parse(data)
-            highestScoreMap[module.moduleId] = `${deserialisedModule._result}/${module.noOfQuestions}`
+            highestScoreMap.set(module.moduleId, `${deserialisedModule._result}/${module.noOfQuestions}`)
         }
     }
 
@@ -107,6 +108,7 @@ const getModulesForStudent = async (req, res, next)=>{
 async function getCumulativeScore(highestScoreMap){  
     let grade = 0
     for(const [moduleId, highestScore] of highestScoreMap.entries()){
+        console.log("here")
         let module = await dbModuleController.getModule(moduleId)
         let scores = highestScore.split("/")
         let modulePercentageScore = parseFloat(scores[0])/parseFloat(scores[1])
