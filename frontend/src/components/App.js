@@ -3,28 +3,27 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import "../style.css";
 import useToken from './useToken';
-
 import Header from "./templates/Header";
-import Module from "./modules/Module"
 import Login from "./Login";
-import Unit from './units/Unit'
+
 import StaffDashboard from './dashboards/StaffDashboard'
 import StudentDashboard from './dashboards/StudentDashboard'
-
-import QuestionList from "./questions/QuestionList";
-import QuestionCreate from "./questions/QuestionCreate";
-import StaffQuestionManage from './questions/StaffQuestionManage'
 
 import StudentProfile from "./student/StudentProfile";
 import StaffStudentManage from './student/StaffStudentManage'
 import StudentMarkEntry from './student/StudentMarkEntry'
 
+import Module from "./modules/Module"
 import StaffModuleManage from './modules/StaffModuleManage'
+import Unit from './units/Unit'
+
+import StaffQuestionManage from './questions/StaffQuestionManage'
+import StaffQuestionView from "./questions/StaffQuestionView";
+import StaffQuestionAdd from "./questions/StaffQuestionAdd";
 
 const App = () => {
 
-  const [userId, setUserId] = useState()
-  console.log(userId);
+  const [, setUserId] = useState()
   useEffect(() => {
     setUserId(window.localStorage.getItem('userId'))
   }, [])
@@ -48,11 +47,11 @@ const App = () => {
         <div className="container">
         <Switch>
         <Route path="/manage/students" component={StaffStudentManage} />
-        <Route path="/manage/modules" component={StaffModuleManage} />
+        <Route path="/manage/modules" key={getDate()} component={StaffModuleManage} />
         <Route path="/manage/questions" component={StaffQuestionManage} />
         <Route path="/student/:studentId/profile" component={StudentProfile} />
-        <Route path="/question/create" component={QuestionCreate} />
-        <Route path="/question" component={QuestionList} />
+        <Route path="/question/create" component={StaffQuestionAdd} />
+        <Route path="/question/:questionId" component={StaffQuestionView} />
         <Route path="/mark/:courseId/:studentId" component={StudentMarkEntry} />
         <Route path="/unit/:unitId" component={Unit} />
         <Route path="/module/:moduleId" component={Module} />      
