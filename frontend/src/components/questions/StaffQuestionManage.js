@@ -3,6 +3,7 @@ import microcredapi from "../../apis/microcredapi";
 import { Link, useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import '../dashboards/Dashboard.css'
+
 const StaffQuestionManage = () => {
 
   const history = useHistory()
@@ -12,7 +13,6 @@ const StaffQuestionManage = () => {
   const [modules, setModules] = useState();
   const [questions, setQuestions] = useState()
   const [redirect, setRedirect] = useState()
-  const [deleteAllFlag, setDeleteAllFlag] = useState()
   
   useEffect(() => {
     setSelectedCourse(window.localStorage.getItem('selectedCourse') ? window.localStorage.getItem('selectedCourse') : undefined)
@@ -44,7 +44,6 @@ const StaffQuestionManage = () => {
       getModules();
       window.localStorage.setItem('selectedCourse',selectedCourse)
       if (window.localStorage.getItem('selectedCourse').startsWith('S')) {
-        console.log(window.localStorage.getItem('selectedCourse'))
         setSelectedCourse(undefined)
         setSelectedModule(undefined)
         setModules(undefined)

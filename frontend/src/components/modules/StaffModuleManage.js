@@ -1,12 +1,13 @@
-import React, {useState,useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import microcredapi from '../../apis/microcredapi'
-import InlineSearchForm from '../templates/InlineSearchForm'
-import FlashMessage from 'react-flash-message'
 import { Link } from 'react-router-dom'
+import FlashMessage from 'react-flash-message'
+
+import microcredapi from '../../apis/microcredapi'
 import '../dashboards/Dashboard.css'
 
-function StaffModuleManage() {
+
+const StaffModuleManage = (props) => {
 
     const history = useHistory()
 
@@ -15,61 +16,52 @@ function StaffModuleManage() {
     const [selectedCourse, setSelectedCourse] = useState()
     const [updating, setUpdating] = useState(false)
     const [error, setError] = useState(true)
+    const [mounted, setMounted] = useState(false)
 
-    // Get modules if a course has been selected.
     useEffect(() => {
-        console.log('SELECTED COURSE HAS CHANGED');
-        getCourses()
-        if(selectedCourse){
+        let mounted = true
+        if(mounted){
+            if(!courses){
+                getCourses()
+            }
+        }
+        return () => {
+            mounted = false
+        }
+    }, [])
+
+    useEffect(() => {
+        let mounted = true
+        if(mounted){
+            if(!selectedCourse){
+                setModules({})
+            }
             getModules(selectedCourse)
         }
-        if(!selectedCourse){
-            setModules(undefined)
+        return () => {
+            mounted = false
         }
-
     }, [selectedCourse])
-
-    // API call to get courses taught by employee
+    
+    // api calls to get data
+    
     async function getCourses() {
         return await microcredapi.get(`/unit/${window.localStorage.getItem('userId')}`).then(response => {
             setCourses(response.data.units);
         })
     }
-    // API call to get modules for selected course
+    
     async function getModules(unitId) {
-        const response = await microcredapi.get(`module/${unitId}`).then(response => {
-            console.log(response.data);
+        return await microcredapi.get(`module/${unitId}`).then(response => {
             setModules(response.data.modules)
         })
     }
 
-    // Publish a module if conditions are met
-    async function publishModule(moduleId){
+    async function manageModule(type, moduleId){
+        const callType = type
         let response;
         try {
-            response = await microcredapi.get(`/module/${moduleId}/publish`)
-            if (response.data.message) {
-                setError({status: true, message: response.data.message})
-                setTimeout(() => {
-                    setError({status: false, message: undefined})
-                }, 5000);
-            } else if(response.data.success){
-                setUpdating(true)
-                setTimeout(() => {
-                    window.location.reload()
-                }, 1000);
-            }
-            
-        } catch (error) {
-
-        }
-    }
-
-    //unpublish a module if conditions are met
-    async function unPublishModule(moduleId){
-        let response;
-        try {
-            response = await microcredapi.get(`/module/${moduleId}/unpublish`)
+            response = await microcredapi.get(`/module/${moduleId}/${callType}`)
             if (response.data.message) {
                 setError({status: true, message: response.data.message})
                 setTimeout(() => {
@@ -87,39 +79,94 @@ function StaffModuleManage() {
         }
     }
 
-    // Render method that return all module data in tabular form.
-    function renderModules(){
-        return modules.map(module => {
-            return (
-                <tr key={module.moduleNo}>
-                    <td scope="row">{module.moduleId}</td>
-                <td scope="row">{module.moduleName}</td>
-                <td>{module.noOfQuestions}</td>
-                <td>{module.published == true ? 'Published' : 'Unpublished'}</td>
-                <td>{`${module.weight}%`}</td>
-                <td>
-                    {module.published == false ? 
-                        (
-                            <div className="d-flex">
-                                <Link to={`/module/edit/${module.moduleNo}`} style={{marginRight: '1em'}} class="btn btn-warning">Edit</Link>
-                                <button type="button" class="btn btn-success" onClick={() => publishModule(module.moduleId)}>Publish</button>
-                            </div>
-                        )
-                    : 
-                    <button type="button" class="btn btn-danger" onClick={() => unPublishModule(module.moduleId)}>Unpublish</button>
-                    }
-                </td>
-            </tr>
+    // Set selected course into state
+
+    function onCourseSelect(unitId = undefined) {
+        if(unitId){
+            setSelectedCourse(unitId)
+            window.localStorage.setItem('selectedCourse', unitId)
+        }
+        setSelectedCourse(unitId)
+    }
+
+    function renderCourseOptions() {
+        return courses.map(course => {
+            return(
+                <option key={course.unitId} defaultValue={course.unitId} onClick={() => onCourseSelect(course.unitId)}>{course.unitName}</option>
             )
         })
+    }
+    // function renderCourseOptions() {
+    //     return courses.map(course => {
+    //         return(
+    //             <div>
+    //                 <option key={course.unitId} defaultValue={course.unitId} onClick={() => onCourseSelect(course.unitId)}>{course.unitName}</option>
+    //                 {/* <button type="button" class="btn btn-primary" value={'t'} onClick={() =>onCourseSelect(course.unitId)}>{course.unitName}</button> */}
+    //             </div>
+                
+    //         )
+    //     })
+    // }
+
+    function renderSearchForm() {
+        return (
+            <div>
+                <h5>Selection Area</h5>
+                {/* <div className="d-flex">
+                    {courses ? renderCourseOptions() : 'Loading'}
+                </div> */}
+                <form className="row row-cols-lg-auto g-3 align-items-center py-2">
+                    <div className="col-lg-8">
+                        <label className="visually-hidden" for="inlineFormSelectPref">Preference</label>
+                        <select className="form-select" id="inlineFormSelectPref">
+                        <option key="placeholder" selected id="placeholder-course" onClick={() => onCourseSelect()}>Select a Course</option>
+                        {courses ? renderCourseOptions() : <option>Loading</option>}
+                        </select>
+                    </div>       
+                </form>
+            </div>
+        )
+    }
+
+    function renderModules() {
+        try {
+            return modules.map(module => {
+                return (
+                    <tr key={module.moduleNo}>
+                    <td scope="row">{module.moduleId}</td>
+                    <td scope="row">{module.moduleName}</td>
+                    <td>{module.noOfQuestions}</td>
+                    <td>{module.published == true ? 'Published' : 'Unpublished'}</td>
+                    <td>{`${module.weight}`}</td>
+                    <td>
+                        {module.published == false ? 
+                            (
+                                <div className="d-flex">
+                                    <Link to={`/module/edit/${module.moduleNo}`} style={{marginRight: '1em'}} class="btn btn-warning">Edit</Link>
+                                    <button type="button" class="btn btn-success" onClick={() => manageModule('publish', module.moduleId)}>Publish</button>
+                                </div>
+                            )
+                        : 
+                        <button type="button" class="btn btn-danger" onClick={() => manageModule('unpublish', module.moduleId)}>Unpublish</button>
+                        }
+                    </td>
+                </tr>
+                )
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
         <div className="align-center">
-            <div className="pb-4">
-                <h1 className="py-5">Modules Management</h1>
-                {courses ? <InlineSearchForm courses={courses} onClickCourse={setSelectedCourse} selectedCourse={selectedCourse} /> : ""}
-            </div>
+            <section className="pb-5">
+                <h1>Module Management</h1>
+            </section>
+            <section>
+            {renderSearchForm()}
+            </section>
+            <section>
             {
                 error.status ?
                 <FlashMessage duration={5000} className="alert alert-danger">
@@ -127,25 +174,26 @@ function StaffModuleManage() {
                 </FlashMessage>:
             ''
             }
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th># of Questions</th>
-                        <th>Publish</th>
-                        <th>Weight</th>
-                        <th>Manage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        updating ?
-                        <tr><td colspan="6" className="p-5 text-center">Module is updating</td></tr>:
-                        modules ? renderModules() : <tr><td colspan="6" className="p-5 text-center">Please choose a course</td></tr>
-                    }
-                </tbody>
-            </table>
+            </section>
+            <section className="pb-5">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th># of Questions</th>
+                            <th>Publish</th>
+                            <th>Weight</th>
+                            <th>Manage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {modules ? renderModules() : ''}
+                        
+                    </tbody>
+                </table>
+            </section>
+            
         </div>
     )
 }
