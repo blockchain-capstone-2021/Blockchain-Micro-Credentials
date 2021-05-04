@@ -22,7 +22,7 @@ const getEnrolmentsByStudent = async (req, res, next)=>{
         
         for (const enrolment of enrolments){
             let unit  = await dbUnitController.getUnit(enrolment.unitId)
-            unitMap[unit.unitId] = unit.unitName
+            unitMap.set(unit.unitId,unit.unitName)
     
             let unitKey = new Unit_Key(enrolment.studentId, enrolment.unitId, currentSemester)
             let serialisedKey = JSON.stringify(unitKey)
@@ -80,7 +80,7 @@ const getEnrolmentsByUnit = async (req, res, next)=>{
 
                 let data = await ipfs.ipfsGetData(hash)
                 let deserialisedUnit = JSON.parse(data)
-                studentScoreMap[student.studentId] = deserialisedUnit._finalResult
+                studentScoreMap.set(student.studentId, deserialisedUnit._finalResult)
             }
         }
         res.locals.availableStudents = availableStudents;
