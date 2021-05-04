@@ -75,6 +75,13 @@ const Unit = (props) => {
         })
     }
 
+    // Renders final grade in desired format
+    function renderGrade() {
+        return (
+            <h5> Current Grade:  {grade.cumulativeScore},   {grade.finalGrade}</h5>
+        )
+    }
+
     return (
             <div className="jumbotron align-center">
             {
@@ -105,14 +112,9 @@ const Unit = (props) => {
                         </tbody>
                     </table>
                     <div>
-                        <h4>Current Grade:  
                         {
-                            grade? grade.cumulativeScore : ""
+                            grade? renderGrade() : ""
                         }
-                        ,   
-                        {
-                            grade? grade.finalGrade : ""
-                        } </h4>
                     </div>
                     <div className="d-flex">
                         <div style={{marginLeft:'auto', marginRight:'4em', paddingBottom:'5%'}}>
