@@ -2,21 +2,21 @@ import React, {useState, useEffect} from 'react'
 import microcredapi from '../../apis/microcredapi'
 import "../dashboards/Dashboard.css";
 
-const StudentProfile = (props) => {
+const StudentProfile = () => {
 
+    // set state variable for component
     const [student, setStudent] = useState()
 
+    // Retrieve student data from database and set as state variable
     useEffect(() => {
-
         async function getStudent() {
             const response = await microcredapi.get(`student/${window.localStorage.getItem('userId')}`)
-            console.log(response.data)
             setStudent({'name': response.data.student.studentName, 'id': response.data.student.studentId, 'email': response.data.student.studentEmail, 'degree': Object.values(response.data.degreeName)[1], 'credits': response.data.student.studentCreditPoints})
         }
         getStudent()
     }, [])
-    console.log(student)
 
+    // render disabled form to display student details
     return (
         <div className="jumbotron align-center" >
                 {
