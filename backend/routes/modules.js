@@ -21,7 +21,7 @@ router.get('/:moduleId/questions', getRandomizedQuestions, async function (req,r
         return res.status(200).send({
             success: res.locals.success,
             questions: res.locals.questions,
-            answersMap: res.locals.answersMap
+            answersMap: Object.fromEntries(res.locals.answersMap)
         })
     }
     return res.status(400).send({

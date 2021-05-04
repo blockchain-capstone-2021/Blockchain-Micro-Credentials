@@ -23,7 +23,7 @@ router.get('/:unitId/enrolled', getEnrolmentsByUnit, async function (req, res, n
         return res.status(200).send({
             success: 'true',
             students: {available: res.locals.availableStudents, unavailable: res.locals.unavailableStudents},
-            scores: res.locals.studentScoreMap 
+            scores: Object.fromEntries(res.locals.studentScoreMap)
         })
     }
     return res.status(400).send({
@@ -37,8 +37,8 @@ router.get('/:unitId/:studentId', getModulesForStudent, async function (req, res
         return res.status(200).send({
             success: 'true',
             modules: res.locals.modules,
-            highestScore: res.locals.highestScoreMap,
-            numAttempts: res.locals.attemptsMap,
+            highestScore: Object.fromEntries(res.locals.highestScoreMap),
+            numAttempts: Object.fromEntries(res.locals.attemptsMap),
             cumulativeScore: res.locals.cumulativeScore,
             finalGrade: res.locals.finalGrade
 
