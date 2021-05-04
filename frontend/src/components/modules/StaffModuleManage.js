@@ -18,10 +18,15 @@ function StaffModuleManage() {
 
     // Get modules if a course has been selected.
     useEffect(() => {
+        console.log('SELECTED COURSE HAS CHANGED');
         getCourses()
         if(selectedCourse){
             getModules(selectedCourse)
         }
+        if(!selectedCourse){
+            setModules(undefined)
+        }
+
     }, [selectedCourse])
 
     // API call to get courses taught by employee
@@ -33,6 +38,7 @@ function StaffModuleManage() {
     // API call to get modules for selected course
     async function getModules(unitId) {
         const response = await microcredapi.get(`module/${unitId}`).then(response => {
+            console.log(response.data);
             setModules(response.data.modules)
         })
     }

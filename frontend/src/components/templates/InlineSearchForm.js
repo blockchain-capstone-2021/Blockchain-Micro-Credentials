@@ -36,20 +36,20 @@ const InlineSearchForm = (props) => {
     return (
     <div>
         <h5>Selection Area</h5>
-        <form class="row row-cols-lg-auto g-3 align-items-center py-2">
-            <div class="col-lg-6">
-                <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
-                <select class="form-select" id="inlineFormSelectPref">
-                    <option selected>Choose Course</option>
+        <form className="row row-cols-lg-auto g-3 align-items-center py-2">
+            <div className="col-lg-6">
+                <label className="visually-hidden" for="inlineFormSelectPref">Preference</label>
+                <select className="form-select" id="inlineFormSelectPref">
+                    <option onClick={() => {props.onClickCourse(undefined)}} selected>Choose Course</option>
                     {courses ? renderCourses() : <option>Loading</option>}
                 </select>
             </div>
 
             {
                 modules ?
-                <div class="col-lg-6">
-                <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
-                <select class="form-select" id="inlineFormSelectPref">
+                <div className="col-lg-6">
+                <label className="visually-hidden" for="inlineFormSelectPref">Preference</label>
+                <select className="form-select" id="inlineFormSelectPref">
                     <option>Choose Module</option>
                     {renderModules()}
                 </select>
