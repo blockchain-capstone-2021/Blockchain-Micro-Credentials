@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import FlashMessage from 'react-flash-message'
 
 import microcredapi from '../../apis/microcredapi'
-import '../dashboards/Dashboard.css'
+import '../../style.css'
 
 
 const StaffModuleManage = (props) => {
@@ -142,7 +142,7 @@ const StaffModuleManage = (props) => {
                         {module.published == false ? 
                             (
                                 <div className="d-flex">
-                                    <Link to={`/module/edit/${module.moduleNo}`} style={{marginRight: '1em'}} class="btn btn-warning">Edit</Link>
+                                    <Link to={`/module/edit/${module.moduleNo}`} class="btn btn-warning align-button-right">Edit</Link>
                                     <button type="button" class="btn btn-success" onClick={() => manageModule('publish', module.moduleId)}>Publish</button>
                                 </div>
                             )

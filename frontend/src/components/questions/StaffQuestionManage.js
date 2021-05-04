@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import microcredapi from "../../apis/microcredapi";
 import { Link, useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import '../dashboards/Dashboard.css'
+import '../../style.css'
 
 const StaffQuestionManage = () => {
 
@@ -96,7 +96,7 @@ const StaffQuestionManage = () => {
                 <td>{_question.moduleId}</td>
                 <td>{_question.content}</td>
                 <td class="d-flex">
-                  <div style={{marginLeft: 'auto', marginRight: '1em'}}>
+                  <div className="align-button-right">
                   </div>
                 <Link to={{pathname: `/question/${_question.questionId}`, state:{question: _question}}} class="btn btn-warning mx-1">View</Link>
                 <button type="button" className="btn btn-danger mx-2" data-bs-questionid={_question.questionId} data-bs-moduleid={_question.moduleId} data-bs-toggle="modal"  data-bs-target="#deleteConf" onClick={displayDeleteModal('DELETE', history, redirect)}>
@@ -218,7 +218,7 @@ function displayDeleteModal(type, history, redirect) {
             {renderUnitModuleInput()}
             {selectedModule?
                         <div className="d-flex">
-                        <div style={{marginLeft:'auto', marginRight:'1em'}}>
+                        <div className="align-button-right">
                           <Link to={{pathname: '/question/create', state:{module: selectedModule, course: selectedCourse}}} class="btn btn-success">Add</Link>  
                         </div>
                         <div>

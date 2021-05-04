@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
-import '../dashboards/Dashboard.css'
+import '../../style.css'
 
 const StaffModuleEdit = (props) => {
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { validate } from "uuid";
 import microcredapi from "../../apis/microcredapi";
-import '../dashboards/Dashboard.css'
+import '../../style.css'
 
 const StaffQuestionAdd = (props) => {
 

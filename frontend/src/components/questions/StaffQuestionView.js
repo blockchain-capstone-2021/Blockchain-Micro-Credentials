@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import microcredapi from '../../apis/microcredapi'
 import { Link } from 'react-router-dom'
-import '../dashboards/Dashboard.css'
+import '../../style.css'
 
 const StaffQuestionView = (props) => {
 
