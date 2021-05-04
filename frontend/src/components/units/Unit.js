@@ -20,6 +20,7 @@ const Unit = (props) => {
         // Make calls
         async function getModules(){
             const moduleResponse = await microcredapi.get(`/unit/${unitId}/${window.localStorage.getItem('userId')}`).then(response => {
+                console.log(response.data);
                 const updatedModules = []
                 response.data.modules.map((module, key) => {
                     const newModule = {
@@ -89,8 +90,8 @@ const Unit = (props) => {
                             {modules ? renderModules() : <tr colspan="5">Loading</tr>}
                         </tbody>
                     </table>
-                    <div>
-                    <button type="button" name="" id="" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
+                    <div className="d-flex">
+                    <button type="button" name="" id="" class="btn btn-primary btn-block align-button-right" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
                     </div>
                 </section>
 

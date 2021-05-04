@@ -4,6 +4,7 @@ import microcredapi from '../../apis/microcredapi'
 import InlineSearchForm from '../templates/InlineSearchForm'
 import FlashMessage from 'react-flash-message'
 import { Link } from 'react-router-dom'
+import '../dashboards/Dashboard.css'
 
 function StaffModuleManage() {
 
@@ -89,7 +90,7 @@ function StaffModuleManage() {
                 <td scope="row">{module.moduleName}</td>
                 <td>{module.noOfQuestions}</td>
                 <td>{module.published == true ? 'Published' : 'Unpublished'}</td>
-                <td>{module.weight}</td>
+                <td>{`${module.weight}%`}</td>
                 <td>
                     {module.published == false ? 
                         (
@@ -108,7 +109,7 @@ function StaffModuleManage() {
     }
 
     return (
-        <div>
+        <div className="align-center">
             <div className="pb-4">
                 <h1 className="py-5">Modules Management</h1>
                 {courses ? <InlineSearchForm courses={courses} onClickCourse={setSelectedCourse} selectedCourse={selectedCourse} /> : ""}

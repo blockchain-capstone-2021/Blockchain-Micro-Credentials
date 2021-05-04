@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import microcredapi from '../../apis/microcredapi'
 import { Link } from 'react-router-dom'
+import '../dashboards/Dashboard.css'
+
 const StaffQuestionView = (props) => {
 
     const [question, setQuestion] = useState()
@@ -53,7 +55,7 @@ const StaffQuestionView = (props) => {
     }
     function renderQuestionData(){
         return (
-            <div>
+            <div className="align-center">
                 {
                     question?
                     <div>

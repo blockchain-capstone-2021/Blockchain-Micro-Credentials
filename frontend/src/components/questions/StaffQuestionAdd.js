@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { validate } from "uuid";
 import microcredapi from "../../apis/microcredapi";
+import '../dashboards/Dashboard.css'
 
 const StaffQuestionAdd = (props) => {
 
   const history = useHistory()
-
-  const [courses, setCourses] = useState();
   const [selectedCourse, setSelectedCourse] = useState();
   const [modules, setModules] = useState();
   const [payload, setPayload] = useState(
@@ -38,26 +37,6 @@ const StaffQuestionAdd = (props) => {
     }
     getModules();
   }, [selectedCourse]);
-
-  function renderUnitOptions() {
-    return courses.map((course) => {
-      return (
-        <option key={course.unitId} value={course.unitId}>
-          {course.unitName}
-        </option>
-      );
-    });
-  }
-
-  function renderModuleOptions() {
-    return modules.map((_module) => {
-      return (
-        <option key={_module.moduleId} value={_module.moduleId}>
-          {_module.moduleName}
-        </option>
-      );
-    });
-  }
 
   function renderAnswerInput(number) {
       return (
@@ -131,34 +110,8 @@ const StaffQuestionAdd = (props) => {
       )
   }
 
-  function renderUnitModuleInput(){
-    return (
-        <div className="col-sm-12">
-        <div className="input-group mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Question"
-          aria-label="Recipient's username"
-          aria-describedby="basic-addon2"
-        />
-        </div>
-
-        <div className="input-group mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Question"
-          aria-label="Recipient's username"
-          aria-describedby="basic-addon2"
-        />
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="container w-75">
+    <div className="container align-center">
       <h1 className="pt-5">Create a question</h1>
       <div className="row g-3">
         <div className="mt-4">

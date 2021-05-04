@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
+import '../dashboards/Dashboard.css'
 
 const StaffModuleEdit = (props) => {
 
@@ -40,7 +41,7 @@ const StaffModuleEdit = (props) => {
     function renderForm(){
         if (module) {
             return (
-            <form>
+            <form className="align-center">
             <h1>Module Edit</h1>
             <div class="form-group py-3">
             <label for="qid">Module ID</label>
@@ -65,7 +66,7 @@ const StaffModuleEdit = (props) => {
             </div>
             <div class="form-group py-3">
             <label for="content">No of Questions</label>
-            <input type="number" class="form-control" id="mquestions" onChange={(e) => onQuestionCountChange(e)} value={newQuestionCount ? newQuestionCount : module.noOfQuestions} />
+            <input type="number" min="1" class="form-control" id="mquestions" onChange={(e) => onQuestionCountChange(e)} value={newQuestionCount ? newQuestionCount : module.noOfQuestions} />
             </div>
             <div className="d-flex">
                 <button type="button" class="btn btn-primary align-button-right" onClick={(e) => onSubmit(e)}> Submit</button>

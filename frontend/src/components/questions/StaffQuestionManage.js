@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import microcredapi from "../../apis/microcredapi";
 import { Link, useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-
+import '../dashboards/Dashboard.css'
 const StaffQuestionManage = () => {
 
   const history = useHistory()
@@ -204,7 +204,7 @@ function displayDeleteModal(type, history, redirect) {
     )
   }
   return (
-    <div className="container w-75">
+    <div className="container align-center">
       <h1 className="pt-5 mb-5">Question management</h1>
       <div className="row g-3">
         <div className="my-4">
