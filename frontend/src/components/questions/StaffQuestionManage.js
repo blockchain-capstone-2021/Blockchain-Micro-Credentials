@@ -13,10 +13,17 @@ const StaffQuestionManage = () => {
   const [questions, setQuestions] = useState()
   const [redirect, setRedirect] = useState()
   const [deleteAllFlag, setDeleteAllFlag] = useState()
-
+  
   useEffect(() => {
     setSelectedCourse(window.localStorage.getItem('selectedCourse') ? window.localStorage.getItem('selectedCourse') : undefined)
     setSelectedModule(window.localStorage.getItem('selectedModule') ? window.localStorage.getItem('selectedModule') : undefined)
+    return () => {
+      setSelectedCourse({})
+      setSelectedModule({})
+    }
+  }, [])
+
+  useEffect(() => {
     async function getCourses() {
       const units = await microcredapi
         .get(`/unit/${window.localStorage.getItem("userId")}`)
@@ -92,7 +99,7 @@ const StaffQuestionManage = () => {
                 <td class="d-flex">
                   <div style={{marginLeft: 'auto', marginRight: '1em'}}>
                   </div>
-                <Link to={`/question/${_question.questionId}`} class="btn btn-warning mx-1">View</Link>
+                <Link to={{pathname: `/question/${_question.questionId}`, state:{question: _question}}} class="btn btn-warning mx-1">View</Link>
                 <button type="button" className="btn btn-danger mx-2" data-bs-questionid={_question.questionId} data-bs-moduleid={_question.moduleId} data-bs-toggle="modal"  data-bs-target="#deleteConf" onClick={displayDeleteModal('DELETE', history, redirect)}>
                     Delete
                 </button>   

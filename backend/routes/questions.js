@@ -3,6 +3,20 @@ const { getAnswers } = require('../controllers/Answer_Controller')
 const { addQuestionToModule, getQuestion, getQuestionsForStaff, deleteQuestion, deleteAllQuestions } = require('../controllers/Question_Controller')
 var router = express.Router()
 
+
+router.get('/:questionId/answers', getAnswers, async function (req, res, next) {
+    if(res.locals.answers) {
+        return res.status(200).send({
+            success: 'true',
+            answers: res.locals.answers
+        })
+    }
+    return res.status(400).send({
+        success: 'false',
+        message: 'No answers found.'
+    })
+})
+
 router.get('/:moduleId/:total', getQuestionsForStaff, async function (req, res, next) {
     if(res.locals.questions) {
         return res.status(200).send({
@@ -29,18 +43,6 @@ router.get('/:questionId', getQuestion, async function (req, res, next) {
     })
 })
 
-router.post('/:questionId/answers', getAnswers, async function (req, res, next) {
-    if(res.locals.answers) {
-        return res.status(200).send({
-            success: 'true',
-            answers: res.locals.answers
-        })
-    }
-    return res.status(400).send({
-        success: 'false',
-        message: 'No answers found.'
-    })
-})
 
 router.post('/:questionId/delete', deleteQuestion, async function (req, res, next) {
     if(res.locals.success) {

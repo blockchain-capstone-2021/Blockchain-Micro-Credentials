@@ -6,24 +6,30 @@ import '../dashboards/Dashboard.css'
 const StaffQuestionView = (props) => {
 
     const [question, setQuestion] = useState()
+    const [hasAnswers, setHasAnswers] = useState(false)
 
     useEffect(() => {
-        async function getQuestion() {
-            return await microcredapi.get(`/questions/${props.match.params.questionId}`).then(response => {
-                let question = response.data.question
-                const answers = microcredapi.post(`/questions/${props.match.params.questionId}/answers`).then(res => {
-                    question.answers = res.data.answers
-                    setQuestion(question)
-                })
-                
-            })
-        }
-        getQuestion()
+        setQuestion({...props.location.state.question})
     }, [])
 
-    function renderAnswerView(answer) {
+    useEffect(() => {
+        async function getAnswers() {
+            let updatedQuestion;
+            await microcredapi.get(`/questions/${props.match.params.questionId}/answers`).then(res => {
+                updatedQuestion = {...question, answers : res.data.answers}
+            })  
+            setQuestion(updatedQuestion);
+            setHasAnswers(true)
+        }
+        if(!hasAnswers){
+            getAnswers()
+        }
+    },[question])
+
+    function renderAnswerView(answer, key) {
+        const trueAnswer = key === 0 ? 'TRUE' : "FALSE"
         return (
-          <div className="row g-3 py-2">
+          <div className="row g-3 py-2" key={key}>
           <div className="col-sm-10">
             <input
               type="text"
@@ -40,7 +46,7 @@ const StaffQuestionView = (props) => {
               className="form-control"
               id={`answer-${answer.answerId}`}
               name={`answer-${answer.answerId}`}
-              value={answer.isCorrect === true ? 'TRUE' : 'FALSE'}
+              value={trueAnswer}
               disabled
             />
           </div>
@@ -49,29 +55,27 @@ const StaffQuestionView = (props) => {
     }
 
     function renderAnswers() {
-        return question.answers.map(answer => {
-            return renderAnswerView(answer)
+        return question.answers.map((answer, key) => {
+            return renderAnswerView(answer, key)
         })
     }
     function renderQuestionData(){
         return (
             <div className="align-center">
-                {
-                    question?
                     <div>
                         <h1>Question {question.questionId}</h1>
                         <form>
-                        <div class="form-group py-3">
+                        <div className="form-group py-3">
                             <label for="qid">Question ID</label>
-                            <input type="text" class="form-control" id="qid"  value={question.questionId} disabled/>
+                            <input type="text" className="form-control" id="qid"  value={question.questionId} disabled/>
                         </div>
-                        <div class="form-group py-3">
+                        <div className="form-group py-3">
                             <label for="mid">Module ID</label>
-                            <input type="text" class="form-control" id="mid"  value={question.moduleId} disabled/>
+                            <input type="text" className="form-control" id="mid"  value={question.moduleId} disabled/>
                         </div>
-                        <div class="form-group py-3">
+                        <div className="form-group py-3">
                             <label for="content">Content</label>
-                            <input type="text" class="form-control" id="content"  value={question.content} disabled/>
+                            <input type="text" className="form-control" id="content"  value={question.content} disabled/>
                         </div>
                         <div className="py-3">
                             <h6>Answers</h6>
@@ -79,18 +83,16 @@ const StaffQuestionView = (props) => {
                         </div>
                         </form>
                         <div className="d-flex">
-                            <Link to='/manage/questions' class="btn btn-primary align-button-right">Back</Link>
+                            <Link to='/manage/questions' className="btn btn-primary align-button-right">Back</Link>
                         </div>
-                        </div>:
-                  "Loading"
-                }
+                        </div>
             </div>
         )
     }
 
     return (
         <div>
-            {renderQuestionData()}
+            {question && question.answers ? renderQuestionData() : "Loading"}
         </div>
     )
 }
