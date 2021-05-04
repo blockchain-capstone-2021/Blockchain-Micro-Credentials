@@ -108,7 +108,6 @@ const getModulesForStudent = async (req, res, next)=>{
 async function getCumulativeScore(highestScoreMap){  
     let grade = 0
     for(const [moduleId, highestScore] of highestScoreMap.entries()){
-        console.log("here")
         let module = await dbModuleController.getModule(moduleId)
         let scores = highestScore.split("/")
         let modulePercentageScore = parseFloat(scores[0])/parseFloat(scores[1])
