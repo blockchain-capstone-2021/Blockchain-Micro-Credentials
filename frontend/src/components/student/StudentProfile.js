@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import microcredapi from '../../apis/microcredapi'
-import "../dashboards/Dashboard.css";
 
 const StudentProfile = (props) => {
 

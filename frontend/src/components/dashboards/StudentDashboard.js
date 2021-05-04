@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import microcredapi from '../../apis/microcredapi'
-import "./Dashboard.css";
 
+const StudentDashboard = () => {
 
-const StudentDashboard = (props) => {
-  const history = useHistory()
-
+  // Set state variables for the component
   const [availableEnrolments, setAvailableEnrolments] = useState()
   const [unavailableEnrolments, setUnavailableEnrolments] = useState()
   const [unitMap, setUnitMap] = useState()
+
+  // Retrieve student's enrolments from the database and set as state variable
   useEffect(() => {
     async function initState(){
       await microcredapi.get(`/student/${window.localStorage.getItem('userId')}/enrolled`).then(response => {
@@ -22,23 +22,22 @@ const StudentDashboard = (props) => {
     initState()
   }, [])
 
+      
+  // Render the enrolments as elements of a table, render differently if enrolment is completed
   function renderEnrolments(enrolmentsArray, type) {
-    const isAvailable = type == 'AVAILABLE'? true : false
     return enrolmentsArray.map(enrolment => {
       return (
-        <tr>
-        <td scope="row">{unitMap ? unitMap[enrolment.unitId]: "Loading"}</td>
+        <tr key={enrolment.unitId} className={type === 'AVAILABLE' ? "" : "table-secondary"}>
+        <th scope="row">{unitMap ? unitMap[enrolment.unitId]: "Loading"}</th>
         <td>{enrolment.semOfEnrolment}</td>
-        <td>          {
-            isAvailable?
-            <Link to={{pathname:`/unit/${enrolment.unitId}`, state: {enrolment, unitName: unitMap ? unitMap[enrolment.unitId]: "Loading"}}} className="btn btn-primary" onClick={() => {window.localStorage.setItem('enrolmentPeriod', enrolment.semOfEnrolment)}}>Go</Link>:
-            ""
-          }</td>
-      </tr>
-      )
+        <td>{type === 'AVAILABLE' ? "Enrolled" : "Completed"}</td>
+        <td>{type === 'AVAILABLE' ? <Link to={`/unit/${enrolment.unitId}`} className="btn btn-primary" onClick={() => {window.localStorage.setItem('enrolmentPeriod', enrolment.semOfEnrolment)}}>Go</Link> : "" }</td>
+        </tr>
+    )
     })
   }
 
+  // Render the dashboard
   return (
     <div className="jumbotron align-center">
     <main role="main" >
@@ -48,33 +47,42 @@ const StudentDashboard = (props) => {
       </div>
       <section className="mb-5">
       <h2 className="mt-2">Enrolments</h2>
-      <h3 className="py-5">Available</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Course</th>
-            <th>Enrolled</th>
-            <th>Manage</th>
-          </tr>
-        </thead>
-        <tbody>
-        {availableEnrolments && availableEnrolments.length > 0 ? renderEnrolments(availableEnrolments, 'AVAILABLE') :  <tr><td colSpan="3" className="text-center p-5">There are no available enrolments.</td></tr>}
-        </tbody>
-      </table>
-      
-      <h3 className="py-5">Completed</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Course</th>
-            <th>Enrolled</th>
-            <th>Manage</th>
-          </tr>
-        </thead>
-        <tbody>
-        {unavailableEnrolments && unavailableEnrolments.length > 0 ? renderEnrolments(unavailableEnrolments, 'UNAVAILABLE') :  <tr><td colSpan="3" className="text-center p-5">There are no unavailable enrolments.</td></tr>}
-        </tbody>
-      </table>
+      <h3 className="py-2">Available</h3>
+        <div className="mt-2">
+          <div className="col-sm-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th scope="col">Course</th>
+                      <th scope="col">Enrolment Period</th>
+                      <th scope="col">Status</th>
+                      <th scope="col"> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {availableEnrolments ? renderEnrolments(availableEnrolments, 'AVAILABLE') :  "No available enrolments"}
+                </tbody>
+            </table>
+          </div>
+        </div>
+        <h3 className="py-2">Completed</h3>
+        <div className="mt-2">
+          <div className="col-sm-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Course</th>
+                        <th scope="col">Enrolment Period</th>
+                        <th scope="col">Status</th>
+                        <th scope="col"> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {unavailableEnrolments ? renderEnrolments(unavailableEnrolments, 'UNAVAILABLE') : "No unavailable enrolments"}
+                </tbody>
+            </table>
+          </div>
+        </div>
       </section>
     </main>
   </div>

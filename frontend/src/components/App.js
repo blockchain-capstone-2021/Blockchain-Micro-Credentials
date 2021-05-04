@@ -3,11 +3,9 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import "../style.css";
 import useToken from './useToken';
-
 import Header from "./templates/Header";
-import Module from "./modules/Module"
 import Login from "./Login";
-import Unit from './units/Unit'
+
 import StaffDashboard from './dashboards/StaffDashboard'
 import StudentDashboard from './dashboards/StudentDashboard'
 
@@ -15,7 +13,10 @@ import StudentProfile from "./student/StudentProfile";
 import StaffStudentManage from './student/StaffStudentManage'
 import StudentMarkEntry from './student/StudentMarkEntry'
 
+import Module from "./modules/Module"
 import StaffModuleManage from './modules/StaffModuleManage'
+import Unit from './units/Unit'
+
 import StaffQuestionManage from './questions/StaffQuestionManage'
 import StaffQuestionView from "./questions/StaffQuestionView";
 import StaffQuestionAdd from "./questions/StaffQuestionAdd";
@@ -23,7 +24,7 @@ import StaffModuleEdit from "./modules/StaffModuleEdit";
 
 const App = () => {
 
-  const [userId, setUserId] = useState()
+  const [, setUserId] = useState()
   useEffect(() => {
     setUserId(window.localStorage.getItem('userId'))
   }, [])
