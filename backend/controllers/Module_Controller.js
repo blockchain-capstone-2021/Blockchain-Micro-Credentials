@@ -133,12 +133,24 @@ async function getFinalGrade(score){
     return grade
 }
 
-const getModulesForStaff = async (req, res, next)=>{
+async function getCountOfQuestions(modules)
+{   
+    let availableQuestions = new Map()
 
+    for (const module of modules){
+        let questionCount = await dbQuestionController.getQuestionsCount(module.moduleId)
+        availableQuestions.set(module.moduleId, questionCount)
+    } 
+
+    return availableQuestions;
+}
+
+const getModulesForStaff = async (req, res, next)=>{
     try{
         let modules = await dbModuleController.getModulesByUnit(req.params.unitId)
-
+        
         res.locals.modules = modules
+        res.locals.availableQuestions = await getCountOfQuestions(modules)
         res.locals.success = true
     }
     catch(err){
