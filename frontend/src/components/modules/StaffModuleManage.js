@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
 import FlashMessage from 'react-flash-message'
 
@@ -8,24 +9,29 @@ import '../../style.css'
 
 const StaffModuleManage = (props) => {
 
-    // State and history
+    const history = useHistory()
 
     const [courses, setCourses] = useState()
     const [modules, setModules] = useState()
     const [selectedCourse, setSelectedCourse] = useState()
-    const [, setUpdating] = useState(false)
+    const [updating, setUpdating] = useState(false)
     const [error, setError] = useState(true)
-    const [mounted, setMounted] = useState(true)
+    const [mounted, setMounted] = useState(false)
 
-    // API calls before the component is mounted.
     useEffect(() => {
-
-        getCourses()
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        let mounted = true
+        if(mounted){
+            if(!courses){
+                getCourses()
+            }
+        }
+        return () => {
+            mounted = false
+        }
     }, [])
 
     useEffect(() => {
+        let mounted = true
         if(mounted){
             if(!selectedCourse){
                 setModules({})
@@ -33,9 +39,8 @@ const StaffModuleManage = (props) => {
             getModules(selectedCourse)
         }
         return () => {
-            setMounted(false)
+            mounted = false
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCourse])
     
     // api calls to get data
@@ -70,16 +75,24 @@ const StaffModuleManage = (props) => {
             }
 
         } catch (error) {
-            
+            console.log(error);
         }
     }
 
     // Set selected course into state
 
+    function onCourseSelect(unitId = undefined) {
+        if(unitId){
+            setSelectedCourse(unitId)
+            window.localStorage.setItem('selectedCourse', unitId)
+        }
+        setSelectedCourse(unitId)
+    }
+
     function renderCourseOptions() {
         return courses.map(course => {
             return(
-                <option key={course.unitId} value={course.unitId}>{course.unitName}</option>
+                <option key={course.unitId} defaultValue={course.unitId} onClick={() => onCourseSelect(course.unitId)}>{course.unitName}</option>
             )
         })
     }
@@ -88,14 +101,12 @@ const StaffModuleManage = (props) => {
     //         return(
     //             <div>
     //                 <option key={course.unitId} defaultValue={course.unitId} onClick={() => onCourseSelect(course.unitId)}>{course.unitName}</option>
-    //                 {/* <button type="button" className="btn btn-primary" value={'t'} onClick={() =>onCourseSelect(course.unitId)}>{course.unitName}</button> */}
+    //                 {/* <button type="button" class="btn btn-primary" value={'t'} onClick={() =>onCourseSelect(course.unitId)}>{course.unitName}</button> */}
     //             </div>
                 
     //         )
     //     })
     // }
-
-    // Show the search form on the page
 
     function renderSearchForm() {
         return (
@@ -105,57 +116,45 @@ const StaffModuleManage = (props) => {
                     {courses ? renderCourseOptions() : 'Loading'}
                 </div> */}
                 <form className="row row-cols-lg-auto g-3 align-items-center py-2">
-                    <div className="col-lg-12">
-                        <label className="visually-hidden" htmlFor="inlineFormSelectPref">Preference</label>
-                        <select 
-                        className="form-select" 
-                        id="inlineFormSelectPref"
-                        onChange={(e) =>
-                            setSelectedCourse(
-                                e.target.options[e.target.selectedIndex].value
-                            )
-                        }
-                        defaultValue={0}
-                        >
-                        <option key="placeholder" id="placeholder-course">Select a Course</option>
+                    <div className="col-lg-8">
+                        <label className="visually-hidden" for="inlineFormSelectPref">Preference</label>
+                        <select className="form-select" id="inlineFormSelectPref">
+                        <option key="placeholder" selected id="placeholder-course" onClick={() => onCourseSelect()}>Select a Course</option>
                         {courses ? renderCourseOptions() : <option>Loading</option>}
                         </select>
                     </div>       
                 </form>
             </div>
         )
-    }       
-    // Render modules after a course has been selected.
+    }
 
     function renderModules() {
         try {
             return modules.map(module => {
                 return (
                     <tr key={module.moduleNo}>
-                    <td>{module.moduleId}</td>
-                    <td>{module.moduleName}</td>
+                    <td scope="row">{module.moduleId}</td>
+                    <td scope="row">{module.moduleName}</td>
                     <td>{module.noOfQuestions}</td>
-                    <td>{module.published === true ? 'Published' : 'Unpublished'}</td>
+                    <td>{module.published == true ? 'Published' : 'Unpublished'}</td>
                     <td>{`${module.weight}`}</td>
                     <td>
-                        {module.published === false ? 
+                        {module.published == false ? 
                             (
                                 <div className="d-flex">
-                                    <Link to={`/module/edit/${module.moduleNo}`} className="btn btn-warning  flex-fill" style={{marginRight: '1em'}}>Edit</Link>
-                                    <button type="button" className="btn btn-success flex-fill" onClick={() => manageModule('publish', module.moduleId)}>Publish</button>
+                                    <Link to={`/module/edit/${module.moduleNo}`} class="btn btn-warning align-button-right">Edit</Link>
+                                    <button type="button" class="btn btn-success" onClick={() => manageModule('publish', module.moduleId)}>Publish</button>
                                 </div>
                             )
                         : 
-                        <div className="d-flex">
-                            <button type="button" className="btn btn-danger flex-fill" onClick={() => manageModule('unpublish', module.moduleId)}>Unpublish</button>
-                        </div>
+                        <button type="button" class="btn btn-danger" onClick={() => manageModule('unpublish', module.moduleId)}>Unpublish</button>
                         }
                     </td>
                 </tr>
                 )
             })
         } catch (error) {
-            
+            console.log(error);
         }
     }
 
@@ -170,16 +169,14 @@ const StaffModuleManage = (props) => {
             <section>
             {
                 error.status ?
-                <FlashMessage duration={80000}>
-                <div className="my-5 text-center">
-                <strong className="alert alert-danger">{error.message}</strong>
-                </div>
+                <FlashMessage duration={5000} className="alert alert-danger">
+                <strong>{error.message}</strong>
                 </FlashMessage>:
             ''
             }
             </section>
             <section className="pb-5">
-                <table className="table">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -187,11 +184,11 @@ const StaffModuleManage = (props) => {
                             <th># of Questions</th>
                             <th>Publish</th>
                             <th>Weight</th>
-                            <th style={{width:'5%'}}>Manage</th>
+                            <th>Manage</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {modules ? renderModules() : <tr><td colSpan="6">s</td></tr>}
+                        {modules ? renderModules() : ''}
                         
                     </tbody>
                 </table>
