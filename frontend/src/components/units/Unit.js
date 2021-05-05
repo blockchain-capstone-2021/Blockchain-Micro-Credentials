@@ -79,7 +79,7 @@ const Unit = (props) => {
     // Renders final grade in desired format
     function renderGrade() {
         return (
-            <h5> Current Grade:  {grade.cumulativeScore},   {grade.finalGrade}</h5>
+            <h5> Current Grade:  {`${grade.cumulativeScore}%`},   {grade.finalGrade}</h5>
         )
     }
 

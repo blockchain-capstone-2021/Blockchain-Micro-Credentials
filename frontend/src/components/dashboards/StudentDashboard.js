@@ -60,7 +60,7 @@ const StudentDashboard = () => {
                     </tr>
                 </thead>
                 <tbody>
-                  {availableEnrolments ? renderEnrolments(availableEnrolments, 'AVAILABLE') :  "No available enrolments"}
+                  {availableEnrolments && availableEnrolments.length > 0 ? renderEnrolments(availableEnrolments, 'AVAILABLE') :  "No available enrolments"}
                 </tbody>
             </table>
           </div>
@@ -78,7 +78,7 @@ const StudentDashboard = () => {
                     </tr>
                 </thead>
                 <tbody>
-                  {unavailableEnrolments ? renderEnrolments(unavailableEnrolments, 'UNAVAILABLE') : "No unavailable enrolments"}
+                  {unavailableEnrolments && unavailableEnrolments.length > 0 ? renderEnrolments(unavailableEnrolments, 'UNAVAILABLE') : "No unavailable enrolments"}
                 </tbody>
             </table>
           </div>

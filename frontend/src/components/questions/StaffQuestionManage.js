@@ -245,7 +245,7 @@ function displayDeleteModal(type, history, redirect) {
                     </tr>
                 </thead>
                 <tbody>
-                    {questions ? renderQuestions(): <tr><td colSpan="4" className="p-5 text-center">There are no questions for this module</td></tr>}
+                    {questions && questions.length > 0 ? renderQuestions(): <tr><td colSpan="4" className="p-5 text-center">There are no questions for this module</td></tr>}
                 </tbody>
             </table>
           </div>

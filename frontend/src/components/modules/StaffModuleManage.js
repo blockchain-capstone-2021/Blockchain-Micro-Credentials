@@ -170,7 +170,7 @@ const StaffModuleManage = (props) => {
             <section>
             {
                 error.status ?
-                <FlashMessage duration={80000}>
+                <FlashMessage duration={8000}>
                 <div className="my-5 text-center">
                 <strong className="alert alert-danger">{error.message}</strong>
                 </div>
@@ -191,7 +191,7 @@ const StaffModuleManage = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {modules ? renderModules() : <tr><td colSpan="6">s</td></tr>}
+                        {modules && modules.length > 0 ? renderModules() : <tr><td colSpan="6" className="p-5 text-center">No modules for the selected course</td></tr>}
                         
                     </tbody>
                 </table>
