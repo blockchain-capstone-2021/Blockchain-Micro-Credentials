@@ -45,7 +45,7 @@ const StaffStudentManage = () => {
     function renderUnitOptions() {
         return courses.map((course) => {
           return (
-            <option key={course.unitId} defaultValue={course.unitId}>
+            <option key={course.unitId} value={course.unitId}>
               {course.unitName}
             </option>
           );
