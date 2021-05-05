@@ -5,13 +5,17 @@ import '../../style.css'
 
 const StaffQuestionView = (props) => {
 
+    // State variables
+
     const [question, setQuestion] = useState()
     const [hasAnswers, setHasAnswers] = useState(false)
 
+    // Get question data from previous page
     useEffect(() => {
         setQuestion({...props.location.state.question})
     }, [])
 
+    // API call to get answers
     useEffect(() => {
         async function getAnswers() {
             let updatedQuestion;
@@ -26,6 +30,7 @@ const StaffQuestionView = (props) => {
         }
     },[question])
 
+    // Render Answer and true/false pair
     function renderAnswerView(answer, key) {
         const trueAnswer = key === 0 ? 'TRUE' : "FALSE"
         return (
@@ -54,16 +59,19 @@ const StaffQuestionView = (props) => {
         )
     }
 
+    // Render the answers on the page
     function renderAnswers() {
         return question.answers.map((answer, key) => {
             return renderAnswerView(answer, key)
         })
     }
+
+    // Render the question data
     function renderQuestionData(){
         return (
             <div className="align-center">
                     <div>
-                        <h1>Question {question.questionId}</h1>
+                        <h1>Question Details</h1>
                         <form>
                         <div className="form-group py-3">
                             <label for="qid">Question ID</label>

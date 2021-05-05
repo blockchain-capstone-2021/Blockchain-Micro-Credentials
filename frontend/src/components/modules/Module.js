@@ -6,10 +6,12 @@ import Answer from './Answer'
 
 const Module = (props) => {
 
+    // State variables
     const [questions, setQuestions] = useState()
     const [submitting, setSubmitting] = useState(false)
     const history = useHistory()
 
+    // API call to get questions and answers for the module quiz
     useEffect(() => {
         window.localStorage.setItem('moduleId', props.match.params.moduleId)
         async function getQuestionsAndAnswers() {
@@ -31,7 +33,7 @@ const Module = (props) => {
     }, [])
 
 
-
+    // Displays the questions in the quiz
     function renderQuestions() {
         return questions.map((question, key) => {
             return (
@@ -43,6 +45,7 @@ const Module = (props) => {
         })
     }
 
+    // Submites the module once user has click the submit button
     async function submitModule(e) {
         e.preventDefault()
         setSubmitting(true)
@@ -52,6 +55,7 @@ const Module = (props) => {
         })
         setSubmitting(false)
     }
+    
     
     function generateModuleSubmissionPayload(e) {
         const qa_pair = generateQAPair(e)

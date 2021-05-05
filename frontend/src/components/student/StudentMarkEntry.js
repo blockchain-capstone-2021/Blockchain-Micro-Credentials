@@ -3,11 +3,14 @@ import {  useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
 
 const StudentMarkEntry = (props) => {
+
+    // State variables
     const history = useHistory();
     const [student, setStudent] = useState()
     const [finalMark, setFinalMark] = useState()
     const [submitting, setSubmitting] = useState(false)
 
+    // API call to get student data
     useEffect(() => {
         async function getStudent() {
             const response = await microcredapi.get(`/student/${props.match.params.studentId}`).then(response => response.data.student)
@@ -15,6 +18,8 @@ const StudentMarkEntry = (props) => {
         }
         getStudent()
     }, [])
+
+    // Submits final mark for student
 
     async function onSubmit(e) {
         e.preventDefault();

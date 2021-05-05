@@ -6,6 +6,7 @@ import '../../style.css'
 
 const StaffQuestionManage = () => {
 
+  // State Variables
   const history = useHistory()
   const [courses, setCourses] = useState();
   const [selectedCourse, setSelectedCourse] = useState();
@@ -14,6 +15,7 @@ const StaffQuestionManage = () => {
   const [questions, setQuestions] = useState()
   const [redirect, setRedirect] = useState()
   
+  // Set state before component mount
   useEffect(() => {
     setSelectedCourse(window.localStorage.getItem('selectedCourse') ? window.localStorage.getItem('selectedCourse') : undefined)
     setSelectedModule(window.localStorage.getItem('selectedModule') ? window.localStorage.getItem('selectedModule') : undefined)
@@ -23,6 +25,7 @@ const StaffQuestionManage = () => {
     }
   }, [])
 
+  // APi call to get data
   useEffect(() => {
     async function getCourses() {
       const units = await microcredapi
@@ -65,6 +68,7 @@ const StaffQuestionManage = () => {
     window.localStorage.setItem('selectedModule',selectedModule)
   }, [selectedModule]);
 
+  // Render units as options on the webpage
   function renderUnitOptions() {
     const courseSelected =  window.localStorage.getItem('selectedCourse') ? true : false
     return courses.map((course) => {
@@ -76,6 +80,7 @@ const StaffQuestionManage = () => {
     });
   }
 
+  // Render modules as options in the dropdown of the search form
   function renderModuleOptions() {
     const moduleSelected =  window.localStorage.getItem('selectedModule') ? true : false
     return modules.map((_module) => {
@@ -88,6 +93,7 @@ const StaffQuestionManage = () => {
     });
   }
 
+  // Render questions as table rows on the webpage
   function renderQuestions() {
       return questions.map((_question) => {
           return (
@@ -108,6 +114,7 @@ const StaffQuestionManage = () => {
       })
   }
 
+  // Injects relevant delete data into the modal
 function displayDeleteModal(type, history, redirect) {
         const confId = type === 'DELETE_ALL' ? 'deleteConfAll' : 'deleteConf'
         const el = document.getElementById(confId)
@@ -144,6 +151,7 @@ function displayDeleteModal(type, history, redirect) {
         })
     }
 
+    // Function to render the modal popup.
     function renderModal(modType) {
       const isDeleteAll = modType == 'DELETE_ALL' ? 'deleteConfAll' : 'deleteConf'
       return (

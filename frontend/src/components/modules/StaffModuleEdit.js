@@ -5,6 +5,8 @@ import '../../style.css'
 
 const StaffModuleEdit = (props) => {
 
+    // State variables
+
     const history = useHistory()
     const [module, setModule] = useState()
     const [newQuestionCount, setNewQuestionCount] = useState()
@@ -34,7 +36,6 @@ const StaffModuleEdit = (props) => {
             }
         }
         changeNoOfQuestions()
-
     }
 
     // method for form

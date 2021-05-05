@@ -9,6 +9,7 @@ import '../../style.css'
 
 const StaffModuleManage = (props) => {
 
+    // State and history
     const history = useHistory()
 
     const [courses, setCourses] = useState()
@@ -18,6 +19,7 @@ const StaffModuleManage = (props) => {
     const [error, setError] = useState(true)
     const [mounted, setMounted] = useState(false)
 
+    // API calls before the component is mounted.
     useEffect(() => {
         let mounted = true
         if(mounted){
@@ -108,6 +110,8 @@ const StaffModuleManage = (props) => {
     //     })
     // }
 
+    // Show the search form on the page
+
     function renderSearchForm() {
         return (
             <div>
@@ -127,6 +131,8 @@ const StaffModuleManage = (props) => {
             </div>
         )
     }
+
+    // Render modules after a course has been selected.
 
     function renderModules() {
         try {
@@ -159,7 +165,7 @@ const StaffModuleManage = (props) => {
             console.log(error);
         }
     }
-
+    
     return (
         <div className="align-center">
             <section className="pb-5">
