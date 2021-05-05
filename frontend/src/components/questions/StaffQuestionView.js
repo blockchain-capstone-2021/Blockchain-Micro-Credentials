@@ -13,6 +13,7 @@ const StaffQuestionView = (props) => {
     // Get question data from previous page
     useEffect(() => {
         setQuestion({...props.location.state.question})
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // API call to get answers
@@ -28,6 +29,7 @@ const StaffQuestionView = (props) => {
         if(!hasAnswers){
             getAnswers()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[question])
 
     // Render Answer and true/false pair
@@ -74,15 +76,15 @@ const StaffQuestionView = (props) => {
                         <h1>Question Details</h1>
                         <form>
                         <div className="form-group py-3">
-                            <label for="qid">Question ID</label>
+                            <label htmlFor="qid">Question ID</label>
                             <input type="text" className="form-control" id="qid"  value={question.questionId} disabled/>
                         </div>
                         <div className="form-group py-3">
-                            <label for="mid">Module ID</label>
+                            <label htmlFor="mid">Module ID</label>
                             <input type="text" className="form-control" id="mid"  value={question.moduleId} disabled/>
                         </div>
                         <div className="form-group py-3">
-                            <label for="content">Content</label>
+                            <label htmlFor="content">Content</label>
                             <input type="text" className="form-control" id="content"  value={question.content} disabled/>
                         </div>
                         <div className="py-3">

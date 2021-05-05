@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import microcredapi from '../../apis/microcredapi'
 
 const StudentDashboard = () => {
@@ -50,7 +50,7 @@ const StudentDashboard = () => {
       <h3 className="py-2">Available</h3>
         <div className="mt-2">
           <div className="col-sm-12">
-            <table class="table">
+            <table className="table">
                 <thead>
                     <tr>
                       <th scope="col">Course</th>
@@ -68,7 +68,7 @@ const StudentDashboard = () => {
         <h3 className="py-2">Completed</h3>
         <div className="mt-2">
           <div className="col-sm-12">
-            <table class="table">
+            <table className="table">
                 <thead>
                     <tr>
                         <th scope="col">Course</th>

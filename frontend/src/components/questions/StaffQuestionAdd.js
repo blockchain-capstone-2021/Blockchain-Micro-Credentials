@@ -7,7 +7,7 @@ const StaffQuestionAdd = (props) => {
   
   // state variables
   const history = useHistory()
-  const [selectedCourse, setSelectedCourse] = useState();
+  const [selectedCourse, ] = useState();
   const [, setModules] = useState();
   const [payload, setPayload] = useState(
     {
@@ -23,7 +23,7 @@ const StaffQuestionAdd = (props) => {
   // API calls to get course and module information
   useEffect(() => {
     async function getCourses() {
-      const units = await microcredapi
+      await microcredapi
         .get(`/unit/${window.localStorage.getItem("userId")}`)
         .then((response) => response.data.units);
     }

@@ -57,21 +57,21 @@ function displayDeleteModal(type, history, redirect) {
 function renderQuestionViewModal() {
     
     return (
-        <div class="modal fade" id="questionDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div className="modal fade" id="questionDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div className="modal-dialog" role="document">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title" id="exampleModalLongTitle">Modal title</h5>
+          <button type="button" className="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div className="modal-body">
         <p>Question ID:<span id="qid"></span></p>
         <p>Module ID:<span id="mid"></span></p>
         <p>Content:<span id="qcontent"></span></p>
             <h6>Answers</h6>
-          <table class="table">
+          <table className="table">
               <thead>
                   <tr>
                       <th>Content</th>
@@ -80,26 +80,26 @@ function renderQuestionViewModal() {
               </thead>
               <tbody>
                   <tr>
-                      <td scope="row" id="acontent1"></td>
+                      <td id="acontent1"></td>
                       <td id="aCorrect1"></td>
                   </tr>
                   <tr>
-                      <td scope="row" id="acontent2"></td>
+                      <td id="acontent2"></td>
                       <td id="aCorrect2"></td>
                   </tr>
                   <tr>
-                      <td scope="row" id="acontent3"></td>
+                      <td id="acontent3"></td>
                       <td id="aCorrect3"></td>
                   </tr>
                   <tr>
-                      <td scope="row" id="acontent4"></td>
+                      <td id="acontent4"></td>
                       <td id="aCorrect4"></td>
                   </tr>
               </tbody>
           </table>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -108,7 +108,7 @@ function renderQuestionViewModal() {
   }
 
   function renderModal(modType) {
-    const isDeleteAll = modType == 'DELETE_ALL' ? 'deleteConfAll' : 'deleteConf'
+    const isDeleteAll = modType === 'DELETE_ALL' ? 'deleteConfAll' : 'deleteConf'
     return (
       <div className="modal fade" id={isDeleteAll} tabIndex="-1" aria-labelledby="deleteConf" aria-hidden="true">
       <div className="modal-dialog">

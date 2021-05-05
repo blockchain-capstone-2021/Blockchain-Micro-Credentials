@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
 import FlashMessage from 'react-flash-message'
 
@@ -10,30 +9,30 @@ import '../../style.css'
 const StaffModuleManage = (props) => {
 
     // State and history
-    const history = useHistory()
 
     const [courses, setCourses] = useState()
     const [modules, setModules] = useState()
     const [selectedCourse, setSelectedCourse] = useState()
-    const [updating, setUpdating] = useState(false)
+    const [, setUpdating] = useState(false)
     const [error, setError] = useState(true)
     const [mounted, setMounted] = useState(false)
 
     // API calls before the component is mounted.
     useEffect(() => {
-        let mounted = true
+
         if(mounted){
             if(!courses){
                 getCourses()
             }
         }
         return () => {
-            mounted = false
+            setMounted(false)
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
-        let mounted = true
         if(mounted){
             if(!selectedCourse){
                 setModules({})
@@ -41,8 +40,9 @@ const StaffModuleManage = (props) => {
             getModules(selectedCourse)
         }
         return () => {
-            mounted = false
+            setMounted(false)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCourse])
     
     // api calls to get data
@@ -103,7 +103,7 @@ const StaffModuleManage = (props) => {
     //         return(
     //             <div>
     //                 <option key={course.unitId} defaultValue={course.unitId} onClick={() => onCourseSelect(course.unitId)}>{course.unitName}</option>
-    //                 {/* <button type="button" class="btn btn-primary" value={'t'} onClick={() =>onCourseSelect(course.unitId)}>{course.unitName}</button> */}
+    //                 {/* <button type="button" className="btn btn-primary" value={'t'} onClick={() =>onCourseSelect(course.unitId)}>{course.unitName}</button> */}
     //             </div>
                 
     //         )
@@ -121,9 +121,9 @@ const StaffModuleManage = (props) => {
                 </div> */}
                 <form className="row row-cols-lg-auto g-3 align-items-center py-2">
                     <div className="col-lg-12">
-                        <label className="visually-hidden" for="inlineFormSelectPref">Preference</label>
+                        <label className="visually-hidden" htmlFor="inlineFormSelectPref">Preference</label>
                         <select className="form-select" id="inlineFormSelectPref">
-                        <option key="placeholder" selected id="placeholder-course" onClick={() => onCourseSelect()}>Select a Course</option>
+                        <option key="placeholder" id="placeholder-course" onClick={() => onCourseSelect()}>Select a Course</option>
                         {courses ? renderCourseOptions() : <option>Loading</option>}
                         </select>
                     </div>       
@@ -139,22 +139,22 @@ const StaffModuleManage = (props) => {
             return modules.map(module => {
                 return (
                     <tr key={module.moduleNo}>
-                    <td scope="row">{module.moduleId}</td>
-                    <td scope="row">{module.moduleName}</td>
+                    <td>{module.moduleId}</td>
+                    <td>{module.moduleName}</td>
                     <td>{module.noOfQuestions}</td>
-                    <td>{module.published == true ? 'Published' : 'Unpublished'}</td>
+                    <td>{module.published === true ? 'Published' : 'Unpublished'}</td>
                     <td>{`${module.weight}`}</td>
                     <td>
-                        {module.published == false ? 
+                        {module.published === false ? 
                             (
                                 <div className="d-flex">
-                                    <Link to={`/module/edit/${module.moduleNo}`} class="btn btn-warning  flex-fill" style={{marginRight: '1em'}}>Edit</Link>
-                                    <button type="button" class="btn btn-success flex-fill" onClick={() => manageModule('publish', module.moduleId)}>Publish</button>
+                                    <Link to={`/module/edit/${module.moduleNo}`} className="btn btn-warning  flex-fill" style={{marginRight: '1em'}}>Edit</Link>
+                                    <button type="button" className="btn btn-success flex-fill" onClick={() => manageModule('publish', module.moduleId)}>Publish</button>
                                 </div>
                             )
                         : 
                         <div className="d-flex">
-                            <button type="button" class="btn btn-danger flex-fill" onClick={() => manageModule('unpublish', module.moduleId)}>Unpublish</button>
+                            <button type="button" className="btn btn-danger flex-fill" onClick={() => manageModule('unpublish', module.moduleId)}>Unpublish</button>
                         </div>
                         }
                     </td>
@@ -186,7 +186,7 @@ const StaffModuleManage = (props) => {
             }
             </section>
             <section className="pb-5">
-                <table class="table">
+                <table className="table">
                     <thead>
                         <tr>
                             <th>#</th>

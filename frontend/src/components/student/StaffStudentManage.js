@@ -45,7 +45,7 @@ const StaffStudentManage = () => {
     function renderUnitOptions() {
         return courses.map((course) => {
           return (
-            <option key={course.unitId} value={course.unitId}>
+            <option key={course.unitId} defaultValue={course.unitId}>
               {course.unitName}
             </option>
           );
@@ -100,7 +100,7 @@ const StaffStudentManage = () => {
             <h2>Enrolled Students</h2>
             <div className="mt-4">
               <div className="col-sm-12">
-                <table class="table">
+                <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -118,7 +118,7 @@ const StaffStudentManage = () => {
             <h2>Completed Students</h2>
             <div className="mt-4">
               <div className="col-sm-12">
-                <table class="table">
+                <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>

@@ -17,6 +17,7 @@ const StudentMarkEntry = (props) => {
             setStudent(response)
         }
         getStudent()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // Submits final mark for student
