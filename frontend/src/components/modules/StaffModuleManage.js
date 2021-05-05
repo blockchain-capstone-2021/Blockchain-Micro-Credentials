@@ -142,12 +142,14 @@ const StaffModuleManage = (props) => {
                         {module.published == false ? 
                             (
                                 <div className="d-flex">
-                                    <Link to={`/module/edit/${module.moduleNo}`} class="btn btn-warning align-button-right">Edit</Link>
-                                    <button type="button" class="btn btn-success" onClick={() => manageModule('publish', module.moduleId)}>Publish</button>
+                                    <Link to={`/module/edit/${module.moduleNo}`} class="btn btn-warning  flex-fill" style={{marginRight: '1em'}}>Edit</Link>
+                                    <button type="button" class="btn btn-success flex-fill" onClick={() => manageModule('publish', module.moduleId)}>Publish</button>
                                 </div>
                             )
                         : 
-                        <button type="button" class="btn btn-danger" onClick={() => manageModule('unpublish', module.moduleId)}>Unpublish</button>
+                        <div className="d-flex">
+                            <button type="button" class="btn btn-danger flex-fill" onClick={() => manageModule('unpublish', module.moduleId)}>Unpublish</button>
+                        </div>
                         }
                     </td>
                 </tr>
@@ -184,7 +186,7 @@ const StaffModuleManage = (props) => {
                             <th># of Questions</th>
                             <th>Publish</th>
                             <th>Weight</th>
-                            <th>Manage</th>
+                            <th style={{width:'5%'}}>Manage</th>
                         </tr>
                     </thead>
                     <tbody>
