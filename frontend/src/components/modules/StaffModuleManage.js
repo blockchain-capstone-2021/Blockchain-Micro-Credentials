@@ -116,7 +116,7 @@ const StaffModuleManage = (props) => {
                     {courses ? renderCourseOptions() : 'Loading'}
                 </div> */}
                 <form className="row row-cols-lg-auto g-3 align-items-center py-2">
-                    <div className="col-lg-8">
+                    <div className="col-lg-12">
                         <label className="visually-hidden" for="inlineFormSelectPref">Preference</label>
                         <select className="form-select" id="inlineFormSelectPref">
                         <option key="placeholder" selected id="placeholder-course" onClick={() => onCourseSelect()}>Select a Course</option>
@@ -171,8 +171,10 @@ const StaffModuleManage = (props) => {
             <section>
             {
                 error.status ?
-                <FlashMessage duration={5000} className="alert alert-danger">
-                <strong>{error.message}</strong>
+                <FlashMessage duration={80000}>
+                <div className="my-5 text-center">
+                <strong className="alert alert-danger">{error.message}</strong>
+                </div>
                 </FlashMessage>:
             ''
             }
