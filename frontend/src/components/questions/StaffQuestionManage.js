@@ -53,7 +53,7 @@ const StaffQuestionManage = () => {
         setQuestions(undefined)        
       }
     } catch (error) {
-      console.log(error)
+      
     }
 
   }, [selectedCourse]);

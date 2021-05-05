@@ -77,7 +77,7 @@ const StaffModuleManage = (props) => {
             }
 
         } catch (error) {
-            console.log(error);
+            
         }
     }
 
@@ -162,10 +162,10 @@ const StaffModuleManage = (props) => {
                 )
             })
         } catch (error) {
-            console.log(error);
+            
         }
     }
-    
+
     return (
         <div className="align-center">
             <section className="pb-5">

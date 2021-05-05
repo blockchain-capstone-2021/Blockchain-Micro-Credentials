@@ -20,7 +20,7 @@ const Unit = (props) => {
         async function getModules(){
             await microcredapi.get(`/unit/${unitId}/${window.localStorage.getItem('userId')}`).then(response => {
                 const updatedModules = []
-                console.log(response.data)
+                
                 const grade = {
                     finalGrade: response.data.finalGrade,
                     cumulativeScore: response.data.cumulativeScore
