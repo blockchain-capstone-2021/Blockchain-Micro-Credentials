@@ -20,7 +20,7 @@ const Unit = (props) => {
         async function getModules(){
             await microcredapi.get(`/unit/${unitId}/${window.localStorage.getItem('userId')}`).then(response => {
                 const updatedModules = []
-                
+                console.log(response.data)
                 const grade = {
                     finalGrade: response.data.finalGrade,
                     cumulativeScore: response.data.cumulativeScore
@@ -34,14 +34,12 @@ const Unit = (props) => {
                         
                     }
                     updatedModules.push(newModule)
-                    return true
                 })
                 setModules(updatedModules)
                 setGrade(grade)
             })
         }
         getModules()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -119,24 +117,24 @@ const Unit = (props) => {
                     </div>
                     <div className="d-flex">
                         <div style={{marginLeft:'auto', marginRight:'4em', paddingBottom:'5%'}}>
-                            <button type="button" name="" id="" className="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
+                            <button type="button" name="" id="" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
                         </div>
                     </div>
                 </section>
 
-                <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Submit Modules?</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Submit Modules?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div className="modal-body">
+                        <div class="modal-body">
                             Are you sure that you want to submit modules?<br/> Once submitted, you will no longer be able to take quizs for this course.
                         </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-success"  data-bs-dismiss="modal" onClick={() => submitMicroCredential()}>Submit</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success"  data-bs-dismiss="modal" onClick={() => submitMicroCredential()}>Submit</button>
                         </div>
                         </div>
                     </div>

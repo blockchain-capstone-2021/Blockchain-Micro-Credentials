@@ -1,6 +1,6 @@
 import React from 'react'
 
-// Small prop to render the answer inputs for each question.
+
 
 const Answer = (props) => {
 
