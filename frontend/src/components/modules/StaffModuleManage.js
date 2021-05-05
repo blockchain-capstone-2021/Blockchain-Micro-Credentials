@@ -15,19 +15,12 @@ const StaffModuleManage = (props) => {
     const [selectedCourse, setSelectedCourse] = useState()
     const [, setUpdating] = useState(false)
     const [error, setError] = useState(true)
-    const [mounted, setMounted] = useState(false)
+    const [mounted, setMounted] = useState(true)
 
     // API calls before the component is mounted.
     useEffect(() => {
 
-        if(mounted){
-            if(!courses){
-                getCourses()
-            }
-        }
-        return () => {
-            setMounted(false)
-        }
+        getCourses()
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -83,18 +76,10 @@ const StaffModuleManage = (props) => {
 
     // Set selected course into state
 
-    function onCourseSelect(unitId = undefined) {
-        if(unitId){
-            setSelectedCourse(unitId)
-            window.localStorage.setItem('selectedCourse', unitId)
-        }
-        setSelectedCourse(unitId)
-    }
-
     function renderCourseOptions() {
         return courses.map(course => {
             return(
-                <option key={course.unitId} defaultValue={course.unitId} onClick={() => onCourseSelect(course.unitId)}>{course.unitName}</option>
+                <option key={course.unitId} value={course.unitId}>{course.unitName}</option>
             )
         })
     }
@@ -122,16 +107,24 @@ const StaffModuleManage = (props) => {
                 <form className="row row-cols-lg-auto g-3 align-items-center py-2">
                     <div className="col-lg-12">
                         <label className="visually-hidden" htmlFor="inlineFormSelectPref">Preference</label>
-                        <select className="form-select" id="inlineFormSelectPref">
-                        <option key="placeholder" id="placeholder-course" onClick={() => onCourseSelect()}>Select a Course</option>
+                        <select 
+                        className="form-select" 
+                        id="inlineFormSelectPref"
+                        onChange={(e) =>
+                            setSelectedCourse(
+                                e.target.options[e.target.selectedIndex].value
+                            )
+                        }
+                        defaultValue={0}
+                        >
+                        <option key="placeholder" id="placeholder-course">Select a Course</option>
                         {courses ? renderCourseOptions() : <option>Loading</option>}
                         </select>
                     </div>       
                 </form>
             </div>
         )
-    }
-
+    }       
     // Render modules after a course has been selected.
 
     function renderModules() {
@@ -198,7 +191,7 @@ const StaffModuleManage = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {modules ? renderModules() : ''}
+                        {modules ? renderModules() : <tr><td colSpan="6">s</td></tr>}
                         
                     </tbody>
                 </table>
