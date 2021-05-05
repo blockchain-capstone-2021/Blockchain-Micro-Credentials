@@ -5,13 +5,18 @@ import '../../style.css'
 
 const StaffQuestionView = (props) => {
 
+    // State variables
+
     const [question, setQuestion] = useState()
     const [hasAnswers, setHasAnswers] = useState(false)
 
+    // Get question data from previous page
     useEffect(() => {
         setQuestion({...props.location.state.question})
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    // API call to get answers
     useEffect(() => {
         async function getAnswers() {
             let updatedQuestion;
@@ -24,8 +29,10 @@ const StaffQuestionView = (props) => {
         if(!hasAnswers){
             getAnswers()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[question])
 
+    // Render Answer and true/false pair
     function renderAnswerView(answer, key) {
         const trueAnswer = key === 0 ? 'TRUE' : "FALSE"
         return (
@@ -54,27 +61,30 @@ const StaffQuestionView = (props) => {
         )
     }
 
+    // Render the answers on the page
     function renderAnswers() {
         return question.answers.map((answer, key) => {
             return renderAnswerView(answer, key)
         })
     }
+
+    // Render the question data
     function renderQuestionData(){
         return (
             <div className="align-center">
                     <div>
-                        <h1>Question {question.questionId}</h1>
+                        <h1>Question Details</h1>
                         <form>
                         <div className="form-group py-3">
-                            <label for="qid">Question ID</label>
+                            <label htmlFor="qid">Question ID</label>
                             <input type="text" className="form-control" id="qid"  value={question.questionId} disabled/>
                         </div>
                         <div className="form-group py-3">
-                            <label for="mid">Module ID</label>
+                            <label htmlFor="mid">Module ID</label>
                             <input type="text" className="form-control" id="mid"  value={question.moduleId} disabled/>
                         </div>
                         <div className="form-group py-3">
-                            <label for="content">Content</label>
+                            <label htmlFor="content">Content</label>
                             <input type="text" className="form-control" id="content"  value={question.content} disabled/>
                         </div>
                         <div className="py-3">
