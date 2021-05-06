@@ -49,7 +49,6 @@ const StaffModuleManage = (props) => {
     
     async function getModules(unitId) {
         return await microcredapi.get(`module/${unitId}`).then(response => {
-            console.log(response.data.availableQuestions);
             setAvailableQuestions(response.data.availableQuestions);
             setModules(response.data.modules);
         })
