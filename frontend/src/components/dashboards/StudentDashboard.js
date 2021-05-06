@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import microcredapi from '../../apis/microcredapi'
 
 const StudentDashboard = () => {
@@ -13,7 +13,7 @@ const StudentDashboard = () => {
   useEffect(() => {
     async function initState(){
       await microcredapi.get(`/student/${window.localStorage.getItem('userId')}/enrolled`).then(response => {
-        console.log(response.data);
+        
         setUnavailableEnrolments(response.data.enrolments.unavailable ? response.data.enrolments.unavailable: undefined)
         setAvailableEnrolments(response.data.enrolments.available ? response.data.enrolments.available: undefined)
         setUnitMap(response.data.unitMap)
@@ -50,7 +50,7 @@ const StudentDashboard = () => {
       <h3 className="py-2">Available</h3>
         <div className="mt-2">
           <div className="col-sm-12">
-            <table class="table">
+            <table className="table">
                 <thead>
                     <tr>
                       <th scope="col">Course</th>
@@ -60,7 +60,7 @@ const StudentDashboard = () => {
                     </tr>
                 </thead>
                 <tbody>
-                  {availableEnrolments ? renderEnrolments(availableEnrolments, 'AVAILABLE') :  "No available enrolments"}
+                  {availableEnrolments && availableEnrolments.length > 0 ? renderEnrolments(availableEnrolments, 'AVAILABLE') :  "No available enrolments"}
                 </tbody>
             </table>
           </div>
@@ -68,7 +68,7 @@ const StudentDashboard = () => {
         <h3 className="py-2">Completed</h3>
         <div className="mt-2">
           <div className="col-sm-12">
-            <table class="table">
+            <table className="table">
                 <thead>
                     <tr>
                         <th scope="col">Course</th>
@@ -78,7 +78,7 @@ const StudentDashboard = () => {
                     </tr>
                 </thead>
                 <tbody>
-                  {unavailableEnrolments ? renderEnrolments(unavailableEnrolments, 'UNAVAILABLE') : "No unavailable enrolments"}
+                  {unavailableEnrolments && unavailableEnrolments.length > 0 ? renderEnrolments(unavailableEnrolments, 'UNAVAILABLE') : "No unavailable enrolments"}
                 </tbody>
             </table>
           </div>

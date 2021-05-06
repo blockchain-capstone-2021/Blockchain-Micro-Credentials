@@ -7,7 +7,8 @@ router.get('/:unitId', getModulesForStaff, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success,
-            modules: res.locals.modules
+            modules: res.locals.modules,
+            availableQuestions: Object.fromEntries(res.locals.availableQuestions)
         })
     }
     return res.status(400).send({
