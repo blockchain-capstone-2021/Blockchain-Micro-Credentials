@@ -91,7 +91,7 @@ const Module = (props) => {
                 submitting?
                 "Please hold while the quiz is processing.":
                 <form className="w-75">
-                <h1>Module {props.match.params.moduleId} Quiz</h1>
+                <h1>Module Quiz</h1>
                 <h4>Attempt: #{props.location.attemptNumber+1}</h4>
                 {questions ? renderQuestions() : 'Loading'}
                 <button type="submit" className="btn btn-primary py-3" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
