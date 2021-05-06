@@ -17,8 +17,6 @@ const StaffQuestionManage = () => {
   
   // Set state before component mount
   useEffect(() => {
-    setSelectedCourse(window.localStorage.getItem('selectedCourse') ? window.localStorage.getItem('selectedCourse') : undefined)
-    setSelectedModule(window.localStorage.getItem('selectedModule') ? window.localStorage.getItem('selectedModule') : undefined)
     return () => {
       setSelectedCourse({})
       setSelectedModule({})

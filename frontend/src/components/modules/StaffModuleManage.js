@@ -12,6 +12,7 @@ const StaffModuleManage = (props) => {
 
     const [courses, setCourses] = useState()
     const [modules, setModules] = useState()
+    const [availableQuestions, setAvailableQuestions] = useState([])
     const [selectedCourse, setSelectedCourse] = useState()
     const [, setUpdating] = useState(false)
     const [error, setError] = useState(true)
@@ -48,7 +49,8 @@ const StaffModuleManage = (props) => {
     
     async function getModules(unitId) {
         return await microcredapi.get(`module/${unitId}`).then(response => {
-            setModules(response.data.modules)
+            setAvailableQuestions(response.data.availableQuestions);
+            setModules(response.data.modules);
         })
     }
 
@@ -134,6 +136,7 @@ const StaffModuleManage = (props) => {
                     <tr key={module.moduleNo}>
                     <td>{module.moduleId}</td>
                     <td>{module.moduleName}</td>
+                    <td>{getAvailableQuestions(module.moduleNo)}</td>
                     <td>{module.noOfQuestions}</td>
                     <td>{module.published === true ? 'Published' : 'Unpublished'}</td>
                     <td>{`${module.weight}`}</td>
@@ -159,6 +162,10 @@ const StaffModuleManage = (props) => {
         }
     }
 
+    function getAvailableQuestions(moduleNo){
+        return availableQuestions[moduleNo]
+    }
+
     return (
         <div className="align-center">
             <section className="pb-5">
@@ -172,7 +179,7 @@ const StaffModuleManage = (props) => {
                 error.status ?
                 <FlashMessage duration={8000}>
                 <div className="my-5 text-center">
-                <strong className="alert alert-danger">{error.message}</strong>
+                <p className="alert alert-danger text-break">{error.message}</p>
                 </div>
                 </FlashMessage>:
             ''
@@ -184,7 +191,8 @@ const StaffModuleManage = (props) => {
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th># of Questions</th>
+                            <th>Questions Written</th>
+                            <th>Question Bank Size</th>
                             <th>Publish</th>
                             <th>Weight</th>
                             <th style={{width:'5%'}}>Manage</th>
