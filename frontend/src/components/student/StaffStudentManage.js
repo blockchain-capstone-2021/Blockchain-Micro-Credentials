@@ -4,13 +4,11 @@ import microcredapi from '../../apis/microcredapi'
 
 const StaffStudentManage = () => {
 
-    // State variables 
     const [courses, setCourses] = useState();
     const [selectedCourse, setSelectedCourse] = useState();
     const [availableStudents, setAvailableStudents] = useState();
     const [unavailableStudents, setUnavailableStudents] = useState();
 
-    // API call to get student and course information
     useEffect(() => {
         async function getCourses() {
           const units = await microcredapi
@@ -41,7 +39,6 @@ const StaffStudentManage = () => {
         if(selectedCourse){getUnavailableStudents();}
     }, [selectedCourse]);
 
-    // Return courses as selectable option for form.
     function renderUnitOptions() {
         return courses.map((course) => {
           return (
@@ -52,7 +49,6 @@ const StaffStudentManage = () => {
         });
       }
 
-    // Display courses on the webpage.
     function renderUnitInput(){
         return (
             <div className="row row-cols-lg-auto g-3 align-items-center py-2">
@@ -74,7 +70,6 @@ const StaffStudentManage = () => {
         )
     }
 
-    // Render student information as table rows on webpage
     function renderStudents(students, type) {
         return students.map(student => {
             return (
@@ -100,7 +95,7 @@ const StaffStudentManage = () => {
             <h2>Enrolled Students</h2>
             <div className="mt-4">
               <div className="col-sm-12">
-                <table className="table">
+                <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -118,7 +113,7 @@ const StaffStudentManage = () => {
             <h2>Completed Students</h2>
             <div className="mt-4">
               <div className="col-sm-12">
-                <table className="table">
+                <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>

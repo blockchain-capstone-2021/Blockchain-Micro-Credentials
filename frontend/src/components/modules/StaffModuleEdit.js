@@ -5,8 +5,6 @@ import '../../style.css'
 
 const StaffModuleEdit = (props) => {
 
-    // State variables
-
     const history = useHistory()
     const [module, setModule] = useState()
     const [newQuestionCount, setNewQuestionCount] = useState()
@@ -19,7 +17,6 @@ const StaffModuleEdit = (props) => {
             setModule(response.data.module)
         }
         getModule()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // Set noOFQuestion form input to state.
@@ -37,6 +34,7 @@ const StaffModuleEdit = (props) => {
             }
         }
         changeNoOfQuestions()
+
     }
 
     // method for form
@@ -45,33 +43,33 @@ const StaffModuleEdit = (props) => {
             return (
             <form className="align-center">
             <h1>Module Edit</h1>
-            <div className="form-group py-3">
-            <label htmlFor="qid">Module ID</label>
-            <input type="text" className="form-control" value={module.moduleNo} id="mid" disabled/>
+            <div class="form-group py-3">
+            <label for="qid">Module ID</label>
+            <input type="text" class="form-control" value={module.moduleNo} id="mid" disabled/>
             </div>
-            <div className="form-group py-3">
-            <label htmlFor="qid">Course ID</label>
-            <input type="text" className="form-control" value={module.unitId} id="cid" disabled/>
+            <div class="form-group py-3">
+            <label for="qid">Course ID</label>
+            <input type="text" class="form-control" value={module.unitId} id="cid" disabled/>
             </div>
-            <div className="form-group py-3">
-            <label htmlFor="qid">Module Name</label>
-            <input type="text" className="form-control" id="mname" value={module.moduleName} disabled/>
+            <div class="form-group py-3">
+            <label for="qid">Module Name</label>
+            <input type="text" class="form-control" id="mname" value={module.moduleName} disabled/>
             </div>
 
-            <div className="form-group py-3">
-            <label htmlFor="qid">Published</label>
-            <input type="text" className="form-control" id="mpublished" value={module.published === 0 ? 'Unpublished' : 'Published'} disabled/>
+            <div class="form-group py-3">
+            <label for="qid">Published</label>
+            <input type="text" class="form-control" id="mpublished" value={module.published == 0 ? 'Unpublished' : 'Published'} disabled/>
             </div>
-            <div className="form-group py-3">
-            <label htmlFor="mid">Weight</label>
-            <input type="text" className="form-control" id="mweight" value={`${module.weight}%`} disabled/>
+            <div class="form-group py-3">
+            <label for="mid">Weight</label>
+            <input type="text" class="form-control" id="mweight" value={`${module.weight}%`} disabled/>
             </div>
-            <div className="form-group py-3">
-            <label htmlFor="content">No of Questions</label>
-            <input type="number" min="1" className="form-control" id="mquestions" onChange={(e) => onQuestionCountChange(e)} value={newQuestionCount ? newQuestionCount : module.noOfQuestions} />
+            <div class="form-group py-3">
+            <label for="content">No of Questions</label>
+            <input type="number" min="1" class="form-control" id="mquestions" onChange={(e) => onQuestionCountChange(e)} value={newQuestionCount ? newQuestionCount : module.noOfQuestions} />
             </div>
             <div className="d-flex">
-                <button type="button" className="btn btn-primary align-button-right" onClick={(e) => onSubmit(e)}> Submit</button>
+                <button type="button" class="btn btn-primary align-button-right" onClick={(e) => onSubmit(e)}> Submit</button>
             </div>
             </form>
             )

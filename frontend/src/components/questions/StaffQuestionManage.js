@@ -6,16 +6,14 @@ import '../../style.css'
 
 const StaffQuestionManage = () => {
 
-  // State Variables
   const history = useHistory()
   const [courses, setCourses] = useState();
   const [selectedCourse, setSelectedCourse] = useState();
   const [selectedModule, setSelectedModule] = useState();
   const [modules, setModules] = useState();
   const [questions, setQuestions] = useState()
-  const [redirect, ] = useState()
+  const [redirect, setRedirect] = useState()
   
-  // Set state before component mount
   useEffect(() => {
     return () => {
       setSelectedCourse({})
@@ -23,7 +21,6 @@ const StaffQuestionManage = () => {
     }
   }, [])
 
-  // APi call to get data
   useEffect(() => {
     async function getCourses() {
       const units = await microcredapi
@@ -42,8 +39,8 @@ const StaffQuestionManage = () => {
         .then((response) => setModules(response.data.modules));
     } 
     try {
-      window.localStorage.setItem('selectedCourse',selectedCourse)
       getModules();
+      window.localStorage.setItem('selectedCourse',selectedCourse)
       if (window.localStorage.getItem('selectedCourse').startsWith('S')) {
         setSelectedCourse(undefined)
         setSelectedModule(undefined)
@@ -51,7 +48,7 @@ const StaffQuestionManage = () => {
         setQuestions(undefined)        
       }
     } catch (error) {
-      
+      console.log(error)
     }
 
   }, [selectedCourse]);
@@ -66,29 +63,29 @@ const StaffQuestionManage = () => {
     window.localStorage.setItem('selectedModule',selectedModule)
   }, [selectedModule]);
 
-  // Render units as options on the webpage
   function renderUnitOptions() {
+    const courseSelected =  window.localStorage.getItem('selectedCourse') ? true : false
     return courses.map((course) => {
       return (
-        <option key={course.unitId} value={course.unitId}>
+        <option key={course.unitId} value={course.unitId} selected={courseSelected}>
           {course.unitName}
         </option>
       );
     });
   }
 
-  // Render modules as options in the dropdown of the search form
   function renderModuleOptions() {
+    const moduleSelected =  window.localStorage.getItem('selectedModule') ? true : false
     return modules.map((_module) => {
+      const modPicked = parseInt(window.localStorage.getItem('selectedModule')) === _module.moduleId ? true : false
       return (
-        <option key={_module.moduleId} value={_module.moduleId} disabled={_module.published}>
+        <option key={_module.moduleId} value={_module.moduleId} disabled={_module.published} selected={modPicked}>
           {_module.moduleName}
         </option>
       );
     });
   }
 
-  // Render questions as table rows on the webpage
   function renderQuestions() {
       return questions.map((_question) => {
           return (
@@ -96,10 +93,10 @@ const StaffQuestionManage = () => {
                 <td>{_question.questionId}</td>
                 <td>{_question.moduleId}</td>
                 <td>{_question.content}</td>
-                <td className="d-flex">
+                <td class="d-flex">
                   <div className="align-button-right">
                   </div>
-                <Link to={{pathname: `/question/${_question.questionId}`, state:{question: _question}}} className="btn btn-warning mx-1">View</Link>
+                <Link to={{pathname: `/question/${_question.questionId}`, state:{question: _question}}} class="btn btn-warning mx-1">View</Link>
                 <button type="button" className="btn btn-danger mx-2" data-bs-questionid={_question.questionId} data-bs-moduleid={_question.moduleId} data-bs-toggle="modal"  data-bs-target="#deleteConf" onClick={displayDeleteModal('DELETE', history, redirect)}>
                     Delete
                 </button>   
@@ -109,7 +106,6 @@ const StaffQuestionManage = () => {
       })
   }
 
-  // Injects relevant delete data into the modal
 function displayDeleteModal(type, history, redirect) {
         const confId = type === 'DELETE_ALL' ? 'deleteConfAll' : 'deleteConf'
         const el = document.getElementById(confId)
@@ -125,7 +121,7 @@ function displayDeleteModal(type, history, redirect) {
             modalTitle.innerHTML = 'Delete question \'' + qid + '\'?'
             modalBodyInput.innerHTML = 'Are you sure that you want to delete question \'' + qid + '\' from module \''+ mid +'\'? This action is irreversible.'
             deleteButton.onclick = async function() {
-            await microcredapi.post(`/questions/${qid}/delete`).then(
+              const response = await microcredapi.post(`/questions/${qid}/delete`).then(
                 setTimeout(() => {
                   window.location.reload()
                 }, 2000)
@@ -146,9 +142,8 @@ function displayDeleteModal(type, history, redirect) {
         })
     }
 
-    // Function to render the modal popup.
     function renderModal(modType) {
-      const isDeleteAll = modType === 'DELETE_ALL' ? 'deleteConfAll' : 'deleteConf'
+      const isDeleteAll = modType == 'DELETE_ALL' ? 'deleteConfAll' : 'deleteConf'
       return (
         <div className="modal fade" id={isDeleteAll} tabIndex="-1" aria-labelledby="deleteConf" aria-hidden="true">
         <div className="modal-dialog">
@@ -162,7 +157,9 @@ function displayDeleteModal(type, history, redirect) {
             </div>
             <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-danger" id={`delAll_${isDeleteAll}`}  data-bs-dismiss="modal">Delete</button>
+
+                <Link className="btn btn-danger" id={`delAll_${isDeleteAll}`} data-bs-dismiss="modal">Delete</Link>
+                {/* <button type="button" className="btn btn-danger" id="del" data-bs-dismiss="modal">Delete</button> */}
             </div>
             </div>
         </div>
@@ -190,7 +187,6 @@ function displayDeleteModal(type, history, redirect) {
                 e.target.options[e.target.selectedIndex].value
               )
             }
-            defaultValue={0}
           >
             <option>Select a Course</option>
             {courses ? renderUnitOptions() : <option>Loading...</option>}
@@ -200,12 +196,10 @@ function displayDeleteModal(type, history, redirect) {
         <div className="input-group col-lg-5">
           <select className="form-select" id="course"
             onChange={(e) =>
-              setSelectedModule(
+            setSelectedModule(
                 e.target.options[e.target.selectedIndex].value
             )
-            }
-            defaultValue={0}
-            >
+            }>
             <option>Select a module</option>
             {modules ? renderModuleOptions() : <option>Loading...</option>}
           </select>
@@ -223,17 +217,17 @@ function displayDeleteModal(type, history, redirect) {
             {selectedModule?
                         <div className="d-flex">
                         <div className="align-button-right">
-                          <Link to={{pathname: '/question/create', state:{module: selectedModule, course: selectedCourse}}} className="btn btn-success">Add</Link>  
+                          <Link to={{pathname: '/question/create', state:{module: selectedModule, course: selectedCourse}}} class="btn btn-success">Add</Link>  
                         </div>
                         <div>
-                        <Link to={linkTarget} className="btn btn-danger" data-bs-toggle="modal"  data-bs-target="#deleteConfAll" data-bs-moduleid={selectedModule} onClick={displayDeleteModal('DELETE_ALL', history, redirect)}>Delete all</Link>
+                        <Link to={linkTarget} class="btn btn-danger" data-bs-toggle="modal"  data-bs-target="#deleteConfAll" data-bs-moduleid={selectedModule} onClick={displayDeleteModal('DELETE_ALL', history, redirect)}>Delete all</Link>
                         </div>
                       </div>:
                       ""}
         </div>
         <div className="mt-4">
           <div className="col-sm-12">
-            <table className="table">
+            <table class="table">
                 <thead>
                     <tr>
                         <th>ID</th>
