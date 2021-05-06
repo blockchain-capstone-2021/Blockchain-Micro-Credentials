@@ -17,7 +17,7 @@ const Login = ({ setToken }) => {
           password
         );
         
-        if(login == true) {
+        if(login === true) {
             window.localStorage.setItem('userId', username);
             // check if user is a staff or student
             username.startsWith("e") ? window.localStorage.setItem('isStaff', 'true') : window.localStorage.setItem('isStaff', 'false')
@@ -46,13 +46,13 @@ const Login = ({ setToken }) => {
             <h1 className="text-center">Login</h1>
             <form onSubmit={handleSubmit}>
                 <div className="row mb-3">
-                    <label htmlhtmlFor="inputID" className="col-sm-2 col-form-label">Username (ID)</label>
+                    <label htmlFor="inputID" className="col-sm-2 col-form-label">Username (ID)</label>
                     <div className="col-sm-10">
                     <input type="text" className="form-control" id="inputID" onChange={e => setUserName(e.target.value)}/>
                     </div>
                 </div>
                 <div className="row mb-3">
-                    <label htmlhtmlFor="inputPassword3" className="col-sm-2 col-form-label">Password</label>
+                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Password</label>
                     <div className="col-sm-10">
                     <input type="password" className="form-control" id="inputPassword3" onChange={e => setPassword(e.target.value)}/>
                     </div>

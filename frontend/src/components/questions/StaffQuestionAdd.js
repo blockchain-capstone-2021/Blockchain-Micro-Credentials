@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
-import { validate } from "uuid";
 import microcredapi from "../../apis/microcredapi";
 import '../../style.css'
 
 const StaffQuestionAdd = (props) => {
-
+  
+  // state variables
   const history = useHistory()
-  const [selectedCourse, setSelectedCourse] = useState();
-  const [modules, setModules] = useState();
+  const [selectedCourse, ] = useState();
+  const [, setModules] = useState();
   const [payload, setPayload] = useState(
     {
       questionContent:undefined,
@@ -20,9 +20,10 @@ const StaffQuestionAdd = (props) => {
     {content: undefined, isCorrect: false},
   ]})
 
+  // API calls to get course and module information
   useEffect(() => {
     async function getCourses() {
-      const units = await microcredapi
+      await microcredapi
         .get(`/unit/${window.localStorage.getItem("userId")}`)
         .then((response) => response.data.units);
     }
@@ -38,6 +39,7 @@ const StaffQuestionAdd = (props) => {
     getModules();
   }, [selectedCourse]);
 
+  // Form inputs for answer section
   function renderAnswerInput(number) {
       return (
         <div className="row g-3 py-2">
@@ -66,16 +68,19 @@ const StaffQuestionAdd = (props) => {
       )
   }
 
+  // Stores question content into state
   function onQuestionChange(e){
     setPayload({...payload, questionContent: e.target.value})
   }
 
+  // Stores answer content into state
   function onAnswerChange(e, number) {
     const newPayload = payload
     newPayload.answers[number].content = e.target.value
     setPayload({...payload})
   }
 
+  // Validates whether all relevant data has been included
   function validateData(){
     const hasQuestion = payload.questionContent ? true : false
     let hasAnswers = []
@@ -85,6 +90,7 @@ const StaffQuestionAdd = (props) => {
     return({question: hasQuestion, answers: hasAnswers.includes(false) ? false : true})
   }
 
+  // API call to create the question and add it to the module.
   function onQuestionSubmit() {
     const validate = validateData()
     if (validate.question && validate.answers) {
@@ -95,6 +101,7 @@ const StaffQuestionAdd = (props) => {
     }, 1000);
   }
 
+  // Render question form input section
   function renderQuestionInput(){
       return (
         <div className="input-group py-3">
