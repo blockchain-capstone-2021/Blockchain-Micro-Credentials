@@ -1,0 +1,23 @@
+{
+  "name": "blockchain-micro-credentials",
+  "version": "1.0.0",
+  "description": "## Backend",
+  "main": "truffle-config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blockchain-capstone-2021/Blockchain-Micro-Credentials.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blockchain-capstone-2021/Blockchain-Micro-Credentials/issues"
+  },
+  "homepage": "https://github.com/blockchain-capstone-2021/Blockchain-Micro-Credentials#readme",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^1.2.6",
+    "dotenv": "^8.2.0"
+  }
+}
