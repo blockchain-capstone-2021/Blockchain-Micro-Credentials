@@ -11,7 +11,7 @@ const StudentMarkEntry = (props) => {
     const [submitting, setSubmitting] = useState(false)
 
     // API call to get student data
-    useEffect(() => {
+    React.useEffect(() => {
         async function getStudent() {
             const response = await microcredapi.get(`/student/${props.match.params.studentId}`).then(response => response.data.student)
             setStudent(response)
@@ -37,7 +37,7 @@ const StudentMarkEntry = (props) => {
             <h1 className="mt-5">Final Mark Form</h1>
             {
                 submitting ?
-                "Please hold while the form is processing." :
+                <p>Please hold while the form is processing.</p> :
                 student ?
                 <form>
                 <fieldset className="mt-5">
@@ -67,7 +67,7 @@ const StudentMarkEntry = (props) => {
                     </div>
                 </fieldset>
                 </form> :
-                "Loading..." 
+                <p>Loading...</p>
             }
         </div>
     )
