@@ -55,6 +55,12 @@ router.get('/submit/:studentId/:unitId/:enrolmentPeriod', submitMicroCred, async
             success: res.locals.success
         })
     }
+    else if (res.locals.customError){
+        return res.status(200).send({
+            success: 'false',
+            message: res.locals.errorMessage
+        })
+    }
     return res.status(400).send({
         success: res.locals.success,
         message: 'Could not submit micro-credential. Try again.'

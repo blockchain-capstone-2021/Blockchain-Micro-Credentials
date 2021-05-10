@@ -1,27 +1,42 @@
 import React, { useEffect, useState } from 'react'
 import microcredapi from '../../apis/microcredapi'
+import { Link } from 'react-router-dom'
+import '../../style.css'
 
 const StaffQuestionView = (props) => {
 
-    const [question, setQuestion] = useState()
+    // State variables
 
+    const [question, setQuestion] = useState()
+    const [hasAnswers, setHasAnswers] = useState(false)
+
+    // Get question data from previous page
     useEffect(() => {
-        async function getQuestion() {
-            return await microcredapi.get(`/questions/${props.match.params.questionId}`).then(response => {
-                let question = response.data.question
-                const answers = microcredapi.post(`/questions/${props.match.params.questionId}/answers`).then(res => {
-                    question.answers = res.data.answers
-                    setQuestion(question)
-                })
-                
-            })
-        }
-        getQuestion()
+        setQuestion({...props.location.state.question})
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    function renderAnswerView(answer) {
+    // API call to get answers
+    useEffect(() => {
+        async function getAnswers() {
+            let updatedQuestion;
+            await microcredapi.get(`/questions/${props.match.params.questionId}/answers`).then(res => {
+                updatedQuestion = {...question, answers : res.data.answers}
+            })  
+            setQuestion(updatedQuestion);
+            setHasAnswers(true)
+        }
+        if(!hasAnswers){
+            getAnswers()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[question])
+
+    // Render Answer and true/false pair
+    function renderAnswerView(answer, key) {
+        const trueAnswer = key === 0 ? 'TRUE' : "FALSE"
         return (
-          <div className="row g-3 py-2">
+          <div className="row g-3 py-2" key={key}>
           <div className="col-sm-10">
             <input
               type="text"
@@ -38,7 +53,7 @@ const StaffQuestionView = (props) => {
               className="form-control"
               id={`answer-${answer.answerId}`}
               name={`answer-${answer.answerId}`}
-              value={answer.isCorrect === true ? 'TRUE' : 'FALSE'}
+              value={trueAnswer}
               disabled
             />
           </div>
@@ -46,46 +61,48 @@ const StaffQuestionView = (props) => {
         )
     }
 
+    // Render the answers on the page
     function renderAnswers() {
-        return question.answers.map(answer => {
-            return renderAnswerView(answer)
+        return question.answers.map((answer, key) => {
+            return renderAnswerView(answer, key)
         })
     }
+
+    // Render the question data
     function renderQuestionData(){
         return (
-            <div>
-                {
-                    question?
+            <div className="align-center">
                     <div>
-                        <h1>Question {question.questionId}</h1>
+                        <h1>Question Details</h1>
                         <form>
-                        <div class="form-group py-3">
-                            <label for="qid">Question ID</label>
-                            <input type="text" class="form-control" id="qid"  value={question.questionId} disabled/>
+                        <div className="form-group py-3">
+                            <label htmlFor="qid">Question ID</label>
+                            <input type="text" className="form-control" id="qid"  value={question.questionId} disabled/>
                         </div>
-                        <div class="form-group py-3">
-                            <label for="mid">Module ID</label>
-                            <input type="text" class="form-control" id="mid"  value={question.moduleId} disabled/>
+                        <div className="form-group py-3">
+                            <label htmlFor="mid">Module ID</label>
+                            <input type="text" className="form-control" id="mid"  value={question.moduleId} disabled/>
                         </div>
-                        <div class="form-group py-3">
-                            <label for="content">Content</label>
-                            <input type="text" class="form-control" id="content"  value={question.content} disabled/>
+                        <div className="form-group py-3">
+                            <label htmlFor="content">Content</label>
+                            <input type="text" className="form-control" id="content"  value={question.content} disabled/>
                         </div>
                         <div className="py-3">
                             <h6>Answers</h6>
                             {question.answers ? renderAnswers() : "Loading"}
                         </div>
                         </form>
-                        </div>:
-                  "Loading"
-                }
+                        <div className="d-flex">
+                            <Link to='/manage/questions' className="btn btn-primary align-button-right">Back</Link>
+                        </div>
+                        </div>
             </div>
         )
     }
 
     return (
         <div>
-            {renderQuestionData()}
+            {question && question.answers ? renderQuestionData() : "Loading"}
         </div>
     )
 }

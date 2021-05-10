@@ -1,14 +1,14 @@
 const express = require('express')
-const { getUnitModules, submitModule, publishModule, unpublishModule } = require('../controllers/Module_Controller')
+const { getModule, getModulesForStaff, submitModule, publishModule, unpublishModule, updateModuleNoOfQuestions } = require('../controllers/Module_Controller')
 const { getRandomizedQuestions } = require('../controllers/Question_Controller')
 var router = express.Router()
 
-
-router.get('/:unitId', getUnitModules, async function (req,res,next) {
+router.get('/:unitId', getModulesForStaff, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success,
-            modules: res.locals.modules
+            modules: res.locals.modules,
+            availableQuestions: Object.fromEntries(res.locals.availableQuestions)
         })
     }
     return res.status(400).send({
@@ -29,13 +29,14 @@ router.get('/:moduleId/questions', getRandomizedQuestions, async function (req,r
     }) 
 })
 
+
 router.get('/:moduleId/publish', publishModule, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success
         })
     } else if (res.locals.customError){
-        return res.status(400).send({
+        return res.status(200).send({
             success: 'false',
             message: res.locals.errorMessage
         })
@@ -51,7 +52,7 @@ router.get('/:moduleId/unpublish', unpublishModule, async function (req,res,next
             success: res.locals.success
         })
     } else if (res.locals.customError){
-        return res.status(400).send({
+        return res.status(200).send({
             success: 'false',
             message: res.locals.errorMessage
         })
@@ -70,6 +71,29 @@ router.post('/submit', submitModule ,async function (req,res,next) {
     return res.status(400).send({
         message: "There was an issue. Please try again."
     }) 
+})
+
+router.get('/:moduleId/info/', getModule, async function (req,res,next) {
+    if(res.locals.success) {
+        return res.status(200).send({
+            success: res.locals.success,
+            module: res.locals.module
+        })
+    }
+    return res.status(400).send({
+        message: "That did not work. Try again."
+    })
+})
+
+router.get('/:moduleId/edit/:noOfQuestions', updateModuleNoOfQuestions, async function (req,res,next) {
+    if(res.locals.success) {
+        return res.status(200).send({
+            success: res.locals.success
+        })
+    }
+    return res.status(400).send({
+        message: "That did not work. Try again."
+    })
 })
 
 module.exports = router;

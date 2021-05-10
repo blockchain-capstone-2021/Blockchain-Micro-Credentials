@@ -3,24 +3,28 @@ import {  useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
 
 const StudentMarkEntry = (props) => {
+
+    // State variables
     const history = useHistory();
     const [student, setStudent] = useState()
     const [finalMark, setFinalMark] = useState()
     const [submitting, setSubmitting] = useState(false)
 
+    // API call to get student data
     useEffect(() => {
-        console.log(props);
         async function getStudent() {
             const response = await microcredapi.get(`/student/${props.match.params.studentId}`).then(response => response.data.student)
             setStudent(response)
         }
         getStudent()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    // Submits final mark for student
 
     async function onSubmit(e) {
         e.preventDefault();
         setSubmitting(true)
-        console.log(student.studentId, props.match.params.courseId,finalMark);
 
         await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`).then(response => {
             history.push(`/manage/students`);
@@ -58,8 +62,8 @@ const StudentMarkEntry = (props) => {
                     <label htmlFor="finalMark" className="form-label">Final Mark</label>
                     <input type="number" id="finalMark" className="form-control" max="100" onChange={(e) => {setFinalMark(e.target.value)}}/>
                     </div>
-                    <div>
-                        <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center" onClick={(e) => onSubmit(e)}>Submit</button>
+                    <div className="d-flex">
+                        <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center align-button-right" onClick={(e) => onSubmit(e)}>Submit</button>
                     </div>
                 </fieldset>
                 </form> :

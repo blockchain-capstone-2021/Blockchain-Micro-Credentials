@@ -14,7 +14,6 @@ import {
 //import icons from react icons
 import { FaQuestion, FaUsers } from "react-icons/fa";
 import { FiHome, FiLogOut, FiArrowLeftCircle, FiArrowRightCircle, FiBook } from "react-icons/fi";
-import { BiCog } from "react-icons/bi";
 
 
 //import sidebar css from react-pro-sidebar module and our custom css 
@@ -53,7 +52,6 @@ const Header = () => {
           current[0].className = current[0].className.replace(" active", "");
           this.className += " active";
         });
-        console.log(btns[i]);
       } 
   }
 
