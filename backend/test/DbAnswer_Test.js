@@ -4,12 +4,7 @@ const sequelizeMock = require('sequelize-mock')
 var DBConnectionMock = new sequelizeMock
 var DbAnswerController = require('../db/controllers/DbAnswerController')
 
-var AnswerMock = DBConnectionMock.define('answers', 
-{
-    questionId: 1,
-    content: "testAnswer1",
-    isCorrect: false
-}, {autoQueryfallback: false, stopPropagation: false});
+var AnswerMock = DBConnectionMock.define('answers', {autoQueryfallback: false, stopPropagation: false});
 
 AnswerMock.$queueResult(AnswerMock.build({
     questionId: 1,
