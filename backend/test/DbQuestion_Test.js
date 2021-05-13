@@ -1,7 +1,4 @@
 const assert = require('assert');
-const SequelizeMock = require('sequelize-mock');
-var DBConnectionMock = new SequelizeMock();
-
 const dbQuestionController = require('../db/controllers/DbQuestionController')
 
 describe('Db Question Controller', () => {

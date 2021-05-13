@@ -41,32 +41,4 @@ describe('Db Student Controller', () => {
             assert.strictEqual(exists, expectedExists);
         }).timeout(10000);
     })
-    describe('updateCreditPoints()', () => {
-        it('should return the correct credit points', async () => {
-            let expectedCreditPoints = 264
-
-            await updateCreditPoints("s3710669", 264)
-
-            StudentMock.findOne({
-                where: {
-                    studentId: "s3710669"
-                }
-            }).then(function (student) {
-                assert.strictEqual(student.get('studentCreditPoints'), expectedCreditPoints);
-            })
-            
-        }).timeout(10000);
-    })
 });
-
-async function updateCreditPoints(_studentId, _creditPoints)
-{
-    let student = await dbStudentController.getStudent(_studentId)
-    let currentPoints = student.studentCreditPoints
-    let updatedPoints = currentPoints + _creditPoints
-    await StudentMock.update({ studentCreditPoints: updatedPoints}, {
-        where: {
-            studentId: _studentId
-        }
-    });
-}
