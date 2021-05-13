@@ -20,7 +20,6 @@ const Unit = (props) => {
         async function getModules(){
             await microcredapi.get(`/unit/${unitId}/${window.localStorage.getItem('userId')}`).then(response => {
                 const updatedModules = []
-                
                 const grade = {
                     finalGrade: response.data.finalGrade,
                     cumulativeScore: response.data.cumulativeScore
@@ -31,7 +30,6 @@ const Unit = (props) => {
                         // use Object.keys() to handle key value mismatch
                         numAttempts: response.data.numAttempts[key+ parseInt(Object.keys(response.data.numAttempts)[0])],
                         highestScore: response.data.highestScore[key+ parseInt(Object.keys(response.data.highestScore)[0])],
-                        
                     }
                     updatedModules.push(newModule)
                     return true
@@ -65,11 +63,13 @@ const Unit = (props) => {
     // Renders modules in table format
     function renderModules() {
         return modules.map(module => {
+            const isPublished = module.published ? '' : 'none'
             return (
-                <tr className="py-2" key={module.moduleId}>
+                <tr className="py-2" key={module.moduleId} style={{display:`${isPublished}`}}>
                     <td>{module.moduleName}</td>
                     <td>{module.numAttempts}</td>
                     <td>{module.highestScore}</td>
+                    <td>{module.weight}</td>
                     <td><Link to={{pathname: `/module/${module.moduleId}`, attemptNumber: module.numAttempts}} className="btn btn-primary">Go</Link></td>
                 </tr>
             )
@@ -105,6 +105,7 @@ const Unit = (props) => {
                                 <th>Name</th>
                                 <th># of Attempts</th>
                                 <th>Best result</th>
+                                <th>Weight</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
