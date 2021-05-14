@@ -3,7 +3,7 @@ const assert = require('assert');
 const sequelizeMock = require('sequelize-mock')
 var DBConnectionMock = new sequelizeMock
 
-var EnrolmentMock = DBConnectionMock.define('enrolmentss', {autoQueryfallback: false, stopPropagation: false});
+var EnrolmentMock = DBConnectionMock.define('enrolments', {autoQueryfallback: false, stopPropagation: false});
 
 EnrolmentMock.$queueResult(EnrolmentMock.build({
     studentId: "s3541003",
