@@ -2,15 +2,13 @@ const assert = require('assert');
 
 const sequelizeMock = require('sequelize-mock')
 var DBConnectionMock = new sequelizeMock
-var DbAnswerController = require('../db/controllers/DbAnswerController')
 
-var AnswerMock = DBConnectionMock.define('answers', {autoQueryfallback: false, stopPropagation: false});
-
-AnswerMock.$queueResult(AnswerMock.build({
+var AnswerMock = DBConnectionMock.define('answers', {
     questionId: 1,
     content: "testAnswer1",
     isCorrect: false
-}));
+},
+ {autoQueryfallback: false, stopPropagation: false});
 
 describe('DbAnswerController', () => {
 
@@ -46,24 +44,6 @@ describe('DbAnswerController', () => {
     })
   
 })
-
-
-
-//return all answers for a given question
-async function getAnswers(_questionId) 
-{
-    let _answers;
-
-    await AnswerMock.findAll({
-        where: {
-          questionId: _questionId
-        },
-      }).then( answers => {
-        _answers = answers;
-    });
-
-    return _answers;
-}
 
 //return an answer for a given answerId
 async function getAnswer(_answerId) 

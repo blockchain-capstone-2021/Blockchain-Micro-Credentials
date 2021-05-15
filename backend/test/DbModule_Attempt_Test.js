@@ -3,24 +3,14 @@ const assert = require('assert');
 const sequelizeMock = require('sequelize-mock')
 var DBConnectionMock = new sequelizeMock
 
-var Module_AttemptMock = DBConnectionMock.define('module_attempts', {autoQueryfallback: false, stopPropagation: false});
-
-Module_AttemptMock.$queueResult(Module_AttemptMock.build({
+var Module_AttemptMock = DBConnectionMock.define('module_attempts', {
     studentId: "s3541003",
     moduleId: 1,
     semOfEnrolment: "Y2021S1",
     attemptNo: 1
-}));
+});
 
-Module_AttemptMock.$queueResult(Module_AttemptMock.build({
-    studentId: "s3541003",
-    moduleId: 2,
-    semOfEnrolment: "Y2021S1",
-    attemptNo: 1
-}));
-
-
-describe('Enrolment', () => {
+describe('Module_Attempt', () => {
 
     describe('getNoOfAttempts()', () =>{
         it('should return the correct number of attempts for the given parameters', async () => {
@@ -36,7 +26,7 @@ describe('Enrolment', () => {
     describe('checkAttemptsExist()', () =>{
         it('should return an attempt matching the expected student and module id and semester', async () => {
             let expectedStudentId = "s3541003"
-            let moduleId = 2
+            let moduleId = 1
             let sem = "Y2021S1"
             let actualAttempt = await checkAttemptsExist(moduleId, sem)
             assert.strictEqual(actualAttempt.studentId, expectedStudentId)
@@ -46,6 +36,7 @@ describe('Enrolment', () => {
     })
   
 })
+
 
 //return number of attempts for a given studentId and moduleId
 async function getNoOfAttempts(_studentId, _moduleId, _semOfEnrolment) 

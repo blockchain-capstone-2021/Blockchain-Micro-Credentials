@@ -3,13 +3,12 @@ const assert = require('assert');
 const sequelizeMock = require('sequelize-mock')
 var DBConnectionMock = new sequelizeMock
 
-var DegreeMock = DBConnectionMock.define('degrees', {autoQueryfallback: false, stopPropagation: false});
+var DegreeMock = DBConnectionMock.define('degrees', 
 
-DegreeMock.$queueResult(DegreeMock.build({
-    degreeName: "Test",
-    totalCreditPoints: 288,
-    creditPointsPerSem: 48
-}));
+{degreeName: "Test",
+totalCreditPoints: 288,
+creditPointsPerSem: 48
+});
 
 describe('Degree', () => {
 
