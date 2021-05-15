@@ -57,7 +57,7 @@ const Unit = (props) => {
     // Post method to submit microcredential
     async function submitMicroCredential() {
         setSubmitting(true)
-        await microcredapi.get(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
+        await microcredapi.post(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
         setSubmitting(false)
         history.push('/')
     }
