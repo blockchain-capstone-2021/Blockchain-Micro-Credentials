@@ -7,8 +7,7 @@ var AnswerMock = DBConnectionMock.define('answers', {
     questionId: 1,
     content: "testAnswer1",
     isCorrect: false
-},
- {autoQueryfallback: false, stopPropagation: false});
+});
 
 describe('DbAnswerController', () => {
 
