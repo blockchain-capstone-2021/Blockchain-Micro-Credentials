@@ -14,15 +14,12 @@ module.exports = {
             timestamps: false
         }
     },
-    "test": {
-        "use_env_variable": "DATABASE_URL"
-    },
     "production": {
         "username": process.env.DATABASE_USER,
         "password": process.env.DATABASE_PASSWORD,
         "database": "MicrocredentialDB",
-        "host": "127.0.0.1",
-        "port": 8080,
+        "host": process.env.DATABASE_URL,
+        "port": 3306,
         "dialect": "mysql",
         "define": {
             timestamps: false
