@@ -1,0 +1,20 @@
+### Version 1.0.0 of 17 May 2021
+
+We are happy to announce the initial release of our Blockchain Microcredential Platform Application, Microcred.
+Microcred is a completely web based service allowing users to access it from anywhere. We aim to create a service
+that empowers students to take charge of their learning and to assist staff with administrative tasks so they can
+focus on bigger things.
+
+#### Features
+
+Students will be able to:
+ - View current courses and info.
+ - Take quizes.
+ - Submit coursework.
+
+Staff will be able to:
+- View courses they are currently teaching.
+- See students enrolled in their courses.
+- Manually enter grades.
+- Publish and unpublish modules.
+- Add, remove and delete questions.
