@@ -8,7 +8,7 @@ async function getModule(_moduleId)
     await models.Module.findByPk(_moduleId).then( module => {
         _module = module;
     });
-
+    console.log(_module);
     return _module;
 }
 

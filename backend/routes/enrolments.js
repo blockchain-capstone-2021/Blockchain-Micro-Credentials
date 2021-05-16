@@ -7,7 +7,7 @@ router.get('/courses/:unitId/enrolled', getUnitsByStaff, async function (req, re
         return res.status(200).send({
             success: 'true',
             students: {available: res.locals.availableStudents, unavailable: res.locals.unavailableStudents},
-            scores: res.locals.studentScoreMap 
+            scores: Object.fromEntries(res.locals.studentScoreMap)
         })
     }
     return res.status(400).send({

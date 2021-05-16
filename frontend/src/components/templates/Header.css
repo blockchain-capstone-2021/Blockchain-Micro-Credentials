@@ -71,3 +71,11 @@ body {
       overflow: hidden;
     }
   }
+
+  .menu-text:hover {
+    color: #adadad !important;
+  }
+
+  .menu-text {
+    color: black !important;
+  }

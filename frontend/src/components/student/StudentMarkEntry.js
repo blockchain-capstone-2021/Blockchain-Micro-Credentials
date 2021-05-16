@@ -2,13 +2,16 @@ import React, {useState, useEffect} from 'react'
 import {  useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
 
-const FinalMarkForm = (props) => {
+const StudentMarkEntry = (props) => {
+
+    // State variables
     const history = useHistory();
     const [student, setStudent] = useState()
     const [finalMark, setFinalMark] = useState()
+    const [submitting, setSubmitting] = useState(false)
 
+    // API call to get student data
     useEffect(() => {
-        console.log(props);
         async function getStudent() {
             const response = await microcredapi.get(`/student/${props.match.params.studentId}`).then(response => response.data.student)
             setStudent(response)
@@ -17,23 +20,25 @@ const FinalMarkForm = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    // Submits final mark for student
+
     async function onSubmit(e) {
         e.preventDefault();
-        console.log(student.studentId, props.match.params.courseId,finalMark);
+        setSubmitting(true)
 
         await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`).then(response => {
-            history.push(`/courses/${props.match.params.courseId}`);
-        }
-        )
+            history.push(`/manage/students`);
+        })
+        setSubmitting(false)
     }
         
-
-
     return (
         <div className="container">
             <h1 className="mt-5">Final Mark Form</h1>
             {
-                student?
+                submitting ?
+                "Please hold while the form is processing." :
+                student ?
                 <form>
                 <fieldset className="mt-5">
                     
@@ -57,15 +62,15 @@ const FinalMarkForm = (props) => {
                     <label htmlFor="finalMark" className="form-label">Final Mark</label>
                     <input type="number" id="finalMark" className="form-control" max="100" onChange={(e) => {setFinalMark(e.target.value)}}/>
                     </div>
-                    <div>
-                        <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center" onClick={(e) => onSubmit(e)}>Submit</button>
+                    <div className="d-flex">
+                        <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center align-button-right" onClick={(e) => onSubmit(e)}>Submit</button>
                     </div>
                 </fieldset>
-                </form>:
-                "Loading"
+                </form> :
+                "Loading..." 
             }
         </div>
     )
 }
 
-export default FinalMarkForm
+export default StudentMarkEntry

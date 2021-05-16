@@ -15,6 +15,19 @@ const getQuestionsForStaff = async (req, res, next)=>{
     }
 }
 
+const getQuestion = async (req, res, next)=>{
+    try{
+        res.locals.question = await dbQuestionController.getQuestion(req.params.questionId)
+        res.locals.success = true
+    }
+    catch(err){
+        res.locals.success = false
+    }
+    finally{
+        next();
+    }
+}
+
 const getRandomizedQuestions = async (req, res, next)=>{
     try{
         let module = await dbModuleController.getModule(parseInt(req.params.moduleId))
@@ -52,6 +65,7 @@ const addQuestionToModule = async (req, res, next)=>{
 
 const deleteQuestion = async (req, res, next)=>{
     try{
+        console.log('HELLO')
         await dbAnswerController.deleteAnswersOfQuestion(req.params.questionId)
         await dbQuestionController.deleteQuestion(req.params.questionId)
 
@@ -103,6 +117,7 @@ async function getAnswers(questions)
 }
 
 module.exports = {
+    getQuestion,
     getQuestionsForStaff,
     getRandomizedQuestions,
     addQuestionToModule,

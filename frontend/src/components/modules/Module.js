@@ -6,10 +6,12 @@ import Answer from './Answer'
 
 const Module = (props) => {
 
+    // State variables
     const [questions, setQuestions] = useState()
     const [submitting, setSubmitting] = useState(false)
     const history = useHistory()
 
+    // API call to get questions and answers for the module quiz
     useEffect(() => {
         window.localStorage.setItem('moduleId', props.match.params.moduleId)
         async function getQuestionsAndAnswers() {
@@ -31,7 +33,7 @@ const Module = (props) => {
     }, [])
 
 
-
+    // Displays the questions in the quiz
     function renderQuestions() {
         return questions.map((question, key) => {
             return (
@@ -43,6 +45,7 @@ const Module = (props) => {
         })
     }
 
+    // Submites the module once user has click the submit button
     async function submitModule(e) {
         e.preventDefault()
         setSubmitting(true)
@@ -52,6 +55,7 @@ const Module = (props) => {
         })
         setSubmitting(false)
     }
+    
     
     function generateModuleSubmissionPayload(e) {
         const qa_pair = generateQAPair(e)
@@ -82,15 +86,15 @@ const Module = (props) => {
     }
 
     return (
-        <div className="row justify-content-center my-3">
-            <h1>Module {props.match.params.moduleId} Quiz</h1>
-            <h4>Attempt: #{props.location.attemptNumber+1}</h4>
+        <div className="row justify-content-center">
             {
                 submitting?
                 "Please hold while the quiz is processing.":
                 <form className="w-75">
+                <h1>Module {props.match.params.moduleId} Quiz</h1>
+                <h4>Attempt: #{props.location.attemptNumber+1}</h4>
                 {questions ? renderQuestions() : 'Loading'}
-                <button type="submit" className="btn btn-primary my-3" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
+                <button type="submit" className="btn btn-primary py-3" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
             </form>
             }
         </div>

@@ -1,7 +1,7 @@
 const express = require('express')
 const { getUnitsByStaff } = require('../controllers/Unit_Controller')
 const { getEnrolmentsByUnit } = require('../controllers/Enrolment_Controller')
-const { getModules } = require('../controllers/Module_Controller')
+const { getModulesForStudent } = require('../controllers/Module_Controller')
 const { submitMicroCred } = require('../controllers/Microcredential_Controller')
 var router = express.Router()
 
@@ -23,7 +23,7 @@ router.get('/:unitId/enrolled', getEnrolmentsByUnit, async function (req, res, n
         return res.status(200).send({
             success: 'true',
             students: {available: res.locals.availableStudents, unavailable: res.locals.unavailableStudents},
-            scores: res.locals.studentScoreMap 
+            scores: Object.fromEntries(res.locals.studentScoreMap)
         })
     }
     return res.status(400).send({
@@ -32,13 +32,15 @@ router.get('/:unitId/enrolled', getEnrolmentsByUnit, async function (req, res, n
     })
 })
 
-router.get('/:unitId/:studentId', getModules, async function (req, res, next) {
+router.get('/:unitId/:studentId', getModulesForStudent, async function (req, res, next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: 'true',
             modules: res.locals.modules,
-            highestScore: res.locals.highestScoreMap,
-            numAttempts: res.locals.attemptsMap
+            highestScore: Object.fromEntries(res.locals.highestScoreMap),
+            numAttempts: Object.fromEntries(res.locals.attemptsMap),
+            cumulativeScore: res.locals.cumulativeScore,
+            finalGrade: res.locals.finalGrade
         })
     }
     return res.status(400).send({

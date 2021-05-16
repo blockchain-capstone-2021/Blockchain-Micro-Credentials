@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "start-mac": "nodemon ./bin/www",
-    "start-windows": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dev": "nodemon —exec babel-node app.js",
   "author": "",
