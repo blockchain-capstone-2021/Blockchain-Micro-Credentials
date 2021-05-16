@@ -7,7 +7,7 @@ describe('Db Module Controller', () => {
     //test that the correct module is returned for a given module id
     //test that a given module id does not return an incorrect module
     describe('getModule()', () => {
-        it('should return the correct moduke Id', async () => {
+        it('should return the correct module Id', async () => {
             let moduleId = 1;
             let module = await dbModuleController.getModule(moduleId);
             assert.strictEqual(module.moduleId, moduleId);
