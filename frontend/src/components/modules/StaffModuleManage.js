@@ -16,6 +16,7 @@ const StaffModuleManage = (props) => {
     const [, setUpdating] = useState(false)
     const [error, setError] = useState(true)
     const [mounted, setMounted] = useState(true)
+    const [ModuleTableData, setModuleTableData] = useState()
 
     // API calls before the component is mounted.
     useEffect(() => {
@@ -24,10 +25,8 @@ const StaffModuleManage = (props) => {
 
     useEffect(() => {
         if(mounted){
-            if(!selectedCourse){
-                setModules({})
-            }
             getModules(selectedCourse)
+            setModuleTableData(renderModules())
         }
         return () => {
             setMounted(false)
@@ -125,7 +124,7 @@ const StaffModuleManage = (props) => {
                         {module.published === false ? 
                             (
                                 <div className="d-flex">
-                                    <Link to={`/module/edit/${module.moduleNo}`} className="btn btn-warning  flex-fill" style={{marginRight: '1em'}}>Edit</Link>
+                                    <Link to={{pathname:`/module/edit/${module.moduleNo}`, state:{module}}} className="btn btn-warning  flex-fill" style={{marginRight: '1em'}}>Edit</Link>
                                     <button type="button" className="btn btn-success flex-fill" onClick={() => manageModule('publish', module.moduleId)}>Publish</button>
                                 </div>
                             )

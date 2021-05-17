@@ -76,7 +76,7 @@ const Unit = (props) => {
                     <td>{module.numAttempts}</td>
                     <td>{module.highestScore}</td>
                     <td>{module.weight}</td>
-                    <td><Link to={{pathname: `/module/${module.moduleId}`, attemptNumber: module.numAttempts}} className="btn btn-primary">Go</Link></td>
+                    <td><Link to={{pathname: `/module/${module.moduleId}`, state:{attemptNumber: module.numAttempts}}} className="btn btn-primary">Go</Link></td>
                 </tr>
             )
         })

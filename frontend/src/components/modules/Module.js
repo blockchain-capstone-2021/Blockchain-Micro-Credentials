@@ -63,7 +63,7 @@ const Module = (props) => {
             'moduleId':window.localStorage.getItem('moduleId'),
             'studentId': window.localStorage.getItem('userId'),
             'enrolmentPeriod': window.localStorage.getItem('enrolmentPeriod'),
-            'attemptNo': props.location.attemptNumber+1,
+            'attemptNo': props.location.state.attemptNumber+1,
             'qAPairs': qa_pair
         }
         return payload;
@@ -91,7 +91,7 @@ const Module = (props) => {
                 "Please hold while the quiz is processing.":
                 <form className="w-75">
                 <h1>Module Quiz</h1>
-                <h4>Attempt: #{props.location.attemptNumber+1}</h4>
+                <h4>Attempt: #{props.location.state.attemptNumber+1}</h4>
                 {questions ? renderQuestions() : 'Loading'}
                 <div className="d-flex">
                     <button type="submit" className="btn btn-primary my-3 align-button-right" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
