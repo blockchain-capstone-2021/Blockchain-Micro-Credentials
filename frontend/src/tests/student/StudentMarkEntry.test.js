@@ -12,8 +12,14 @@ describe("testing Student Mark Entry component", () => {
   it('renders with submit', () => {
     expect(StudentMarkEntry).toBeDefined();
   });
+
+  it('renders page header', () => {
+    let container = wrapper.find("h1");
+    expect(container).toHaveLength(1);
+    expect(container.text()).toEqual("Enter Final Mark");
+  });
   
-  it('shows loading when no student is set', () => {
+  it('shows loading when fetching data', () => {
     expect(
         wrapper.containsMatchingElement(
           <p>Loading...</p>

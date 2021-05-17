@@ -34,7 +34,7 @@ const StudentMarkEntry = (props) => {
         
     return (
         <div className="container">
-            <h1 className="mt-5">Final Mark Form</h1>
+            <h1 className="mt-5">Enter Final Mark</h1>
             {
                 submitting ?
                 <p>Please hold while the form is processing.</p> :
