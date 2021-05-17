@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import microcredapi from '../../apis/microcredapi';
+import FlashMessage from 'react-flash-message'
 
 const Unit = (props) => {
 
@@ -10,6 +11,7 @@ const Unit = (props) => {
     const [modules, setModules] = useState()
     const [grade, setGrade] = useState()
     const [submitting, setSubmitting] = useState(false) // Set to false as should only be true when button clicked
+    const [error, setError] = useState('')
 
     useEffect(() => {
         // Save unitId to localStorage
@@ -54,9 +56,14 @@ const Unit = (props) => {
     // Post method to submit microcredential
     async function submitMicroCredential() {
         setSubmitting(true)
-        await microcredapi.post(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
+        const response = await microcredapi.post(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
         setSubmitting(false)
-        history.push('/')
+        if (response.data.success === 'false') {
+            setError(response.data.message)
+        }
+        if(response.data.success === 'true'){
+            history.push('/')
+        }
     }
     
     // Renders modules in table format
@@ -81,7 +88,6 @@ const Unit = (props) => {
             <h5> Current Grade:  {`${grade.cumulativeScore}%`},   {grade.finalGrade}</h5>
         )
     }
-
     return (
             <div className="jumbotron align-center">
             {
@@ -89,14 +95,22 @@ const Unit = (props) => {
                 "Please hold while micro-credential is being submitted.": // Provides message to the user during long wait time
                 <div className="container mt-5">
                 {
-                    unit?
+                    unit ?
                     <section>
                         <h1>{unit.name}</h1>
                         <h4>{unit.code}</h4>
                     </section>:
                     ""
                 }
-
+                {
+                    error ?
+                    <FlashMessage duration={8000}>
+                    <div className="my-5 text-center">
+                    <p className="alert alert-danger text-break">{error}</p>
+                    </div>
+                    </FlashMessage>:
+                ''
+                }
                 <section>
                     <table className="table">
                         <thead>
@@ -132,7 +146,7 @@ const Unit = (props) => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            Are you sure that you want to submit modules?<br/> Once submitted, you will no longer be able to take quizs for this course.
+                            Are you sure that you want to submit modules?<br/> Once submitted, you will no longer be able to take quizzes for this course.
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
