@@ -19,10 +19,21 @@ describe("testing Staff Student Manage component", () => {
     expect(container.text()).toEqual("Student Management");
   });
 
-  it('renders Enrolments header', () => {
+  it('renders Table headers', () => {
     let container = wrapper.find("h2");
     expect(container).toHaveLength(2);
-    // expect(container.text()).toEqual("Enrolled Students");
+  });
+
+  it('renders dropdown menu', () => {
+    expect(
+        wrapper.containsMatchingElement(
+          <option>Select a Course</option>
+        )
+      ).toBeTruthy();
+  });
+
+  it('renders two tables', () => {
+    expect(wrapper.find("table")).toHaveLength(2);
   });
 
   it('renders table headings', () => {
@@ -32,6 +43,19 @@ describe("testing Staff Student Manage component", () => {
           <th>Name</th>,
           <th>Status</th>,
           <th>Manage</th>
+        )
+      ).toBeTruthy();
+  });
+
+  it('renders message if no students enrolled', () => {
+    expect(
+        wrapper.containsMatchingElement(
+          <tr><td>There are no enrolled students for this course.</td></tr>
+        )
+      ).toBeTruthy();
+      expect(
+        wrapper.containsMatchingElement(
+          <tr><td>There are no completed students for this course.</td></tr>
         )
       ).toBeTruthy();
   });
