@@ -39,7 +39,6 @@ const Unit = (props) => {
             })
         }
         getModules()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {

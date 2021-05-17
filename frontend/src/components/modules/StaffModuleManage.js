@@ -9,7 +9,6 @@ import '../../style.css'
 const StaffModuleManage = (props) => {
 
     // State and history
-
     const [courses, setCourses] = useState()
     const [modules, setModules] = useState()
     const [availableQuestions, setAvailableQuestions] = useState([])
@@ -20,10 +19,7 @@ const StaffModuleManage = (props) => {
 
     // API calls before the component is mounted.
     useEffect(() => {
-
         getCourses()
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -36,11 +32,9 @@ const StaffModuleManage = (props) => {
         return () => {
             setMounted(false)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCourse])
     
     // api calls to get data
-    
     async function getCourses() {
         return await microcredapi.get(`/unit/${window.localStorage.getItem('userId')}`).then(response => {
             setCourses(response.data.units);
@@ -58,7 +52,7 @@ const StaffModuleManage = (props) => {
         const callType = type
         let response;
         try {
-            response = await microcredapi.get(`/module/${moduleId}/${callType}`)
+            response = await microcredapi.post(`/module/${moduleId}/${callType}`)
             if (response.data.message) {
                 setError({status: true, message: response.data.message})
                 setTimeout(() => {
@@ -77,7 +71,6 @@ const StaffModuleManage = (props) => {
     }
 
     // Set selected course into state
-
     function renderCourseOptions() {
         return courses.map(course => {
             return(
@@ -85,20 +78,8 @@ const StaffModuleManage = (props) => {
             )
         })
     }
-    // function renderCourseOptions() {
-    //     return courses.map(course => {
-    //         return(
-    //             <div>
-    //                 <option key={course.unitId} defaultValue={course.unitId} onClick={() => onCourseSelect(course.unitId)}>{course.unitName}</option>
-    //                 {/* <button type="button" className="btn btn-primary" value={'t'} onClick={() =>onCourseSelect(course.unitId)}>{course.unitName}</button> */}
-    //             </div>
-                
-    //         )
-    //     })
-    // }
 
     // Show the search form on the page
-
     function renderSearchForm() {
         return (
             <div>
@@ -126,9 +107,9 @@ const StaffModuleManage = (props) => {
                 </form>
             </div>
         )
-    }       
-    // Render modules after a course has been selected.
+    }
 
+    // Render modules after a course has been selected.
     function renderModules() {
         try {
             return modules.map(module => {

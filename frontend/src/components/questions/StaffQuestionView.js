@@ -6,14 +6,12 @@ import '../../style.css'
 const StaffQuestionView = (props) => {
 
     // State variables
-
     const [question, setQuestion] = useState()
     const [hasAnswers, setHasAnswers] = useState(false)
 
     // Get question data from previous page
     useEffect(() => {
         setQuestion({...props.location.state.question})
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // API call to get answers
@@ -29,7 +27,6 @@ const StaffQuestionView = (props) => {
         if(!hasAnswers){
             getAnswers()
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[question])
 
     // Render Answer and true/false pair
