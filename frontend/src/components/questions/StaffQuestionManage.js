@@ -88,7 +88,6 @@ const StaffQuestionManage = () => {
           return (
             <tr key={_question.questionId}>
                 <td>{_question.questionId}</td>
-                <td>{_question.moduleId}</td>
                 <td>{_question.content}</td>
                 <td className="d-flex">
                   <div className="align-button-right">
@@ -231,9 +230,8 @@ const StaffQuestionManage = () => {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Module</th>
                         <th>Content</th>
-                        <th>Manage</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
