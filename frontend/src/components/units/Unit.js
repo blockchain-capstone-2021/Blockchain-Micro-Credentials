@@ -146,7 +146,7 @@ const Unit = (props) => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            Are you sure that you want to submit modules?<br/> Once submitted, you will no longer be able to take quizs for this course.
+                            Are you sure that you want to submit modules?<br/> Once submitted, you will no longer be able to take quizzes for this course.
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
