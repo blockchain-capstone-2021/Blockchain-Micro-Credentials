@@ -60,7 +60,6 @@ const Unit = (props) => {
     async function submitMicroCredential() {
         setSubmitting(true)
         const response = await microcredapi.get(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
-        console.log(response.data);
         setSubmitting(false)
         if (response.data.success === 'false') {
             setError(response.data.message)
@@ -90,7 +89,6 @@ const Unit = (props) => {
             <h5> Current Grade:  {`${grade.cumulativeScore}%`},   {grade.finalGrade}</h5>
         )
     }
-    console.log(error);
     return (
             <div className="jumbotron align-center">
             {
