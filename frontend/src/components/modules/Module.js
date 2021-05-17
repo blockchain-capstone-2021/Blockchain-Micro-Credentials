@@ -94,7 +94,9 @@ const Module = (props) => {
                 <h1>Module Quiz</h1>
                 <h4>Attempt: #{props.location.attemptNumber+1}</h4>
                 {questions ? renderQuestions() : 'Loading'}
-                <button type="submit" className="btn btn-primary" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
+                <div className="d-flex">
+                    <button type="submit" className="btn btn-primary my-3 align-button-right" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
+                </div>
             </form>
             }
         </div>
