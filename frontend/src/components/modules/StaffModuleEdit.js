@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
 import '../../style.css'
+import {Link} from 'react-router-dom'
 
 const StaffModuleEdit = (props) => {
 
@@ -12,12 +13,7 @@ const StaffModuleEdit = (props) => {
 
     // Get module data
     useEffect(() => {
-        
-        async function getModule() {
-            const response = await microcredapi.get(`/module/${props.match.params.moduleId}/info`)
-            setModule(response.data.module)
-        }
-        getModule()
+        setModule(props.location.state.module)
     }, [])
 
     // Set noOFQuestion form input to state.
@@ -29,7 +25,8 @@ const StaffModuleEdit = (props) => {
     function onSubmit(e){
         e.preventDefault();
         async function changeNoOfQuestions(){
-            const response = await microcredapi.get(`/module/${props.match.params.moduleId}/edit/${newQuestionCount}`)
+            const response = await microcredapi.post(`/module/${module.moduleId}/edit/${newQuestionCount}`)
+            console.log(response.data);
             if (response.data.success) {
                 history.push('/manage/modules')
             }
@@ -69,7 +66,7 @@ const StaffModuleEdit = (props) => {
             <input type="number" min="1" className="form-control" id="mquestions" onChange={(e) => onQuestionCountChange(e)} value={newQuestionCount ? newQuestionCount : module.noOfQuestions} />
             </div>
             <div className="d-flex">
-                <button type="button" className="btn btn-primary align-button-right" onClick={(e) => onSubmit(e)}> Submit</button>
+                <Link key={Date.now()} type="button" className="btn btn-primary align-button-right" onClick={(e) => onSubmit(e)}> Submit</Link>
             </div>
             </form>
             )

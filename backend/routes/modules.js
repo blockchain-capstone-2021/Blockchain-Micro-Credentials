@@ -91,7 +91,7 @@ router.get('/:moduleId/info/', getModule, async function (req,res,next) {
 })
 
 // Get method which returns information on a module
-router.get('/:moduleId/edit/:noOfQuestions', updateModuleNoOfQuestions, async function (req,res,next) {
+router.post('/:moduleId/edit/:noOfQuestions', updateModuleNoOfQuestions, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success
