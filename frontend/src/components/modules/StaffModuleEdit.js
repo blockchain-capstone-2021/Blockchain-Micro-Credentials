@@ -6,7 +6,6 @@ import '../../style.css'
 const StaffModuleEdit = (props) => {
 
     // State variables
-
     const history = useHistory()
     const [module, setModule] = useState()
     const [newQuestionCount, setNewQuestionCount] = useState()
@@ -19,7 +18,6 @@ const StaffModuleEdit = (props) => {
             setModule(response.data.module)
         }
         getModule()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // Set noOFQuestion form input to state.

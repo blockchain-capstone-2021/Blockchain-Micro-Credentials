@@ -41,7 +41,6 @@ const Unit = (props) => {
             })
         }
         getModules()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -57,7 +56,7 @@ const Unit = (props) => {
     // Post method to submit microcredential
     async function submitMicroCredential() {
         setSubmitting(true)
-        const response = await microcredapi.get(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
+        const response = await microcredapi.post(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
         setSubmitting(false)
         if (response.data.success === 'false') {
             setError(response.data.message)

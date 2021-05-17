@@ -29,7 +29,6 @@ const Module = (props) => {
             
         }
         getQuestionsAndAnswers()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
@@ -45,7 +44,7 @@ const Module = (props) => {
         })
     }
 
-    // Submites the module once user has click the submit button
+    // Submits the module once user has click the submit button
     async function submitModule(e) {
         e.preventDefault()
         setSubmitting(true)

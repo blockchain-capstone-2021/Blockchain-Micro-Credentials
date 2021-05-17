@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import microcredapi from '../../apis/microcredapi'
 
-const StudentProfile = (props) => {
+const StudentProfile = () => {
 
     const [student, setStudent] = useState()
 

@@ -5,6 +5,7 @@ const { getModulesForStudent } = require('../controllers/Module_Controller')
 const { submitMicroCred } = require('../controllers/Microcredential_Controller')
 var router = express.Router()
 
+// Get method which returns units taught by a staff
 router.get('/:staffId', getUnitsByStaff, async function (req, res, next) {
     if(res.locals.units) {
         return res.status(200).send({
@@ -18,6 +19,7 @@ router.get('/:staffId', getUnitsByStaff, async function (req, res, next) {
     })
 })
 
+// Get method which returns students enrolled in a unit
 router.get('/:unitId/enrolled', getEnrolmentsByUnit, async function (req, res, next) {
     if(res.locals.success) {
         return res.status(200).send({
@@ -32,6 +34,7 @@ router.get('/:unitId/enrolled', getEnrolmentsByUnit, async function (req, res, n
     })
 })
 
+// Get method which returns modules taken by a student
 router.get('/:unitId/:studentId', getModulesForStudent, async function (req, res, next) {
     if(res.locals.success) {
         return res.status(200).send({
@@ -49,7 +52,8 @@ router.get('/:unitId/:studentId', getModulesForStudent, async function (req, res
     })
 })
 
-router.get('/submit/:studentId/:unitId/:enrolmentPeriod', submitMicroCred, async function (req, res, next) {
+// Post method to submit a microcredential
+router.post('/submit/:studentId/:unitId/:enrolmentPeriod', submitMicroCred, async function (req, res, next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success

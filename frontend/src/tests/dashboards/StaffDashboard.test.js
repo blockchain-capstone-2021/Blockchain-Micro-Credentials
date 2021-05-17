@@ -1,5 +1,5 @@
 import React from "react";
-import StaffDashboard from "./StaffDashboard";
+import StaffDashboard from "../../components/dashboards/StaffDashboard";
 import {shallow} from "enzyme";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";

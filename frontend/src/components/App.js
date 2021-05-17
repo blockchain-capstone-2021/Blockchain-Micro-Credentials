@@ -15,12 +15,12 @@ import StudentMarkEntry from './student/StudentMarkEntry'
 
 import Module from "./modules/Module"
 import StaffModuleManage from './modules/StaffModuleManage'
+import StaffModuleEdit from "./modules/StaffModuleEdit";
 import Unit from './units/Unit'
 
 import StaffQuestionManage from './questions/StaffQuestionManage'
 import StaffQuestionView from "./questions/StaffQuestionView";
 import StaffQuestionAdd from "./questions/StaffQuestionAdd";
-import StaffModuleEdit from "./modules/StaffModuleEdit";
 
 const App = () => {
 
