@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import "../style.css";
-import useToken from './useToken';
 import Header from "./templates/Header";
-import Login from "./Login";
+import Login from "./login/Login";
+import useToken from './login/useToken';
 
 import StaffDashboard from './dashboards/StaffDashboard'
 import StudentDashboard from './dashboards/StudentDashboard'
