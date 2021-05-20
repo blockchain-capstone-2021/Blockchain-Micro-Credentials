@@ -94,6 +94,14 @@ const getModulesForStudent = async (req, res, next) => {
 
         res.locals.attemptsMap = await getAttemptNumbers(req.params.studentId, modules);
 
+        //Verify whether the micro-credential is submittable.
+        if (Array.from(res.locals.attemptsMap.values()).includes(0)) {
+            res.locals.submittable = false;
+        }
+        else {
+            res.locals.submittable = true;
+        }
+
         //retrieve student's highest score for each module
         let highestScoreMap = await getHighestScores(req.params.studentId, req.params.unitId, modules);
         res.locals.highestScoreMap = highestScoreMap;
