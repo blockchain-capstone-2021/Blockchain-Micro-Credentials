@@ -116,8 +116,9 @@ const StaffModuleManage = (props) => {
                     <tr key={module.moduleNo}>
                     <td>{module.moduleId}</td>
                     <td>{module.moduleName}</td>
-                    <td>{getAvailableQuestions(module.moduleId)}</td>
                     <td>{module.noOfQuestions}</td>
+                    <td>{getAvailableQuestions(module.moduleId)}</td>
+                    
                     <td>{module.published === true ? 'Published' : 'Unpublished'}</td>
                     <td>{`${module.weight}`}</td>
                     <td>
