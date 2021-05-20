@@ -12,6 +12,7 @@ const Unit = (props) => {
     const [grade, setGrade] = useState()
     const [submitting, setSubmitting] = useState(false) // Set to false as should only be true when button clicked
     const [error, setError] = useState('')
+    const [publishedModules, setPublishedModules] = useState()
 
     useEffect(() => {
         // Save unitId to localStorage
@@ -21,6 +22,7 @@ const Unit = (props) => {
         // Retrive modules from database and set as state variable
         async function getModules(){
             await microcredapi.get(`/unit/${unitId}/${window.localStorage.getItem('userId')}`).then(response => {
+                let publishedModulesCount = 0;
                 const updatedModules = []
                 const grade = {
                     finalGrade: response.data.finalGrade,
@@ -33,15 +35,23 @@ const Unit = (props) => {
                         numAttempts: response.data.numAttempts[key+ parseInt(Object.keys(response.data.numAttempts)[0])],
                         highestScore: response.data.highestScore[key+ parseInt(Object.keys(response.data.highestScore)[0])],
                     }
+                    console.log(module);
+                    if(module.published){publishedModulesCount = publishedModulesCount + 1}
                     updatedModules.push(newModule)
                     return true
                 })
+                console.log(publishedModulesCount);
+                setPublishedModules(publishedModulesCount)
                 setModules(updatedModules)
                 setGrade(grade)
+                
             })
+            
         }
         getModules()
+        
     }, [])
+
 
     useEffect(() => {
         // Retrieve student details from database to display unit name
@@ -71,12 +81,12 @@ const Unit = (props) => {
         return modules.map(module => {
             const isPublished = module.published ? '' : 'none'
             return (
-                <tr className="py-2" key={module.moduleId} style={{backgroundColor:`${isPublished ? '' : 'lightgrey'}`}}>
+                <tr className="py-2" key={module.moduleId} style={{backgroundColor:`${isPublished == '' ? '' : 'lightgrey'}`}}>
                     <td>{module.moduleName}</td>
                     <td>{module.numAttempts}</td>
                     <td>{module.highestScore}</td>
                     <td>{module.weight}</td>
-                    <td>{isPublished ? <Link to={{pathname: `/module/${module.moduleId}`, state:{attemptNumber: module.numAttempts}}} className="btn btn-primary">Go</Link> : <button type="button" class="btn btn-primary" disabled={!isPublished}>Go</button>}</td>
+                    <td>{isPublished == '' ? <Link to={{pathname: `/module/${module.moduleId}`, state:{attemptNumber: module.numAttempts}}} className="btn btn-primary">Go</Link> : <button type="button" class="btn btn-primary" disabled={isPublished == '' ? false : true}>Go</button>}</td>
                 </tr>
             )
         })
@@ -99,6 +109,7 @@ const Unit = (props) => {
                     <section>
                         <h1>{unit.name}</h1>
                         <h4>{unit.code}</h4>
+                        <h5>{modules.length} modules ({publishedModules ? publishedModules : ''} published, {publishedModules ? (modules.length - publishedModules) : ''} unpublished) </h5>
                     </section>:
                     ""
                 }
