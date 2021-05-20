@@ -13,6 +13,7 @@ const Unit = (props) => {
     const [submitting, setSubmitting] = useState(false) // Set to false as should only be true when button clicked
     const [error, setError] = useState('')
     const [publishedModules, setPublishedModules] = useState()
+    const [canSubmit, setCanSubmit] = useState()
 
     useEffect(() => {
         // Save unitId to localStorage
@@ -22,6 +23,7 @@ const Unit = (props) => {
         // Retrive modules from database and set as state variable
         async function getModules(){
             await microcredapi.get(`/unit/${unitId}/${window.localStorage.getItem('userId')}`).then(response => {
+                setCanSubmit(response.data.submittable)
                 let publishedModulesCount = 0;
                 const updatedModules = []
                 const grade = {
@@ -122,6 +124,13 @@ const Unit = (props) => {
                     </FlashMessage>:
                 ''
                 }
+                {
+                    canSubmit?
+                    '':
+                    <div class="alert alert-warning" role="alert">
+                    Please note that you cannot submit this microcredential until all modules have been attempted.
+                    </div>
+                }
                 <section>
                     <table className="table">
                         <thead>
@@ -144,7 +153,11 @@ const Unit = (props) => {
                     </div>
                     <div className="d-flex">
                         <div style={{marginLeft:'auto', marginRight:'4em', paddingBottom:'5%'}}>
-                            <button type="button" name="" id="" className="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
+                            {
+                                canSubmit?
+                                <button type="button" name="" id="" className="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>:
+                                ''
+                            }
                         </div>
                     </div>
                 </section>

@@ -43,7 +43,8 @@ router.get('/:unitId/:studentId', getModulesForStudent, async function (req, res
             highestScore: Object.fromEntries(res.locals.highestScoreMap),
             numAttempts: Object.fromEntries(res.locals.attemptsMap),
             cumulativeScore: res.locals.cumulativeScore,
-            finalGrade: res.locals.finalGrade
+            finalGrade: res.locals.finalGrade,
+            submittable: res.locals.submittable
         })
     }
     return res.status(400).send({
