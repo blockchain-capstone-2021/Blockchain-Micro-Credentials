@@ -1,34 +1,32 @@
-const { models } = require('../models/index')
+const { models } = require('../models/index');
 
 //return unit by unitId
-async function getUnit(_unitId) 
-{
-  let _unit;
+async function getUnit(unitId) {
+    let _unit;
 
-  await models.Unit.findByPk(_unitId).then( unit => {
-    _unit = unit;
-  });
+    await models.Unit.findByPk(unitId).then(unit => {
+        _unit = unit;
+    });
 
-  return _unit;
+    return _unit;
 }
 
-//return all unitar for a given staffId
-async function getUnitByStaff(_staffId) 
-{
-  let _units;
+//return all units for a given staffId
+async function getUnitByStaff(staffId) {
+    let _units;
 
-  await models.Unit.findAll({
-      where: {
-        staffId: _staffId
-      }
-    }).then( units => {
-      _units = units;
-  });
+    await models.Unit.findAll({
+        where: {
+            staffId: staffId
+        }
+    }).then(units => {
+        _units = units;
+    });
 
-  return _units;
+    return _units;
 }
 
 module.exports = {
     getUnitByStaff,
     getUnit
-}
+};
