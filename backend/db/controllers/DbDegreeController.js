@@ -1,11 +1,10 @@
-const { models } = require('../models/index')
+const { models } = require('../models/index');
 
 //return a degree for a given degreeId
-async function getDegree(_degreeId) 
-{
+async function getDegree(degreeId) {
     let _degree;
 
-    await models.Degree.findByPk(_degreeId).then( degree => {
+    await models.Degree.findByPk(degreeId).then(degree => {
         _degree = degree;
     });
 
@@ -14,4 +13,4 @@ async function getDegree(_degreeId)
 
 module.exports = {
     getDegree
-}
+};

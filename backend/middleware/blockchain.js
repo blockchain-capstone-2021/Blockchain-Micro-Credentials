@@ -9,9 +9,9 @@
 
 const path = require('path');
 require('dotenv').config({
-  path: path.join(__dirname, '../.env'),
-  debug: process.env.DEBUG
-})
+    path: path.join(__dirname, '../.env'),
+    debug: process.env.DEBUG
+});
 
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const Web3 = require("web3");
@@ -22,134 +22,126 @@ const privateKey = process.env.GANACHE_PRIVATE_KEY;
 
 const privateKeyBuffer = Buffer.from(privateKey, 'hex');
 
+//Provider config for production
 // const provider = new HDWalletProvider(
 //     privateKey, 
 //     process.env.GANACHE_URL
 // );  
 
+//Provider config for local development
 const provider = new HDWalletProvider(
-    privateKey, 
+    privateKey,
     "http://127.0.0.1:7545"
-);  
+);
 
 const web3 = new Web3(provider);
 
-web3.eth.defaultAccount= process.env.GANACHE_DEFAULT_ACCOUNT;
+//Setting the default account to the first account in the sandbox
+web3.eth.defaultAccount = process.env.GANACHE_DEFAULT_ACCOUNT;
 
-async function addHashToContractWithTracker(contractJson, trackerContractJson, contractAddress, trackerContractAddress, hash, key)
-{
-    let contract = new web3.eth.Contract(contractJson.abi,  contractAddress);
+//Function called when you want to add a hash to an array with it's indexed being tracked
+async function addHashToContractWithTracker(contractJson, trackerContractJson, contractAddress, trackerContractAddress, hash, key) {
+    //Get the respective contracts
+    let contract = new web3.eth.Contract(contractJson.abi, contractAddress);
     let trackerContract = new web3.eth.Contract(trackerContractJson.abi, trackerContractAddress);
-    
-    const preLength = await contract.methods.getLength().call();
 
-    console.log("printing the array length before mod: "+preLength);
-
-    await addHash(contract, trackerContract, contractAddress, trackerContractAddress, hash, key, getIndex); 
-
+    await addHash(contract, trackerContract, contractAddress, trackerContractAddress, hash, key, getIndex);
 }
 
-async function addHashToContractWithOutTracker(contractJson, contractAddress, hash)
-{
-    let contract = new web3.eth.Contract(contractJson.abi,  contractAddress);
+//Function called when you want to add a hash to an array without it's indexed being tracked
+async function addHashToContractWithOutTracker(contractJson, contractAddress, hash) {
+    //Get the respective contract 
+    let contract = new web3.eth.Contract(contractJson.abi, contractAddress);
 
-    const preLength = await contract.methods.getLength().call();
-
-    console.log("printing the array length before mod: "+preLength);
-
-    await addHashWithoutTracker(contract, contractAddress, hash, printNewLength);
+    await addHashWithoutTracker(contract, contractAddress, hash);
 }
 
 //Returning a promise
-//Below is an example of how to deal with the return promise:
-//      var hash;
-//      await getHashFromContract(moduleContract, moduleTrackerContract, moduleAddress, moduleTrackerAddress, key).then(function(result){
-//          hash = result;
-//      });
-//      console.log(hash);
-async function getHashFromContract(contractJson, trackerContractJson, contractAddress, trackerContractAddress, key)
-{
-    let contract = new web3.eth.Contract(contractJson.abi,  contractAddress);
+//Function called when you want the IPFS hash given a particular key.
+async function getHashFromContract(contractJson, trackerContractJson, contractAddress, trackerContractAddress, key) {
+    //Get the respective contracts
+    let contract = new web3.eth.Contract(contractJson.abi, contractAddress);
     let trackerContract = new web3.eth.Contract(trackerContractJson.abi, trackerContractAddress);
 
     const index = await trackerContract.methods.returnIndex(key).call();
 
-    console.log("printing the tracker returned index: "+index);
-
     var hash;
 
-    await contract.methods.returnHash(index).call().then(function(result)
-    {
+    await contract.methods.returnHash(index).call().then(function (result) {
         hash = result;
     });
 
     return hash;
 }
 
-async function addHashWithoutTracker(contract, contractAddress, hash, callback)
-{
+//Function to add a hash without it's index being tracked - used when the current score for a module attempt is not higher than the best score
+async function addHashWithoutTracker(contract, contractAddress, hash) {
     const data = contract.methods.addHash(hash).encodeABI();
 
     await web3.eth.getTransactionCount(web3.eth.defaultAccount, async (err, txCount) => {
+        //Creating  the transaction object
         const txObject = {
             nonce: web3.utils.toHex(txCount),
             gasLimit: web3.utils.toHex(1000000),
             gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
             to: contractAddress,
             data: data
-        }
+        };
 
-        const tx = new Tx(txObject)
+        //Signing the transaction
+        const tx = new Tx(txObject);
         tx.sign(privateKeyBuffer);
 
-        const serializedTx = tx.serialize()
-        const raw = '0x' + serializedTx.toString('hex')
+        const serializedTx = tx.serialize();
+        const raw = '0x' + serializedTx.toString('hex');
 
-        await web3.eth.sendSignedTransaction (raw, (err, txHash) => {
-            console.log('error:', err, 'txHash:', txHash)
-        })
-    })
-
-    await callback(contract)
+        //Send the transaction to the blockchain
+        await web3.eth.sendSignedTransaction(raw, (err, txHash) => {
+            console.log('Adding Hash Without Tracker - Error:', err, 'TxHash:', txHash);
+        });
+    });
 }
 
-async function addHash(contract, trackerContract, contractAddress, trackerContractAddress, hash, key, callback)
-{
+//Function to add a hash with it's index being tracked
+async function addHash(contract, trackerContract, contractAddress, trackerContractAddress, hash, key, callback) {
     const data = contract.methods.addHash(hash).encodeABI();
+
     await web3.eth.getTransactionCount(web3.eth.defaultAccount, async (err, txCount) => {
+        //Creating  the transaction object
         const txObject = {
             nonce: web3.utils.toHex(txCount),
             gasLimit: web3.utils.toHex(1000000),
             gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
             to: contractAddress,
             data: data
-        }
+        };
 
-        const tx = new Tx(txObject)
+        //Signing the transaction
+        const tx = new Tx(txObject);
         tx.sign(privateKeyBuffer);
 
-        const serializedTx = tx.serialize()
-        const raw = '0x' + serializedTx.toString('hex')
+        const serializedTx = tx.serialize();
+        const raw = '0x' + serializedTx.toString('hex');
 
-        await web3.eth.sendSignedTransaction (raw, async (err, txHash) => {
-            console.log('error:', err, 'txHash:', txHash)
-        })
-    })
-    await callback(contract, trackerContract, trackerContractAddress, key, addTracker)
+        //Send the transaction to the blockchain
+        await web3.eth.sendSignedTransaction(raw, async (err, txHash) => {
+            console.log('Adding Hash to Array - Error:', err, 'TxHash:', txHash);
+        });
+    });
+    await callback(contract, trackerContract, trackerContractAddress, key, addTracker);
 }
 
-async function getIndex (contract, trackerContract, trackerContractAddress, key, callback)
-{
+//Function to get the latest index of the hash array in a given contract
+async function getIndex(contract, trackerContract, trackerContractAddress, key, callback) {
     const returnIndex = await contract.methods.getLastIndex().call();
 
-    console.log("printing the array index: "+returnIndex);
-
-    await callback(returnIndex, contract, trackerContract, trackerContractAddress, key, printNewLength);
+    await callback(returnIndex, trackerContract, trackerContractAddress, key);
 }
 
 //Returning a promise
-async function getHashIndex (trackerContractJson, trackerContractAddress, key)
-{
+//Function called when you want the tracked index of a hash given it's key.
+async function getHashIndex(trackerContractJson, trackerContractAddress, key) {
+    //Get the respective contract
     let trackerContract = new web3.eth.Contract(trackerContractJson.abi, trackerContractAddress);
 
     const index = await trackerContract.methods.returnIndex(key).call();
@@ -157,57 +149,38 @@ async function getHashIndex (trackerContractJson, trackerContractAddress, key)
     return index;
 }
 
-//Returning a promise
-async function getLatestIndex (contractJson, contractAddress)
-{
-    let contract = new web3.eth.Contract(contractJson.abi,  contractAddress);
-
-    const returnIndex = await contract.methods.getLastIndex().call();
-
-    return returnIndex
-}
-
-async function addTracker(returnIndex, contract, trackerContract, trackerContractAddress, key, callback)
-{
+//Function to add a tracker for a given index of a hash array in a given contract
+async function addTracker(returnIndex, trackerContract, trackerContractAddress, key) {
     const trackerData = trackerContract.methods.addTracker(key, returnIndex).encodeABI();
+
     await web3.eth.getTransactionCount(web3.eth.defaultAccount, async (err, txCount) => {
+        //Creating  the transaction object
         const txObject = {
             nonce: web3.utils.toHex(txCount),
             gasLimit: web3.utils.toHex(1000000),
             gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
             to: trackerContractAddress,
             data: trackerData
-        }
+        };
 
-        const tx = new Tx(txObject)
+        //Signing the transaction
+        const tx = new Tx(txObject);
         tx.sign(privateKeyBuffer);
 
-        const serializedTx = tx.serialize()
-        const raw = '0x' + serializedTx.toString('hex')
+        const serializedTx = tx.serialize();
+        const raw = '0x' + serializedTx.toString('hex');
 
-        await web3.eth.sendSignedTransaction (raw, async (err, txHash) => {
-            console.log('error:', err, 'txHash:', txHash)
-        })
-    })
-    await callback(contract)
-}
-
-async function printNewLength(contract)
-{
-    const postLength = await contract.methods.getLength().call();
-
-    console.log("printing the array length after mod: "+postLength);
+        //Send the transaction to the blockchain
+        await web3.eth.sendSignedTransaction(raw, async (err, txHash) => {
+            console.log('Adding Tracker to Index - Error:', err, 'TxHash:', txHash);
+        });
+    });
 }
 
 //Returning a promise
-//Below is an example of how to deal with the return promise:
-//      var exists    
-//      await checkExists(moduleTrackerContract,moduleTrackerAddress,key).then(function(result){
-//          exists = result;
-//      });
-//      console.log(exists);
-async function checkExists(trackerContractJson, trackerContractAddress, key)
-{
+//Function called when you want to check whether a given key exists.
+async function checkExists(trackerContractJson, trackerContractAddress, key) {
+    //Get the respective contract
     let trackerContract = new web3.eth.Contract(trackerContractJson.abi, trackerContractAddress);
 
     const exists = await trackerContract.methods.checkExists(key).call();
@@ -220,6 +193,5 @@ module.exports = {
     addHashToContractWithOutTracker,
     getHashFromContract,
     checkExists,
-    getHashIndex,
-    getLatestIndex
-}
+    getHashIndex
+};

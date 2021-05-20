@@ -1,20 +1,20 @@
 // Tool to extract the contract addresses after a truffle migration has been run.
 
 const fs = require('fs')
-const filesToIgnore = ['IterableMapping.json','Migrations.json']
+const filesToIgnore = ['IterableMapping.json', 'Migrations.json']
 
 const files = fs.readdir('./build/contracts/', (err, files) => {
     if (err) {
         console.log(err);
     }
-    
+
     const contracts = files;
 
     // removing the migration and iterrable mapping json
 
     filesToIgnore.forEach(ignoredFile => {
         const index = contracts.indexOf(ignoredFile)
-        if(index >= 0) {
+        if (index >= 0) {
             contracts.splice(index, 1)
         }
     });

@@ -1,7 +1,7 @@
 const assert = require('assert');
 
-const sequelizeMock = require('sequelize-mock')
-var DBConnectionMock = new sequelizeMock
+const sequelizeMock = require('sequelize-mock');
+var DBConnectionMock = new sequelizeMock;
 
 var QuestionMock = DBConnectionMock.define('questions', {
     moduleId: 1,
@@ -9,95 +9,97 @@ var QuestionMock = DBConnectionMock.define('questions', {
 });
 
 describe('Db Question Controller', () => {
+    //Test whether you receive a given number of random questions for a given module.
     describe('getRandomizedQuestions()', () => {
         it('should return the correct number of questions', async () => {
-            let moduleId = 1
-            let numberOfQuestions = 1
-            let randomizedQuestions = await getRandomizedQuestions(moduleId, numberOfQuestions)
+            let moduleId = 1;
+            let numberOfQuestions = 1;
+            let randomizedQuestions = await getRandomizedQuestions(moduleId, numberOfQuestions);
             assert.strictEqual(randomizedQuestions.length, numberOfQuestions);
-            for(const question of randomizedQuestions){
+            for (const question of randomizedQuestions) {
                 assert.strictEqual(question.moduleId, moduleId);
             }
         }).timeout(10000);
-    })
+    });
+    //Test whether you receive a all the questions for a given module.
     describe('getQuestions()', () => {
         it('should return all the questions for a module', async () => {
-            let moduleId = 1
-            let questionBank =  await getQuestions(moduleId)
-            let questionBankSize = await getQuestionsCount(moduleId)
-            let questionBankCount = questionBankSize.count
+            let moduleId = 1;
+            let questionBank = await getQuestions(moduleId);
+            let questionBankSize = await getQuestionsCount(moduleId);
+            let questionBankCount = questionBankSize.count;
             assert.strictEqual(questionBank.length, questionBankCount);
-            for(const question of questionBank){
+            for (const question of questionBank) {
                 assert.strictEqual(question.moduleId, moduleId);
             }
         }).timeout(10000);
-    })
+    });
     describe('getQuestion()', () => {
+        //Test whether you receive a question given a question Id
         it('should return the correct question Id', async () => {
-            let questionId = 1
-            let question = await getQuestion(questionId)
+            let questionId = 1;
+            let question = await getQuestion(questionId);
             assert.strictEqual(question.id, questionId);
         }).timeout(10000);
+        //Test whether you receive the incorrect question given a question Id
         it('should return the incorrect question Id', async () => {
-            let questionId = 1
-            let expectedQuestionId = 2
-            let question = await getQuestion(questionId)
+            let questionId = 1;
+            let expectedQuestionId = 2;
+            let question = await getQuestion(questionId);
             assert.notStrictEqual(question.id, expectedQuestionId);
         }).timeout(10000);
-    })
+    });
 });
 
 
 //return a given number of randomised questions for a given module
-async function getRandomizedQuestions (_moduleId, noOfQuestions) 
-{
+async function getRandomizedQuestions(_moduleId, noOfQuestions) {
     let _questions = await getQuestions(_moduleId);
     let _returnQuestions = [];
-  
-    for(var i=1; i<=noOfQuestions; i++)
-    {
-        var index = Math.floor(Math.random()*(_questions.length-1)+0);
-        let question = _questions[index]
+
+    for (var i = 1; i <= noOfQuestions; i++) {
+        var index = Math.floor(Math.random() * (_questions.length - 1) + 0);
+        let question = _questions[index];
         _questions.splice(index, 1);
-        _returnQuestions.push(question)
+        _returnQuestions.push(question);
     }
     return _returnQuestions;
 }
 
-async function getQuestions (_moduleId) 
-{
+//Get all the questions for a given module
+async function getQuestions(_moduleId) {
     let _questions;
 
     await QuestionMock.findAll({
         where: {
-          moduleId: _moduleId
+            moduleId: _moduleId
         }
-      }).then( questions => {
+    }).then(questions => {
         _questions = questions;
     });
 
-    return _questions
+    return _questions;
 }
 
 //return a question for a given questionId
-async function getQuestion(_questionId) 
-{
+async function getQuestion(_questionId) {
     let _question;
 
-    await QuestionMock.findById(_questionId).then( question => {
+    await QuestionMock.findById(_questionId).then(question => {
         _question = question;
     });
 
     return _question;
 }
 
-async function getQuestionsCount(_moduleId){
+//return the number of questions for a given module Id
+async function getQuestionsCount(_moduleId) {
 
     const count = await QuestionMock.findAndCount({
         where: {
             moduleId: _moduleId
         }
-      });
+    });
 
-    return count
+    return count;
 }
