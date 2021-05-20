@@ -71,12 +71,12 @@ const Unit = (props) => {
         return modules.map(module => {
             const isPublished = module.published ? '' : 'none'
             return (
-                <tr className="py-2" key={module.moduleId} style={{display:`${isPublished}`}}>
+                <tr className="py-2" key={module.moduleId} style={{backgroundColor:`${isPublished ? '' : 'lightgrey'}`}}>
                     <td>{module.moduleName}</td>
                     <td>{module.numAttempts}</td>
                     <td>{module.highestScore}</td>
                     <td>{module.weight}</td>
-                    <td><Link to={{pathname: `/module/${module.moduleId}`, state:{attemptNumber: module.numAttempts}}} className="btn btn-primary">Go</Link></td>
+                    <td>{isPublished ? <Link to={{pathname: `/module/${module.moduleId}`, state:{attemptNumber: module.numAttempts}}} className="btn btn-primary">Go</Link> : <button type="button" class="btn btn-primary" disabled={!isPublished}>Go</button>}</td>
                 </tr>
             )
         })
