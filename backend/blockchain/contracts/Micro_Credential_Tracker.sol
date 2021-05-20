@@ -3,29 +3,28 @@ pragma solidity >=0.6.8 <=0.8.3;
 
 import "./IterableMapping.sol";
 
-contract Micro_Credential_Tracker
-{
+contract Micro_Credential_Tracker {
     itmap private _trackers;
 
     using IterableMapping for itmap;
 
-    function addTracker(string memory key, uint index) public
-    {
+    //Add a tracker for a index of the micro-credential array
+    function addTracker(string memory key, uint256 index) public {
         _trackers.insert(key, index);
     }
 
-    function getLength () public view returns (uint)
-    {
+    //Get the length of the trackers array
+    function getLength() public view returns (uint256) {
         return _trackers.size;
     }
 
-    function checkExists(string memory key) public view returns (bool)
-    {
+    //Check whether a particular key exists
+    function checkExists(string memory key) public view returns (bool) {
         return _trackers.contains(key);
     }
 
-    function returnIndex (string memory key) public view returns (uint)
-    {
+    //Get the index being tracked for a particular key
+    function returnIndex(string memory key) public view returns (uint256) {
         return _trackers.get(key);
     }
 }

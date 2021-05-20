@@ -6,14 +6,11 @@ import "truffle/DeployedAddresses.sol";
 import "../contracts/QA.sol";
 import "../contracts/QA_Tracker.sol";
 
-contract QA_Test
-{
-    // The address of the Module contract to be tested
+contract QA_Test {
     QA qa = QA(DeployedAddresses.QA());
 
     QA_Tracker qa_tracker = QA_Tracker(DeployedAddresses.QA_Tracker());
 
-    // The expected length of the array 
     uint expectedSecondLength = 2;
 
     uint expectedFirstLength = 1;
@@ -30,8 +27,10 @@ contract QA_Test
 
     string expectedFirstString = "This is a sample string";
 
-    function testAddHash() public 
-    {
+    //Test whether a hash is being added correctly:
+    //  -- The size of the tracker should be correct 
+    //  -- The index being added to the tracker should be correct
+    function testAddHash() public {
         qa.addHash(expectedFirstString);
 
         uint returnedIndex = qa.getLastIndex();
@@ -45,8 +44,10 @@ contract QA_Test
         Assert.equal(returnedIndex, expectedFirstIndex, "Expected Index should match the index that is returned.");
     }
 
-    function testAddSecondHash() public
-    {
+    //Test whether a second hash is being added correctly:
+    //  -- The size of the tracker should be correct 
+    //  -- The index being added to the tracker should be correct
+    function testAddSecondHash() public {
         qa.addHash(expectedSecondString);
 
         uint returnedIndex = qa.getLastIndex();
@@ -60,24 +61,24 @@ contract QA_Test
         Assert.equal(returnedIndex, expectedSecondIndex, "Expected Index should match the index that is returned.");
     }
 
-    function  testLength() public
-    {
+    //Test whether the length of the hash array is correct
+    function  testLength() public {
         uint returnedLength = qa.getLength();
 
         Assert.equal(returnedLength, expectedSecondLength, "Expected length should match the length that is returned.");
     }
 
-    function testReturnFirstHash() public
-    {
+    //Test whether the first hash being returned is correct
+    function testReturnFirstHash() public {
         uint returnedIndex = qa_tracker.returnIndex(expectedFirstKey);
 
         string memory returnedHash = qa.returnHash(returnedIndex);
         
         Assert.equal(returnedHash, expectedFirstString, "Expected string should match the string that is returned.");
-    }
+    }   
 
-    function testReturnSecondHash() public
-    {
+    //Test whether the second hash being returned is correct
+    function testReturnSecondHash() public {
         uint returnedIndex = qa_tracker.returnIndex(expectedSecondKey);
 
         string memory returnedHash = qa.returnHash(returnedIndex);
@@ -85,22 +86,22 @@ contract QA_Test
         Assert.equal(returnedHash, expectedSecondString, "Expected string should match the string that is returned.");
     }
 
-    function testExists() public
-    {
+    //Test whether the a particular key exists
+    function testExists() public {
         bool exists = qa_tracker.checkExists(expectedFirstKey);
 
         Assert.equal(exists, true, "Expected state of existence should match the state of existence that is returned.");
     }
 
-    function testNotExist() public
-    {
+    //Test whether a particular key does not exist
+    function testNotExist() public {
         bool exists = qa_tracker.checkExists("does not exist");
 
         Assert.equal(exists, false, "Expected state of existence should match the state of existence that is returned.");
     }
 
-    function testUpdateValue() public
-    {
+    //Test whether the tracked index for a key is changeable, and whether the returned hash is then correct.
+    function testUpdateValue() public {
         qa_tracker.addTracker(expectedSecondKey, expectedFirstIndex);
 
         uint returnedIndex = qa_tracker.returnIndex(expectedSecondKey);

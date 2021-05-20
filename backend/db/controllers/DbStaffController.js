@@ -1,11 +1,10 @@
-const { models } = require('../models/index')
+const { models } = require('../models/index');
 
 //return a staff member for a given staffId
-async function getStaff(_staffId) 
-{
+async function getStaff(staffId) {
     let _staff;
 
-    await models.Staff.findByPk(_staffId).then( staff => {
+    await models.Staff.findByPk(staffId).then(staff => {
         _staff = staff;
     });
 
@@ -13,20 +12,18 @@ async function getStaff(_staffId)
 }
 
 //check if a staff member exists for a given staffId
-async function checkStaffExists(_staffId) 
-{
-    const staff = await getStaff(_staffId)
+async function checkStaffExists(staffId) {
+    const staff = await getStaff(staffId);
 
-    let staffExists = false
-    if(staff){
-      staffExists = true
+    let staffExists = false;
+    if (staff) {
+        staffExists = true;
     }
 
-    return staffExists
+    return staffExists;
 }
-
 
 module.exports = {
     getStaff,
     checkStaffExists
-}
+};
