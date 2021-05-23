@@ -172,7 +172,7 @@ const StaffModuleManage = (props) => {
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Questions Written</th>
+                            <th>Questions in quiz</th>
                             <th>Question Bank Size</th>
                             <th>Publish</th>
                             <th>Weight</th>
