@@ -44,7 +44,7 @@ const StudentProfile = () => {
                         </form>
                         
                     </section>:
-                    ""
+                    <p>No details found</p>
                 }
 
         </div>

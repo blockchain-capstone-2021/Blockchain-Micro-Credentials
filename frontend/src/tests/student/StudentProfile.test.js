@@ -12,4 +12,12 @@ describe("testing Student Profile component", () => {
   it('renders with submit', () => {
     expect(StudentProfile).toBeDefined();
   });
+
+  it('shows message when no details are retrieved', () => {
+    expect(
+        wrapper.containsMatchingElement(
+          <p>No details found</p>
+        )
+      ).toBeTruthy();
+  });
 });

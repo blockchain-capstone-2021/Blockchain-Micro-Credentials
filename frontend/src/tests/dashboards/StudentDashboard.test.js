@@ -19,7 +19,7 @@ describe('testing Student Dashboard component', () => {
         expect(container.text()).toEqual("Dashboard");
     });
 
-    it('renders Dashboard header', () => {
+    it('renders Enrolments header', () => {
         let container = wrapper.find("h2");
         expect(container).toHaveLength(1);
         expect(container.text()).toEqual("Enrolments");
@@ -32,9 +32,9 @@ describe('testing Student Dashboard component', () => {
     it('renders table headings', () => {
         expect(
             wrapper.containsMatchingElement(
-                <th scope="col">Course</th>,
-                <th scope="col">Enrolment Period</th>,
-                <th scope="col">Status</th>
+                <th>Course</th>,
+                <th>Enrolment Period</th>,
+                <th>Status</th>
             )
           ).toBeTruthy();
     });
