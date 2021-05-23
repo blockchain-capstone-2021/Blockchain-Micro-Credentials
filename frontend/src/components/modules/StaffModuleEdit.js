@@ -39,7 +39,7 @@ const StaffModuleEdit = (props) => {
         if (module) {
             return (
             <form className="align-center">
-            <h1>Module Edit</h1>
+            <h1 id="module-heading">Module Edit</h1>
             <div className="form-group py-3">
             <label htmlFor="qid">Module ID</label>
             <input type="text" className="form-control" value={module.moduleNo} id="mid" disabled/>
