@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import "../style.css";
-import useToken from './useToken';
 import Header from "./templates/Header";
-import Login from "./Login";
+import Login from "./login/Login";
+import useToken from './login/useToken';
 
 import StaffDashboard from './dashboards/StaffDashboard'
 import StudentDashboard from './dashboards/StudentDashboard'
@@ -15,12 +15,12 @@ import StudentMarkEntry from './student/StudentMarkEntry'
 
 import Module from "./modules/Module"
 import StaffModuleManage from './modules/StaffModuleManage'
+import StaffModuleEdit from "./modules/StaffModuleEdit";
 import Unit from './units/Unit'
 
 import StaffQuestionManage from './questions/StaffQuestionManage'
 import StaffQuestionView from "./questions/StaffQuestionView";
 import StaffQuestionAdd from "./questions/StaffQuestionAdd";
-import StaffModuleEdit from "./modules/StaffModuleEdit";
 
 const App = () => {
 

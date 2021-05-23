@@ -1,89 +1,86 @@
-const { models } = require('../models/index')
+const { models } = require('../models/index');
 
-//return a given number of randomised questions for a given module
-async function getRandomizedQuestions (_moduleId, noOfQuestions) 
-{
-    let _questions = await getQuestions(_moduleId);
-    let _returnQuestions = [];
-  
-    for(var i=1; i<=noOfQuestions; i++)
-    {
-        var index = Math.floor(Math.random()*(_questions.length-1)+0);
-        let question = _questions[index]
-        _questions.splice(index, 1);
-        _returnQuestions.push(question)
+//returns a given number of randomised questions for a given module
+async function getRandomizedQuestions(moduleId, noOfQuestions) {
+    let questions = await getQuestions(moduleId);
+    let returnQuestions = [];
+
+    for (var i = 1; i <= noOfQuestions; i++) {
+        var index = Math.floor(Math.random() * (questions.length - 1) + 0);
+        let question = questions[index];
+        questions.splice(index, 1);
+        returnQuestions.push(question);
     }
-    return _returnQuestions;
+    return returnQuestions;
 }
 
-async function getQuestions (_moduleId) 
-{
+//returns all questions for a given module
+async function getQuestions(moduleId) {
     let _questions;
 
     await models.Question.findAll({
         where: {
-          moduleId: _moduleId
+            moduleId: moduleId
         }
-      }).then( questions => {
+    }).then(questions => {
         _questions = questions;
     });
 
-    return _questions
+    return _questions;
 }
 
-//return a question for a given questionId
-async function getQuestion(_questionId) 
-{
+//returns a question for a given questionId
+async function getQuestion(questionId) {
     let _question;
 
-    await models.Question.findByPk(_questionId).then( question => {
+    await models.Question.findByPk(questionId).then(question => {
         _question = question;
     });
 
     return _question;
 }
 
-async function getQuestionsCount(_moduleId){
+//returns number of questions for a given module
+async function getQuestionsCount(moduleId) {
 
     const count = await models.Question.count({
         where: {
-            moduleId: _moduleId
+            moduleId: moduleId
         }
-      });
-
-    return count
-}
-
-//add a new question to a given module
-async function addQuestionToModule(_moduleId, _content)
-{
-    let _questionId
-    await models.Question.create({ 
-        moduleId: _moduleId, 
-        content: _content
-    }).then(question => {
-        _questionId = question.questionId
     });
 
-    return _questionId
+    return count;
+}
+
+//adds a new question to a given module
+async function addQuestionToModule(moduleId, content) {
+    let questionId;
+    await models.Question.create({
+        moduleId: moduleId,
+        content: content
+    }).then(question => {
+        questionId = question.questionId;
+    });
+
+    return questionId;
 }
 
 //delete question by question id
-async function deleteQuestion(_questionId)
-{
-    console.log('DB CONTROLLER');
+async function deleteQuestion(questionId) {
     await models.Question.destroy({
         where: {
-            questionId: _questionId
+            questionId: questionId
         }
-    })
+    });
 }
-async function deleteAllQuestions(_moduleId){
+
+//delete all questions for a given module
+async function deleteAllQuestions(moduleId) {
     await models.Question.destroy({
         where: {
-            moduleId: _moduleId
+            moduleId: moduleId
         }
-      })
+    });
 }
 
 module.exports = {
@@ -94,4 +91,4 @@ module.exports = {
     getQuestionsCount,
     deleteQuestion,
     deleteAllQuestions
-}
+};

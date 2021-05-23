@@ -29,7 +29,6 @@ const Module = (props) => {
             
         }
         getQuestionsAndAnswers()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
@@ -45,7 +44,7 @@ const Module = (props) => {
         })
     }
 
-    // Submites the module once user has click the submit button
+    // Submits the module once user has click the submit button
     async function submitModule(e) {
         e.preventDefault()
         setSubmitting(true)
@@ -64,7 +63,7 @@ const Module = (props) => {
             'moduleId':window.localStorage.getItem('moduleId'),
             'studentId': window.localStorage.getItem('userId'),
             'enrolmentPeriod': window.localStorage.getItem('enrolmentPeriod'),
-            'attemptNo': props.location.attemptNumber+1,
+            'attemptNo': props.location.state.attemptNumber+1,
             'qAPairs': qa_pair
         }
         return payload;
@@ -91,10 +90,12 @@ const Module = (props) => {
                 submitting?
                 "Please hold while the quiz is processing.":
                 <form className="w-75">
-                <h1>Module {props.match.params.moduleId} Quiz</h1>
-                <h4>Attempt: #{props.location.attemptNumber+1}</h4>
+                <h1>Module Quiz</h1>
+                <h4>Attempt: #{props.location.state.attemptNumber+1}</h4>
                 {questions ? renderQuestions() : 'Loading'}
-                <button type="submit" className="btn btn-primary py-3" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
+                <div className="d-flex">
+                    <button type="submit" className="btn btn-primary my-3 align-button-right" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
+                </div>
             </form>
             }
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import StaffDashboard from "./StaffDashboard";
+import StaffDashboard from "../../components/dashboards/StaffDashboard";
 import {shallow} from "enzyme";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
@@ -13,6 +13,12 @@ describe('testing Staff Dashboard component', () => {
         expect(StaffDashboard).toBeDefined();
     });
     
+    it('renders Dashboard header', () => {
+        let container = wrapper.find("h1");
+        expect(container).toHaveLength(1);
+        expect(container.text()).toEqual("Dashboard");
+    });
+
     it('renders 3 cards', () => {
         expect(wrapper.find("#card-body")).toHaveLength(3);
     });
