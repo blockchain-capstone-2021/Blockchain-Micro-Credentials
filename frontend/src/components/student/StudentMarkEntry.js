@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {  useHistory } from 'react-router'
 import microcredapi from '../../apis/microcredapi'
+import FlashMessage from 'react-flash-message'
 
 const StudentMarkEntry = (props) => {
 
@@ -9,6 +10,7 @@ const StudentMarkEntry = (props) => {
     const [student, setStudent] = useState()
     const [finalMark, setFinalMark] = useState()
     const [submitting, setSubmitting] = useState(false)
+    const [error, setError] = useState()
 
     // API call to get student data
     React.useEffect(() => {
@@ -25,10 +27,18 @@ const StudentMarkEntry = (props) => {
     async function onSubmit(e) {
         e.preventDefault();
         setSubmitting(true)
-
-        await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`).then(response => {
-            history.push(`/manage/students`);
-        })
+        console.log(e.target.value);
+        if(finalMark > 0 && finalMark < 101) {
+            await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`).then(response => {
+                history.push(`/manage/students`);
+            })
+        }
+        else {
+            setError('Final mark value must be between 0 and 100.')
+            setTimeout(() => {
+                setError(undefined)
+            }, 8000);
+        }
         setSubmitting(false)
     }
         
@@ -40,8 +50,16 @@ const StudentMarkEntry = (props) => {
                 <p>Please hold while the form is processing.</p> :
                 student ?
                 <form>
+                {
+                    error ?
+                    <FlashMessage duration={8000}>
+                    <div className="my-5 text-center">
+                    <p className="alert alert-danger text-break">{error}</p>
+                    </div>
+                    </FlashMessage>:
+                ''
+                }
                 <fieldset className="mt-5">
-                    
                     <div className="mb-3">
                     <label htmlFor="studentId" className="form-label">Id</label>
                     <input type="text" id="studentId" className="form-control" value={student.studentId}  disabled/>
