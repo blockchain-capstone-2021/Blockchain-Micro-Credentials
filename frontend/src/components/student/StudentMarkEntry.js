@@ -27,7 +27,6 @@ const StudentMarkEntry = (props) => {
     async function onSubmit(e) {
         e.preventDefault();
         setSubmitting(true)
-        console.log(e.target.value);
         if(finalMark > 0 && finalMark < 101) {
             await microcredapi.post(`/marks/submitFinalMark/${student.studentId}/${props.match.params.courseId}/${finalMark}`).then(response => {
                 history.push(`/manage/students`);
