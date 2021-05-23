@@ -9,37 +9,31 @@ import '../../style.css'
 const StaffModuleManage = (props) => {
 
     // State and history
-
     const [courses, setCourses] = useState()
     const [modules, setModules] = useState()
+    const [availableQuestions, setAvailableQuestions] = useState([])
     const [selectedCourse, setSelectedCourse] = useState()
     const [, setUpdating] = useState(false)
     const [error, setError] = useState(true)
     const [mounted, setMounted] = useState(true)
+    const [ModuleTableData, setModuleTableData] = useState()
 
     // API calls before the component is mounted.
     useEffect(() => {
-
         getCourses()
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         if(mounted){
-            if(!selectedCourse){
-                setModules({})
-            }
             getModules(selectedCourse)
+            setModuleTableData(renderModules())
         }
         return () => {
             setMounted(false)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCourse])
     
     // api calls to get data
-    
     async function getCourses() {
         return await microcredapi.get(`/unit/${window.localStorage.getItem('userId')}`).then(response => {
             setCourses(response.data.units);
@@ -48,7 +42,8 @@ const StaffModuleManage = (props) => {
     
     async function getModules(unitId) {
         return await microcredapi.get(`module/${unitId}`).then(response => {
-            setModules(response.data.modules)
+            setAvailableQuestions(response.data.availableQuestions);
+            setModules(response.data.modules);
         })
     }
 
@@ -56,7 +51,7 @@ const StaffModuleManage = (props) => {
         const callType = type
         let response;
         try {
-            response = await microcredapi.get(`/module/${moduleId}/${callType}`)
+            response = await microcredapi.post(`/module/${moduleId}/${callType}`)
             if (response.data.message) {
                 setError({status: true, message: response.data.message})
                 setTimeout(() => {
@@ -75,7 +70,6 @@ const StaffModuleManage = (props) => {
     }
 
     // Set selected course into state
-
     function renderCourseOptions() {
         return courses.map(course => {
             return(
@@ -83,20 +77,8 @@ const StaffModuleManage = (props) => {
             )
         })
     }
-    // function renderCourseOptions() {
-    //     return courses.map(course => {
-    //         return(
-    //             <div>
-    //                 <option key={course.unitId} defaultValue={course.unitId} onClick={() => onCourseSelect(course.unitId)}>{course.unitName}</option>
-    //                 {/* <button type="button" className="btn btn-primary" value={'t'} onClick={() =>onCourseSelect(course.unitId)}>{course.unitName}</button> */}
-    //             </div>
-                
-    //         )
-    //     })
-    // }
 
     // Show the search form on the page
-
     function renderSearchForm() {
         return (
             <div>
@@ -124,9 +106,9 @@ const StaffModuleManage = (props) => {
                 </form>
             </div>
         )
-    }       
-    // Render modules after a course has been selected.
+    }
 
+    // Render modules after a course has been selected.
     function renderModules() {
         try {
             return modules.map(module => {
@@ -135,13 +117,15 @@ const StaffModuleManage = (props) => {
                     <td>{module.moduleId}</td>
                     <td>{module.moduleName}</td>
                     <td>{module.noOfQuestions}</td>
+                    <td>{getAvailableQuestions(module.moduleId)}</td>
+                    
                     <td>{module.published === true ? 'Published' : 'Unpublished'}</td>
                     <td>{`${module.weight}`}</td>
                     <td>
                         {module.published === false ? 
                             (
                                 <div className="d-flex">
-                                    <Link to={`/module/edit/${module.moduleNo}`} className="btn btn-warning  flex-fill" style={{marginRight: '1em'}}>Edit</Link>
+                                    <Link to={{pathname:`/module/edit/${module.moduleNo}`, state:{module}}} className="btn btn-warning  flex-fill" style={{marginRight: '1em'}}>Edit</Link>
                                     <button type="button" className="btn btn-success flex-fill" onClick={() => manageModule('publish', module.moduleId)}>Publish</button>
                                 </div>
                             )
@@ -159,6 +143,10 @@ const StaffModuleManage = (props) => {
         }
     }
 
+    function getAvailableQuestions(moduleNo){
+        return availableQuestions[moduleNo]
+    }
+
     return (
         <div className="align-center">
             <section className="pb-5">
@@ -172,7 +160,7 @@ const StaffModuleManage = (props) => {
                 error.status ?
                 <FlashMessage duration={8000}>
                 <div className="my-5 text-center">
-                <strong className="alert alert-danger">{error.message}</strong>
+                <p className="alert alert-danger text-break">{error.message}</p>
                 </div>
                 </FlashMessage>:
             ''
@@ -184,7 +172,8 @@ const StaffModuleManage = (props) => {
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th># of Questions</th>
+                            <th>Questions Written</th>
+                            <th>Question Bank Size</th>
                             <th>Publish</th>
                             <th>Weight</th>
                             <th style={{width:'5%'}}>Manage</th>
