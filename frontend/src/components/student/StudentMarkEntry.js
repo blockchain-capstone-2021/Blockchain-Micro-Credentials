@@ -37,7 +37,7 @@ const StudentMarkEntry = (props) => {
             setError('Final mark value must be between 0 and 100.')
             setTimeout(() => {
                 setError(undefined)
-            }, 8000);
+            }, 3000);
         }
         setSubmitting(false)
     }
