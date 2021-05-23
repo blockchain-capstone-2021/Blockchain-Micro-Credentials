@@ -60,7 +60,7 @@ const StudentMarkEntry = (props) => {
                     </div>
                     <div className="mb-3">
                     <label htmlFor="finalMark" className="form-label">Final Mark</label>
-                    <input type="number" id="finalMark" className="form-control" max="100" onChange={(e) => {setFinalMark(e.target.value)}}/>
+                    <input type="number" id="finalMark" className="form-control" min="0" max="100" onChange={(e) => {setFinalMark(e.target.value)}}/>
                     </div>
                     <div className="d-flex">
                         <button type="button" name="" id="" className="btn btn-primary btn-lg btn-block text-center align-button-right" onClick={(e) => onSubmit(e)}>Submit</button>
