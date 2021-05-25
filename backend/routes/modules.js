@@ -3,11 +3,13 @@ const { getModule, getModulesForStaff, submitModule, publishModule, unpublishMod
 const { getRandomizedQuestions } = require('../controllers/Question_Controller')
 var router = express.Router()
 
+// Get method which returns questions for modules taught by staff
 router.get('/:unitId', getModulesForStaff, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success,
-            modules: res.locals.modules
+            modules: res.locals.modules,
+            availableQuestions: Object.fromEntries(res.locals.availableQuestions)
         })
     }
     return res.status(400).send({
@@ -15,6 +17,7 @@ router.get('/:unitId', getModulesForStaff, async function (req,res,next) {
     })
 })
 
+// Get method which returns questions for a module in random order
 router.get('/:moduleId/questions', getRandomizedQuestions, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
@@ -28,8 +31,8 @@ router.get('/:moduleId/questions', getRandomizedQuestions, async function (req,r
     }) 
 })
 
-
-router.get('/:moduleId/publish', publishModule, async function (req,res,next) {
+// Post method to publish a module 
+router.post('/:moduleId/publish', publishModule, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success
@@ -45,7 +48,8 @@ router.get('/:moduleId/publish', publishModule, async function (req,res,next) {
     }) 
 })
 
-router.get('/:moduleId/unpublish', unpublishModule, async function (req,res,next) {
+// Post method to unpublish a module 
+router.post('/:moduleId/unpublish', unpublishModule, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success
@@ -61,6 +65,7 @@ router.get('/:moduleId/unpublish', unpublishModule, async function (req,res,next
     }) 
 })
 
+// Post method to submit a module 
 router.post('/submit', submitModule ,async function (req,res,next) {
     if (res.locals.success) {
         return res.status(200).send({
@@ -72,6 +77,7 @@ router.post('/submit', submitModule ,async function (req,res,next) {
     }) 
 })
 
+// Get method which returns information on a module
 router.get('/:moduleId/info/', getModule, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
@@ -84,7 +90,8 @@ router.get('/:moduleId/info/', getModule, async function (req,res,next) {
     })
 })
 
-router.get('/:moduleId/edit/:noOfQuestions', updateModuleNoOfQuestions, async function (req,res,next) {
+// Get method which returns information on a module
+router.post('/:moduleId/edit/:noOfQuestions', updateModuleNoOfQuestions, async function (req,res,next) {
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success

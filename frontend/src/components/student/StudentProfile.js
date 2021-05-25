@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
+import { Link } from 'react-router-dom'
 import microcredapi from '../../apis/microcredapi'
 
-const StudentProfile = (props) => {
+const StudentProfile = () => {
 
     const [student, setStudent] = useState()
 
@@ -37,10 +38,13 @@ const StudentProfile = (props) => {
                             <label htmlFor="inputCredits" className="form-label">Credits:</label>
                             <input type="text" className="form-control" id="credits" disabled = {true} defaultValue={student.credits}></input>
                         </div>
+                        <div className="d-flex">
+                            <Link to='/' className="btn btn-primary align-button-right">Back</Link>
+                        </div>
                         </form>
                         
                     </section>:
-                    ""
+                    <p>No details found</p>
                 }
 
         </div>

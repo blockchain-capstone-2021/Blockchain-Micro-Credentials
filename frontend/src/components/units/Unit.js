@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import microcredapi from '../../apis/microcredapi';
+import FlashMessage from 'react-flash-message'
 
 const Unit = (props) => {
 
@@ -10,6 +11,9 @@ const Unit = (props) => {
     const [modules, setModules] = useState()
     const [grade, setGrade] = useState()
     const [submitting, setSubmitting] = useState(false) // Set to false as should only be true when button clicked
+    const [error, setError] = useState('')
+    const [publishedModules, setPublishedModules] = useState()
+    const [canSubmit, setCanSubmit] = useState()
 
     useEffect(() => {
         // Save unitId to localStorage
@@ -19,8 +23,9 @@ const Unit = (props) => {
         // Retrive modules from database and set as state variable
         async function getModules(){
             await microcredapi.get(`/unit/${unitId}/${window.localStorage.getItem('userId')}`).then(response => {
+                setCanSubmit(response.data.submittable)
+                let publishedModulesCount = 0;
                 const updatedModules = []
-                
                 const grade = {
                     finalGrade: response.data.finalGrade,
                     cumulativeScore: response.data.cumulativeScore
@@ -31,18 +36,24 @@ const Unit = (props) => {
                         // use Object.keys() to handle key value mismatch
                         numAttempts: response.data.numAttempts[key+ parseInt(Object.keys(response.data.numAttempts)[0])],
                         highestScore: response.data.highestScore[key+ parseInt(Object.keys(response.data.highestScore)[0])],
-                        
                     }
+                    console.log(module);
+                    if(module.published){publishedModulesCount = publishedModulesCount + 1}
                     updatedModules.push(newModule)
                     return true
                 })
+                console.log(publishedModulesCount);
+                setPublishedModules(publishedModulesCount)
                 setModules(updatedModules)
                 setGrade(grade)
+                
             })
+            
         }
         getModules()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        
     }, [])
+
 
     useEffect(() => {
         // Retrieve student details from database to display unit name
@@ -57,20 +68,27 @@ const Unit = (props) => {
     // Post method to submit microcredential
     async function submitMicroCredential() {
         setSubmitting(true)
-        await microcredapi.get(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
+        const response = await microcredapi.post(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
         setSubmitting(false)
-        history.push('/')
+        if (response.data.success === 'false') {
+            setError(response.data.message)
+        }
+        if(response.data.success === 'true'){
+            history.push('/')
+        }
     }
     
     // Renders modules in table format
     function renderModules() {
         return modules.map(module => {
+            const isPublished = module.published ? '' : 'none'
             return (
-                <tr className="py-2" key={module.moduleId}>
+                <tr className="py-2" key={module.moduleId} style={{backgroundColor:`${isPublished == '' ? '' : 'lightgrey'}`}}>
                     <td>{module.moduleName}</td>
                     <td>{module.numAttempts}</td>
                     <td>{module.highestScore}</td>
-                    <td><Link to={{pathname: `/module/${module.moduleId}`, attemptNumber: module.numAttempts}} className="btn btn-primary">Go</Link></td>
+                    <td>{module.weight}</td>
+                    <td>{isPublished == '' ? <Link to={{pathname: `/module/${module.moduleId}`, state:{attemptNumber: module.numAttempts}}} className="btn btn-primary">Go</Link> : <button type="button" class="btn btn-primary" disabled={isPublished == '' ? false : true}>Go</button>}</td>
                 </tr>
             )
         })
@@ -82,7 +100,6 @@ const Unit = (props) => {
             <h5> Current Grade:  {`${grade.cumulativeScore}%`},   {grade.finalGrade}</h5>
         )
     }
-
     return (
             <div className="jumbotron align-center">
             {
@@ -90,14 +107,30 @@ const Unit = (props) => {
                 "Please hold while micro-credential is being submitted.": // Provides message to the user during long wait time
                 <div className="container mt-5">
                 {
-                    unit?
+                    unit ?
                     <section>
                         <h1>{unit.name}</h1>
                         <h4>{unit.code}</h4>
+                        <h5>{modules.length} modules ({publishedModules ? publishedModules : ''} published, {publishedModules ? (modules.length - publishedModules) : ''} unpublished) </h5>
                     </section>:
                     ""
                 }
-
+                {
+                    error ?
+                    <FlashMessage duration={8000}>
+                    <div className="my-5 text-center">
+                    <p className="alert alert-danger text-break">{error}</p>
+                    </div>
+                    </FlashMessage>:
+                ''
+                }
+                {
+                    canSubmit?
+                    '':
+                    <div class="alert alert-warning" role="alert">
+                    Please note that you cannot submit this microcredential until all modules have been attempted.
+                    </div>
+                }
                 <section>
                     <table className="table">
                         <thead>
@@ -105,6 +138,7 @@ const Unit = (props) => {
                                 <th>Name</th>
                                 <th># of Attempts</th>
                                 <th>Best result</th>
+                                <th>Weight</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -119,7 +153,11 @@ const Unit = (props) => {
                     </div>
                     <div className="d-flex">
                         <div style={{marginLeft:'auto', marginRight:'4em', paddingBottom:'5%'}}>
-                            <button type="button" name="" id="" className="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
+                            {
+                                canSubmit?
+                                <button type="button" name="" id="" className="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>:
+                                ''
+                            }
                         </div>
                     </div>
                 </section>
@@ -132,7 +170,7 @@ const Unit = (props) => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            Are you sure that you want to submit modules?<br/> Once submitted, you will no longer be able to take quizs for this course.
+                            Are you sure that you want to submit modules?<br/> Once submitted, you will no longer be able to take quizzes for this course.
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
