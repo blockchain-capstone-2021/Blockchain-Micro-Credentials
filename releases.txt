@@ -18,3 +18,15 @@ Staff will be able to:
 - Manually enter grades.
 - Publish and unpublish modules.
 - Add, remove and delete questions.
+
+### Known Bugs
+
+- Sidebar highlight does not update if redirected from staff dashboard cards, i.e. clicking go on the manage students card will not make the students sidebar link highlight
+- Login verification uses a dummy token which is not secure
+- Disconnect between module attempt number and best results where a user is logging in on more than one computer.
+- Microcredential submission does not redirect back to dashboard
+- Possible to submit quiz without providing any answers
+- Possible to publish a module that has 0 questions in it.
+- Possible to unpublish a module that has no registered attempts by any student, while a student is concurrently taking it. By doing so the student will still be able to submit the current attempt of the module. But in the event that the module stays unpublished indefinitely and or the staff member changes the number of questions to be taken, the student will still be able to submit the micro-credential for assessment. However, the assessment will be skewed and incorrect. 
+- If the email service fails at any point of its execution before the email is sent or during the email is being sent, the email will not be received by the student at any point even after. That is, the student will not receive an updated transcript and or degree and or micro-credential certificate for that cycle.
+- If the email service fails while creating the attachments or while uploading them to s3 bucket or while being deleted from the local directory, if there were any attachments successfully created they will remain in the folder structure. This will incrementally take up more local storage space. Further if the service fails while creating that attachments or uploading them to the s3, the attachments will be inaccessible and will need to be recreated elsewhere.
