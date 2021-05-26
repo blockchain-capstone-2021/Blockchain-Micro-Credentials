@@ -22,17 +22,21 @@ const privateKey = process.env.GANACHE_PRIVATE_KEY;
 
 const privateKeyBuffer = Buffer.from(privateKey, 'hex');
 
-//Provider config for production
-// const provider = new HDWalletProvider(
-//     privateKey, 
-//     process.env.GANACHE_URL
-// );  
-
-//Provider config for local development
-const provider = new HDWalletProvider(
-    privateKey,
-    "http://127.0.0.1:7545"
-);
+var provider;
+if (process.env.NODE_ENV == "production") {
+    //Provider config for production
+    provider = new HDWalletProvider(
+        privateKey,
+        process.env.GANACHE_URL
+    );
+}
+else {
+    //Provider config for local development
+    provider = new HDWalletProvider(
+        privateKey,
+        "http://127.0.0.1:7545"
+    );
+}
 
 const web3 = new Web3(provider);
 
