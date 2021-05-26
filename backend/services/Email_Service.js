@@ -1,14 +1,14 @@
-require('dotenv').config({
-    path: ('../.env'),
-    debug: process.env.DEBUG
-});
-
 let ejs = require("ejs");
 let pdf = require("html-pdf");
 const fs = require("fs");
 const AWS = require('aws-sdk');
 const Promise = require('bluebird');
 const path = require('path');
+
+require('dotenv').config({
+    path: path.join(__dirname, '../.env'),
+    debug: process.env.DEBUG
+});
 
 //Set up AWS
 AWS.config.update({
@@ -146,14 +146,14 @@ async function generateAttachment(studentId, degreeId, unitId, transcriptRows, s
     //Check what the attachment should be.
     if (attachmentOption === degreeAttachmentOption) {
         //template file
-        fileContent = fs.readFileSync("../templates/degree-template.ejs");
+        fileContent = fs.readFileSync(path.join(__dirname, "../templates/degree-template.ejs"));
         //render the template file with the given attributes
         data = ejs.render(fileContent.toString(), { student: student, degree: degree });
         //Provide the filename for the pdf to bre created
         fileName = `../attachments/${studentId}_${degreeId}.pdf`;
     } else if (attachmentOption === transcriptAttachmentOption) {
         //template file
-        fileContent = fs.readFileSync("../templates/transcript-template.ejs");
+        fileContent = fs.readFileSync(path.join(__dirname, '../templates/transcript-template.ejs'));
         //render the template file with the given attributes
         data = ejs.render(fileContent.toString(), { student: student, degree: degree, transcript: transcriptRows });
         //Provide the filename for the pdf to bre created
@@ -161,7 +161,7 @@ async function generateAttachment(studentId, degreeId, unitId, transcriptRows, s
         orientation = "Portrait";
     } else if (attachmentOption === certificateAttachmentOption) {
         //template file
-        fileContent = fs.readFileSync("../templates/certificate-template.ejs");
+        fileContent = fs.readFileSync(path.join(__dirname, "../templates/certificate-template.ejs"));
         //render the template file with the given attributes
         data = ejs.render(fileContent.toString(), { student: student, unit: unit });
         //Provide the filename for the pdf to bre created
