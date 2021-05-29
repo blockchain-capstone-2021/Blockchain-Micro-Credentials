@@ -6,9 +6,9 @@ All backend and routing files are located in `/backend`
 
 Follows a modifed MVC structure where there is no visible module section in this folder. All frontend rendering will be handled by React, the source files for which are located in `/frontend/src`. Communication between the two is via the Express API.
 
-### attachments:
+### attachments
 Temporarily holds all attachments generated for the email service
-### bin:
+### bin
 Config folder for running the node app
 ### blockchain
 Smart contracts and related code
@@ -16,34 +16,34 @@ Smart contracts and related code
  - contracts: Solidity smart contracts
  - migrations: All contract migration and deployment code
  - test: Smart contract tests
-### controllers: 
+### controllers
 The main application controllers supporting an MVC framework
-### db: 
+### db
 All code relevant to the mySQL database
  - config: Contains the database config file
  - controllers: Database controllers
  - migrations: Database migration files
  - models: Database models
  - seeders: Database data seeding files
-### exceptions: 
+### exceptions
 Custom exceptions
-### middleware: 
+### middleware
 Communication with external services (blockchain and IPFS)
-### node_modules: 
+### node_modules
 NPM packages
-### object_models: 
+### object_models
 Object models to be serialised and deserialised
  - blockchain: Key object models for blockchain tracker contracts
  - ipfs: Object models for IPFS storage
-### routes: 
+### routes
 Provide access to the API through a predefined set of urls.
-### services: 
+### services
 Email service functionality
-### templates: 
+### templates
 ejs templates for email attachment generation
 ### test: 
 Backend Node.js test code
-### utilities: 
+### utilities
 Helper methods
 
 
@@ -51,21 +51,29 @@ Helper methods
 
 All front end files are located in `/frontend`
 
-### Components
-
-All components will be kept in `/frontend/src`. These will serve as building blocks to render the web application.
-
-#### Templates
-
-Any template files to be used repeatedly (i.e. headers and footers) will:
- - Stored in `/frontend/src/components/templates`
- - Files names are prefixed with a _ (underscore) symbol. E.g. `_header.js`
-
-
+### node_modules 
+NPM packages
+### public
+Images and public CSS files
+### src
+Folder containing all Node source files
+ - apis: Creating connection to backend 
+ - components: React components
+     - dashboards: React components for dashboard pages 
+     - login: React components for login pages
+     - modules: React components for module pages
+     - questions: React components for question pages
+     - student: React components for student pages
+     - templates: React components for templates
+     - units: React components for unit pages
+ - tests: Frontend Node.js test code
+     - dashboards: Tests for dashboard components
+     - login: Tests for login components
+     - staff: Tests for module and question components
+     - student: Tests for student components
+     - units: Tests for unit components
  
 **Tree structure**
-
-*Note that the below is subject to change*
 
 ```bash
 .
@@ -118,7 +126,6 @@ Any template files to be used repeatedly (i.e. headers and footers) will:
 │           └── units
 └── node_modules
 ```
-
 
 # Installation
 
