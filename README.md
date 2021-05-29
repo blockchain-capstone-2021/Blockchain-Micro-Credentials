@@ -6,44 +6,44 @@ All backend and routing files are located in `/backend`
 
 Follows a modifed MVC structure where there is no visible module section in this folder. All frontend rendering will be handled by React, the source files for which are located in `/frontend/src`. Communication between the two is via the Express API.
 
-# attachments:
+### attachments:
 Temporarily holds all attachments generated for the email service
-# bin:
+### bin:
 Config folder for running the node app
-# blockchain
+### blockchain
 Smart contracts and related code
  - build / contracts: Compiled JSON smart contract artifacts
  - contracts: Solidity smart contracts
  - migrations: All contract migration and deployment code
  - test: Smart contract tests
-# controllers: 
+### controllers: 
 The main application controllers supporting an MVC framework
-# db: 
+### db: 
 All code relevant to the mySQL database
  - config: Contains the database config file
  - controllers: Database controllers
  - migrations: Database migration files
  - models: Database models
  - seeders: Database data seeding files
-# exceptions: 
+### exceptions: 
 Custom exceptions
-# middleware: 
+### middleware: 
 Communication with external services (blockchain and IPFS)
-# node_modules: 
+### node_modules: 
 NPM packages
-# object_models: 
+### object_models: 
 Object models to be serialised and deserialised
  - blockchain: Key object models for blockchain tracker contracts
  - ipfs: Object models for IPFS storage
-# routes: 
+### routes: 
 Provide access to the API through a predefined set of urls.
-# services: 
+### services: 
 Email service functionality
-# templates: 
+### templates: 
 ejs templates for email attachment generation
-# test: 
+### test: 
 Backend Node.js test code
-# utilities: 
+### utilities: 
 Helper methods
 
 
