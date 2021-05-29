@@ -1,5 +1,61 @@
 # Project Structure Overview
 
+
+**Tree structure**
+
+```bash
+.
+├── attachments
+├── backend
+│   ├── attachments
+│   ├── bin
+│   ├── blockchain
+│   │   ├── build
+│   │   │   └── contracts
+│   │   ├── contracts
+│   │   ├── migrations
+│   │   └── test
+│   ├── controllers
+│   ├── db
+│   │   ├── config
+│   │   ├── controllers
+│   │   ├── migrations
+│   │   ├── models
+│   │   └── seeders
+│   ├── exceptions
+│   ├── middleware
+│   ├── node_modules
+│   ├── object_models
+│   │   ├── blockchain
+│   │   └── ipfs
+│   ├── routes
+│   ├── services
+│   ├── templates
+│   ├── test
+│   └── utilities
+├── frontend
+│   ├── node_modules
+│   ├── public
+│   └── src
+│       ├── apis
+│       ├── components
+│       │   ├── dashboards
+│       │   ├── login
+│       │   ├── modules
+│       │   ├── questions
+│       │   ├── student
+│       │   ├── templates
+│       │   └── units
+│       └── tests
+│           ├── dashboards
+│           ├── login
+│           ├── staff
+│           ├── student
+│           └── units
+└── node_modules
+```
+
+
 ## Backend
 
 All backend and routing files are located in `/backend`
@@ -73,60 +129,6 @@ Folder containing all Node source files
      - `/student` Tests for student components
      - `/units` Tests for unit components
  
-**Tree structure**
-
-```bash
-.
-├── attachments
-├── backend
-│   ├── attachments
-│   ├── bin
-│   ├── blockchain
-│   │   ├── build
-│   │   │   └── contracts
-│   │   ├── contracts
-│   │   ├── migrations
-│   │   └── test
-│   ├── controllers
-│   ├── db
-│   │   ├── config
-│   │   ├── controllers
-│   │   ├── migrations
-│   │   ├── models
-│   │   └── seeders
-│   ├── exceptions
-│   ├── middleware
-│   ├── node_modules
-│   ├── object_models
-│   │   ├── blockchain
-│   │   └── ipfs
-│   ├── routes
-│   ├── services
-│   ├── templates
-│   ├── test
-│   └── utilities
-├── frontend
-│   ├── node_modules
-│   ├── public
-│   └── src
-│       ├── apis
-│       ├── components
-│       │   ├── dashboards
-│       │   ├── login
-│       │   ├── modules
-│       │   ├── questions
-│       │   ├── student
-│       │   ├── templates
-│       │   └── units
-│       └── tests
-│           ├── dashboards
-│           ├── login
-│           ├── staff
-│           ├── student
-│           └── units
-└── node_modules
-```
-
 # Installation
 
 ## Packages
