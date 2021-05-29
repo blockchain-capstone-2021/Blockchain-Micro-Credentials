@@ -51,27 +51,27 @@ Helper methods
 
 All front end files are located in `/frontend`
 
-### node_modules 
+### `/node_modules`
 NPM packages
-### public
+### `/public`
 Images and public CSS files
-### src
+### `/src`
 Folder containing all Node source files
- - apis: Creating connection to backend 
- - components: React components
-     - dashboards: React components for dashboard pages 
-     - login: React components for login pages
-     - modules: React components for module pages
-     - questions: React components for question pages
-     - student: React components for student pages
-     - templates: React components for templates
-     - units: React components for unit pages
- - tests: Frontend Node.js test code
-     - dashboards: Tests for dashboard components
-     - login: Tests for login components
-     - staff: Tests for module and question components
-     - student: Tests for student components
-     - units: Tests for unit components
+ - `/apis` Creating connection to backend 
+ - `/components` React components
+     - `/dashboards` React components for dashboard pages 
+     - `/login` React components for login pages
+     - `/modules` React components for module pages
+     - `/questions` React components for question pages
+     - `/student` React components for student pages
+     - `/templates` React components for templates
+     - `/units` React components for unit pages
+ - `/tests` Frontend Node.js test code
+     - `/dashboards` Tests for dashboard components
+     - `/login` Tests for login components
+     - `/staff` Tests for module and question components
+     - `/student` Tests for student components
+     - `/units` Tests for unit components
  
 **Tree structure**
 
