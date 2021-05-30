@@ -36,24 +36,6 @@ describe("testing Staff Module Manage component", () => {
     expect(container.text()).toEqual("Select a CourseLoading");
   });
 
-  it('no options rendered when no courses taught', () => {
-    let container = wrapper.find("#inlineFormSelectPref");
-    expect(container).toHaveLength(1);
-    expect(container.text()).toEqual("Select a CourseLoading");
-  });
-
-  it('unpublish a module', () => {
-    let container = wrapper.find("#inlineFormSelectPref");
-    expect(container).toHaveLength(1);
-    expect(container.text()).toEqual("Select a CourseLoading");
-  });
-
-  it('publish a module', () => {
-    let container = wrapper.find("#inlineFormSelectPref");
-    expect(container).toHaveLength(1);
-    expect(container.text()).toEqual("Select a CourseLoading");
-  });
-
   it('renders no modules message', () => {
     expect(
         wrapper.containsMatchingElement(
