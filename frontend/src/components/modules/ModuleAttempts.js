@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import microcredapi from '../../apis/microcredapi'
 
 const ModuleAttempts = () => {
     // Set state variables for the component
+    const [modules, setModules] = useState();
+    const [selectedModule, setSelectedModule] = useState();
 
     // Retrieve data from API
+
 
     // Render the page elements 
     return (
