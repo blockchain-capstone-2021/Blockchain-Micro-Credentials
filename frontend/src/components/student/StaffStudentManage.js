@@ -82,6 +82,7 @@ const StaffStudentManage = () => {
                 <th scope="row">{student.studentId}</th>
                 <td>{student.studentName}</td>
                 <td>{type === 'available' ? "Enrolled" : "Completed"}</td>
+                <td><Link to={`/module/attempts/${student.studentId}/${selectedCourse}`} className="btn btn-primary">View</Link></td>
                 <td>{type === 'available' ? <Link to={`/mark/${selectedCourse}/${student.studentId}`} className="btn btn-primary">Enter Mark</Link> : "" }</td>
                 </tr>
             )
@@ -106,6 +107,7 @@ const StaffStudentManage = () => {
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Attempts</th>
                             <th scope="col">Manage</th>
                         </tr>
                     </thead>
@@ -124,6 +126,7 @@ const StaffStudentManage = () => {
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Attempts</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>

@@ -4,21 +4,22 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "../style.css";
 import Header from "./templates/Header";
 import Login from "./login/Login";
-import useToken from './login/useToken';
+import useToken from "./login/useToken";
 
-import StaffDashboard from './dashboards/StaffDashboard'
-import StudentDashboard from './dashboards/StudentDashboard'
+import StaffDashboard from "./dashboards/StaffDashboard";
+import StudentDashboard from "./dashboards/StudentDashboard";
 
 import StudentProfile from "./student/StudentProfile";
-import StaffStudentManage from './student/StaffStudentManage'
-import StudentMarkEntry from './student/StudentMarkEntry'
+import StaffStudentManage from "./student/StaffStudentManage";
+import StudentMarkEntry from "./student/StudentMarkEntry";
 
-import Module from "./modules/Module"
-import StaffModuleManage from './modules/StaffModuleManage'
+import Module from "./modules/Module";
+import StaffModuleManage from "./modules/StaffModuleManage";
 import StaffModuleEdit from "./modules/StaffModuleEdit";
-import Unit from './units/Unit'
+import Attempts from "./modules/ModuleAttempts";
+import Unit from "./units/Unit";
 
-import StaffQuestionManage from './questions/StaffQuestionManage'
+import StaffQuestionManage from "./questions/StaffQuestionManage";
 import StaffQuestionView from "./questions/StaffQuestionView";
 import StaffQuestionAdd from "./questions/StaffQuestionAdd";
 
@@ -56,7 +57,8 @@ const App = () => {
         <Route path="/mark/:courseId/:studentId" component={StudentMarkEntry} />
         <Route path="/unit/:unitId" component={Unit} />
         <Route path="/module/edit/:moduleId" component={StaffModuleEdit} />
-        <Route path="/module/:moduleId" component={Module} />      
+        <Route path="/module/attempts/:studentId/:courseId" component={Attempts} />
+        <Route path="/module/:moduleId" component={Module} />
         <Route exact path="/" component={window.localStorage.getItem('isStaff') === 'true' ? () => <StaffDashboard key={getDate()} /> : () => <StudentDashboard key={getDate()} />} />
         </Switch>
         </div>
