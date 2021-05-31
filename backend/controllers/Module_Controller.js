@@ -13,7 +13,7 @@ const questionAnswerTrackerContract = require('../blockchain/build/contracts/QA_
 const questionAnswerContract = require('../blockchain/build/contracts/QA.json');
 const blockchain = require('../middleware/blockchain');
 const utility = require('../utilities/Utility');
-const Module_Key = require('../object_models/blockchain/Module_Key');
+const ModuleBest_Key = require('../object_models/blockchain/ModuleBest_Key');
 const QA_Key = require('../object_models/blockchain/QA_Key');
 const QA_Data = require('../object_models/ipfs/QA');
 const Module_Data = require('../object_models/ipfs/MicroModule');
@@ -41,7 +41,7 @@ async function getHighestScores(studentId, unitId, modules) {
 
     for (const module of modules) {
         //create module key object
-        let modKey = new Module_Key(studentId, unitId, module.moduleId, currentSemester);
+        let modKey = new ModuleBest_Key(studentId, unitId, module.moduleId, currentSemester);
         //convert key object to JSON
         let serialisedKey = JSON.stringify(modKey);
         //check if key exists on blockchain
@@ -233,26 +233,19 @@ async function submitQAPairs(studentId, unitId, currentSemester, attemptNo, modu
         let questionId = parseInt(qAData[0].substr(1, qAData[0].length - 1));
         let answerId = parseInt(qAData[1].substr(1, qAData[1].length - 1));
 
-        let questionContent;
-        let providedAnswer;
         let correctAnswer;
-
-        let question = await dbQuestionController.getQuestion(questionId);
-        questionContent = question.content;
-
-        let answer = await dbAnswerController.getAnswer(answerId);
-        providedAnswer = answer.content;
 
         //store correct answer
         //if answer is correct, increment student's score 
         if (isCorrect == "true") {
             score++;
-            correctAnswer = providedAnswer;
+            correctAnswer = answerId;
         } else {
             correctAnswer = await dbAnswerController.getCorrectAnswer(questionId);
+            correctAnswer = correctAnswer.answerId;
         }
         //retrieve index of blockchain entry
-        let index = await addQABlock(questionContent, question.questionId, providedAnswer, correctAnswer, studentId,
+        let index = await addQABlock(questionId, answerId, correctAnswer, studentId,
             unitId, moduleNo, moduleId, currentSemester, attemptNo);
 
         //return the blockchain index and the associated score
@@ -262,9 +255,9 @@ async function submitQAPairs(studentId, unitId, currentSemester, attemptNo, modu
 }
 
 //retrieve the index of a Q/A blockchain entry
-async function addQABlock(question, questionId, providedAnswer, correctAnswer, studentId, unitId, moduleNo, moduleId, currentSemester, attemptNo) {
+async function addQABlock(questionId, providedAnswerId, correctAnswerId, studentId, unitId, moduleNo, moduleId, currentSemester, attemptNo) {
     //create Q/A object
-    let qAData = new QA_Data(question, providedAnswer, correctAnswer, studentId, unitId, moduleNo, currentSemester, attemptNo);
+    let qAData = new QA_Data(questionId, providedAnswerId, correctAnswerId, studentId, unitId, moduleNo, currentSemester, attemptNo);
     //convert object to JSON
     let serialisedQAData = JSON.stringify(qAData);
     //store JSON object on IPFS and retrieve hash
@@ -289,7 +282,7 @@ async function submitAttempt(qAList, studentId, unitId, moduleNo, moduleId, curr
     //store JSON object on IPFS and retrieve hash
     let newHash = await ipfs.ipfsStoreData(serialisedModData);
     //create module key object
-    let modKey = new Module_Key(studentId, unitId, moduleId, currentSemester);
+    let modKey = new ModuleBest_Key(studentId, unitId, moduleId, currentSemester);
     //convert key object to JSON
     let serialisedKey = JSON.stringify(modKey);
     //check if key exists on blockchain
