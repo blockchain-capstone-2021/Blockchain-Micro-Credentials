@@ -14,6 +14,7 @@ const questionAnswerContract = require('../blockchain/build/contracts/QA.json');
 const blockchain = require('../middleware/blockchain');
 const utility = require('../utilities/Utility');
 const ModuleBest_Key = require('../object_models/blockchain/ModuleBest_Key');
+const Module_Key = require('../object_models/blockchain/Module_Key');
 const QA_Key = require('../object_models/blockchain/QA_Key');
 const QA_Data = require('../object_models/ipfs/QA');
 const Module_Data = require('../object_models/ipfs/MicroModule');
@@ -282,33 +283,51 @@ async function submitAttempt(qAList, studentId, unitId, moduleNo, moduleId, curr
     //store JSON object on IPFS and retrieve hash
     let newHash = await ipfs.ipfsStoreData(serialisedModData);
     //create module key object
-    let modKey = new ModuleBest_Key(studentId, unitId, moduleId, currentSemester);
+    let modKeyBest = new ModuleBest_Key(studentId, unitId, moduleId, currentSemester);
     //convert key object to JSON
-    let serialisedKey = JSON.stringify(modKey);
+    let serialisedKeyBest = JSON.stringify(modKeyBest);
     //check if key exists on blockchain
-    let exists = await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey);
+    let exists = await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKeyBest);
     //if key does not exist, store IPFS hash and key on blockchain
     //else, get current hash and compare results, storing whichever is better
     if (!exists) {
         await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
-            process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKey);
+            process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKeyBest);
     } else {
         //retrieve existing IPFS hash from blockchain
         let existingHash = await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
-            process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey);
+            process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKeyBest);
         //retrieve JSON object from IPFS
         let data = await ipfs.ipfsGetData(existingHash);
         //deserialise JSON object
         let deserialisedModule = JSON.parse(data);
         //compare new and existing results
+        //if new score is higher, replace as tracked highest score on blockchain, and create a regular module tracker for the previos high score
+        //if new score is lower, simply create a regular module tracker for it
         if (deserialisedModule._result >= result) {
+            //create module key object
+            let modKey = new Module_Key(studentId, unitId, moduleId, currentSemester, attemptNo);
+            //convert key object to JSON
+            let serialisedKey = JSON.stringify(modKey);
+
             //store result on blockchain but do not track as best result
-            await blockchain.addHashToContractWithOutTracker(moduleContract, process.env.MICRO_MODULE_ADDRESS, newHash);
-        }
-        else {
-            //store and track result on blockchain
             await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
                 process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKey);
+        } else {
+            //retrieve attempt number from the previous best result
+            let prevBestAttemptNo = deserialisedModule._attemptNo;
+            //create module key object for the previous best result
+            let modKey = new Module_Key(studentId, unitId, moduleId, currentSemester, prevBestAttemptNo);
+            //convert key object to JSON
+            let serialisedKey = JSON.stringify(modKey);
+
+            //store and track previous best result on blockchain as a regular result
+            await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+                process.env.MICRO_MODULE_TRACKER_ADDRESS, existingHash, serialisedKey);
+
+            //store and track new best result on blockchain
+            await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+                process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKeyBest);
         }
     }
 }

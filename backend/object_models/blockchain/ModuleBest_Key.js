@@ -1,4 +1,4 @@
-//Micro Module Key Object - Unique key to track a micro module hash index
+//Micro Module Key Object - Unique key to track the micro module with the highest score's hash index
 class ModuleBest_Key {
     constructor(studentId, unitId, moduleId, semEnrol) {
         this._studentId = studentId;
