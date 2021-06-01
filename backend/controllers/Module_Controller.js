@@ -20,6 +20,7 @@ const QA_Data = require('../object_models/ipfs/QA');
 const Module_Data = require('../object_models/ipfs/MicroModule');
 const AttemptsExist = require('../exceptions/AttemptsExist');
 const InsufficientQuestions = require('../exceptions/InsufficientQuestions');
+const questionController = require('../controllers/Question_Controller');
 
 //return a map of modules and the number of attempts a given student has had on each
 async function getAttemptNumbers(studentId, modules) {
@@ -398,6 +399,118 @@ const publishModule = async (req, res, next) => {
     }
 };
 
+//Common method to get the best attempt
+async function retrieveBestAttempt(studentId, unitId, moduleId, currentSemester) {
+    //Create the best attempt key
+    let modKeyBest = new ModuleBest_Key(studentId, unitId, moduleId, currentSemester);
+    let serialisedKeyBest = JSON.stringify(modKeyBest);
+    //Get the hash from the contract
+    let bestHash = await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+        process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKeyBest);
+    //Get the data with hash from IPFS
+    let data = await ipfs.ipfsGetData(bestHash);
+
+    let deserialisedModule = JSON.parse(data);
+    //Common method to get the attempt's required data. Returns an object.
+    let retrievedData = await retrieveAttemptData(deserialisedModule);
+    //From the returned object populate local variables of the required data
+    let questions = retrievedData.questions;
+    let providedAnswerMap = retrievedData.providedAnswerMap;
+    let answersMap = retrievedData.answersMap;
+    let score = deserialisedModule._result;
+    //Return an object populated with the local variables of the needed data.
+    return { questions, providedAnswerMap, answersMap, score };
+}
+
+//Common method to get the attempt's required data. Returns an object
+async function retrieveAttemptData(deserialisedModule) {
+    let qAObjects = [];
+    let questions = [];
+    let providedAnswerMap = new Map();
+    //Get each QA Pair for the attempt from the blockchain
+    for (const index of deserialisedModule._qAList) {
+        let hash = await blockchain.getHashWithIndex(questionAnswerContract, process.env.QA_ADDRESS, index);
+        //retrieve JSON object from IPFS
+        let qAData = await ipfs.ipfsGetData(hash);
+        //deserialise JSON object
+        let deserialisedQA = JSON.parse(qAData);
+
+        qAObjects.push(deserialisedQA);
+    }
+    //For each QA pair get the question and associate the question id with the provided answer's id.
+    for (const qAObject of qAObjects) {
+        let question = await dbQuestionController.getQuestion(qAObject._question);
+        questions.push(question);
+        providedAnswerMap.set(qAObject._question, qAObject._providedAnswer);
+    }
+    //For all the questions get all the associated answers
+    let answersMap = await questionController.getAnswers(questions);
+    //Return an object of the collected data.
+    return { questions, providedAnswerMap, answersMap };
+}
+
+//Method to get the best attempt to module
+const getBestAttempt = async (req, res, next) => {
+    try {
+        //Call the common best attempt method. Returns an object with the data needed
+        let retrievedAttempt = await retrieveBestAttempt(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), req.params.currentSemester);
+        //From the returned object return to the view the data needed
+        res.locals.questions = retrievedAttempt.questions;
+        res.locals.answersMap = retrievedAttempt.answersMap;
+        res.locals.providedAnswerMap = retrievedAttempt.providedAnswerMap;
+        res.locals.score = retrievedAttempt.score;
+        res.locals.success = true;
+    }
+    catch (err) {
+        res.locals.success = false;
+    }
+    finally {
+        next();
+    }
+};
+
+const getAttempt = async (req, res, next) => {
+    try {
+        //Create the module key for the given attempt
+        let modKey = new Module_Key(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), req.params.currentSemester, parseInt(req.params.attemptNo));
+        let serialisedKey = JSON.stringify(modKey);
+
+        let exists = await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey);
+        //If the created key exists, than it is not the best attempt.
+        if (!exists) {
+            //Created key does not exists and hence it is the best attempt. Get the best attempt via the common method. Returning an object  
+            let retrievedAttempt = await retrieveBestAttempt(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), req.params.currentSemester);
+            //From the returned object return to the view the data needed
+            res.locals.questions = retrievedAttempt.questions;
+            res.locals.answersMap = retrievedAttempt.answersMap;
+            res.locals.providedAnswerMap = retrievedAttempt.providedAnswerMap;
+            res.locals.score = retrievedAttempt.score;
+        }
+        else {
+            //If the key exists than get that attempt number's hash
+            let hash = await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+                process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey);
+            //Get the module attempt object from IPFS with hash
+            let data = await ipfs.ipfsGetData(hash);
+
+            let deserialisedModule = JSON.parse(data);
+            //Get the data needed for that attempt with the common method. Returing an object.
+            let retrievedData = await retrieveAttemptData(deserialisedModule);
+            //From the returned object return to the view the data needed
+            res.locals.questions = retrievedData.questions;
+            res.locals.providedAnswerMap = retrievedData.providedAnswerMap;
+            res.locals.answersMap = retrievedData.answersMap;
+            res.locals.score = deserialisedModule._result;
+        }
+        res.locals.success = true;
+    }
+    catch (err) {
+        res.locals.success = false;
+    } finally {
+        next();
+    }
+};
+
 module.exports = {
     getModule,
     getModulesForStudent,
@@ -405,5 +518,7 @@ module.exports = {
     getModulesForStaff,
     unpublishModule,
     publishModule,
-    updateModuleNoOfQuestions
+    updateModuleNoOfQuestions,
+    getBestAttempt,
+    getAttempt
 };

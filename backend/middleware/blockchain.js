@@ -70,6 +70,21 @@ async function getHashFromContract(contractJson, trackerContractJson, contractAd
     return hash;
 }
 
+//Returning a promise
+//Function called when you want to get the hash by index. Needed for getting the QA pairs of a module
+async function getHashWithIndex(contractJson, contractAddress, index) {
+    //Get the respective contract
+    let contract = new web3.eth.Contract(contractJson.abi, contractAddress);
+
+    let hash;
+
+    await contract.methods.returnHash(index).call().then(function (result) {
+        hash = result;
+    });
+
+    return hash;
+}
+
 //Function to add a hash with it's index being tracked
 async function addHash(contract, trackerContract, contractAddress, trackerContractAddress, hash, key, callback) {
     const data = contract.methods.addHash(hash).encodeABI();
@@ -160,5 +175,6 @@ module.exports = {
     addHashToContractWithTracker,
     getHashFromContract,
     checkExists,
-    getHashIndex
+    getHashIndex,
+    getHashWithIndex
 };

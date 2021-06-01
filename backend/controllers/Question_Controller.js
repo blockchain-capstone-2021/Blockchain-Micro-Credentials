@@ -123,5 +123,6 @@ module.exports = {
     getRandomizedQuestions,
     addQuestionToModule,
     deleteQuestion,
-    deleteAllQuestions
+    deleteAllQuestions,
+    getAnswers
 };
