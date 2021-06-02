@@ -15,7 +15,7 @@ const moduleTrackerContract = require('../blockchain/build/contracts/Micro_Modul
 const blockchain = require('../middleware/blockchain');
 const ipfs = require('../middleware/ipfs');
 const emailService = require('../services/Email_Service');
-const Module_Key = require('../object_models/blockchain/Module_Key');
+const ModuleBest_Key = require('../object_models/blockchain/ModuleBest_Key');
 const MicroCred_Key = require('../object_models/blockchain/ManualEntry_Key');
 const Unit_Key = require('../object_models/blockchain/Unit_Key');
 const MicroCred_Data = require('../object_models/ipfs/ManualEntry');
@@ -55,7 +55,7 @@ async function calculateScore(studentId, unitId, currentSemester) {
 
     for (const module of modules) {
         //create module key object
-        let modKey = new Module_Key(studentId, unitId, module.moduleId, currentSemester);
+        let modKey = new ModuleBest_Key(studentId, unitId, module.moduleId, currentSemester);
         //convert key object to JSON
         let serialisedModKey = JSON.stringify(modKey);
         //check if key exists on blockchain

@@ -13,12 +13,14 @@ const questionAnswerTrackerContract = require('../blockchain/build/contracts/QA_
 const questionAnswerContract = require('../blockchain/build/contracts/QA.json');
 const blockchain = require('../middleware/blockchain');
 const utility = require('../utilities/Utility');
+const ModuleBest_Key = require('../object_models/blockchain/ModuleBest_Key');
 const Module_Key = require('../object_models/blockchain/Module_Key');
 const QA_Key = require('../object_models/blockchain/QA_Key');
 const QA_Data = require('../object_models/ipfs/QA');
 const Module_Data = require('../object_models/ipfs/MicroModule');
 const AttemptsExist = require('../exceptions/AttemptsExist');
 const InsufficientQuestions = require('../exceptions/InsufficientQuestions');
+const questionController = require('../controllers/Question_Controller');
 
 //return a map of modules and the number of attempts a given student has had on each
 async function getAttemptNumbers(studentId, modules) {
@@ -41,7 +43,7 @@ async function getHighestScores(studentId, unitId, modules) {
 
     for (const module of modules) {
         //create module key object
-        let modKey = new Module_Key(studentId, unitId, module.moduleId, currentSemester);
+        let modKey = new ModuleBest_Key(studentId, unitId, module.moduleId, currentSemester);
         //convert key object to JSON
         let serialisedKey = JSON.stringify(modKey);
         //check if key exists on blockchain
@@ -233,26 +235,19 @@ async function submitQAPairs(studentId, unitId, currentSemester, attemptNo, modu
         let questionId = parseInt(qAData[0].substr(1, qAData[0].length - 1));
         let answerId = parseInt(qAData[1].substr(1, qAData[1].length - 1));
 
-        let questionContent;
-        let providedAnswer;
         let correctAnswer;
-
-        let question = await dbQuestionController.getQuestion(questionId);
-        questionContent = question.content;
-
-        let answer = await dbAnswerController.getAnswer(answerId);
-        providedAnswer = answer.content;
 
         //store correct answer
         //if answer is correct, increment student's score 
         if (isCorrect == "true") {
             score++;
-            correctAnswer = providedAnswer;
+            correctAnswer = answerId;
         } else {
             correctAnswer = await dbAnswerController.getCorrectAnswer(questionId);
+            correctAnswer = correctAnswer.answerId;
         }
         //retrieve index of blockchain entry
-        let index = await addQABlock(questionContent, question.questionId, providedAnswer, correctAnswer, studentId,
+        let index = await addQABlock(questionId, answerId, correctAnswer, studentId,
             unitId, moduleNo, moduleId, currentSemester, attemptNo);
 
         //return the blockchain index and the associated score
@@ -262,9 +257,9 @@ async function submitQAPairs(studentId, unitId, currentSemester, attemptNo, modu
 }
 
 //retrieve the index of a Q/A blockchain entry
-async function addQABlock(question, questionId, providedAnswer, correctAnswer, studentId, unitId, moduleNo, moduleId, currentSemester, attemptNo) {
+async function addQABlock(questionId, providedAnswerId, correctAnswerId, studentId, unitId, moduleNo, moduleId, currentSemester, attemptNo) {
     //create Q/A object
-    let qAData = new QA_Data(question, providedAnswer, correctAnswer, studentId, unitId, moduleNo, currentSemester, attemptNo);
+    let qAData = new QA_Data(questionId, providedAnswerId, correctAnswerId, studentId, unitId, moduleNo, currentSemester, attemptNo);
     //convert object to JSON
     let serialisedQAData = JSON.stringify(qAData);
     //store JSON object on IPFS and retrieve hash
@@ -289,33 +284,51 @@ async function submitAttempt(qAList, studentId, unitId, moduleNo, moduleId, curr
     //store JSON object on IPFS and retrieve hash
     let newHash = await ipfs.ipfsStoreData(serialisedModData);
     //create module key object
-    let modKey = new Module_Key(studentId, unitId, moduleId, currentSemester);
+    let modKeyBest = new ModuleBest_Key(studentId, unitId, moduleId, currentSemester);
     //convert key object to JSON
-    let serialisedKey = JSON.stringify(modKey);
+    let serialisedKeyBest = JSON.stringify(modKeyBest);
     //check if key exists on blockchain
-    let exists = await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey);
+    let exists = await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKeyBest);
     //if key does not exist, store IPFS hash and key on blockchain
     //else, get current hash and compare results, storing whichever is better
     if (!exists) {
         await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
-            process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKey);
+            process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKeyBest);
     } else {
         //retrieve existing IPFS hash from blockchain
         let existingHash = await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
-            process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey);
+            process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKeyBest);
         //retrieve JSON object from IPFS
         let data = await ipfs.ipfsGetData(existingHash);
         //deserialise JSON object
         let deserialisedModule = JSON.parse(data);
         //compare new and existing results
+        //if new score is higher, replace as tracked highest score on blockchain, and create a regular module tracker for the previos high score
+        //if new score is lower, simply create a regular module tracker for it
         if (deserialisedModule._result >= result) {
+            //create module key object
+            let modKey = new Module_Key(studentId, unitId, moduleId, currentSemester, attemptNo);
+            //convert key object to JSON
+            let serialisedKey = JSON.stringify(modKey);
+
             //store result on blockchain but do not track as best result
-            await blockchain.addHashToContractWithOutTracker(moduleContract, process.env.MICRO_MODULE_ADDRESS, newHash);
-        }
-        else {
-            //store and track result on blockchain
             await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
                 process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKey);
+        } else {
+            //retrieve attempt number from the previous best result
+            let prevBestAttemptNo = deserialisedModule._attemptNo;
+            //create module key object for the previous best result
+            let modKey = new Module_Key(studentId, unitId, moduleId, currentSemester, prevBestAttemptNo);
+            //convert key object to JSON
+            let serialisedKey = JSON.stringify(modKey);
+
+            //store and track previous best result on blockchain as a regular result
+            await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+                process.env.MICRO_MODULE_TRACKER_ADDRESS, existingHash, serialisedKey);
+
+            //store and track new best result on blockchain
+            await blockchain.addHashToContractWithTracker(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+                process.env.MICRO_MODULE_TRACKER_ADDRESS, newHash, serialisedKeyBest);
         }
     }
 }
@@ -386,6 +399,118 @@ const publishModule = async (req, res, next) => {
     }
 };
 
+//Common method to get the best attempt
+async function retrieveBestAttempt(studentId, unitId, moduleId, currentSemester) {
+    //Create the best attempt key
+    let modKeyBest = new ModuleBest_Key(studentId, unitId, moduleId, currentSemester);
+    let serialisedKeyBest = JSON.stringify(modKeyBest);
+    //Get the hash from the contract
+    let bestHash = await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+        process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKeyBest);
+    //Get the data with hash from IPFS
+    let data = await ipfs.ipfsGetData(bestHash);
+
+    let deserialisedModule = JSON.parse(data);
+    //Common method to get the attempt's required data. Returns an object.
+    let retrievedData = await retrieveAttemptData(deserialisedModule);
+    //From the returned object populate local variables of the required data
+    let questions = retrievedData.questions;
+    let providedAnswerMap = retrievedData.providedAnswerMap;
+    let answersMap = retrievedData.answersMap;
+    let score = deserialisedModule._result;
+    //Return an object populated with the local variables of the needed data.
+    return { questions, providedAnswerMap, answersMap, score };
+}
+
+//Common method to get the attempt's required data. Returns an object
+async function retrieveAttemptData(deserialisedModule) {
+    let qAObjects = [];
+    let questions = [];
+    let providedAnswerMap = new Map();
+    //Get each QA Pair for the attempt from the blockchain
+    for (const index of deserialisedModule._qAList) {
+        let hash = await blockchain.getHashWithIndex(questionAnswerContract, process.env.QA_ADDRESS, index);
+        //retrieve JSON object from IPFS
+        let qAData = await ipfs.ipfsGetData(hash);
+        //deserialise JSON object
+        let deserialisedQA = JSON.parse(qAData);
+
+        qAObjects.push(deserialisedQA);
+    }
+    //For each QA pair get the question and associate the question id with the provided answer's id.
+    for (const qAObject of qAObjects) {
+        let question = await dbQuestionController.getQuestion(qAObject._question);
+        questions.push(question);
+        providedAnswerMap.set(qAObject._question, qAObject._providedAnswer);
+    }
+    //For all the questions get all the associated answers
+    let answersMap = await questionController.getAnswers(questions);
+    //Return an object of the collected data.
+    return { questions, providedAnswerMap, answersMap };
+}
+
+//Method to get the best attempt to module
+const getBestAttempt = async (req, res, next) => {
+    try {
+        //Call the common best attempt method. Returns an object with the data needed
+        let retrievedAttempt = await retrieveBestAttempt(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), req.params.currentSemester);
+        //From the returned object return to the view the data needed
+        res.locals.questions = retrievedAttempt.questions;
+        res.locals.answersMap = retrievedAttempt.answersMap;
+        res.locals.providedAnswerMap = retrievedAttempt.providedAnswerMap;
+        res.locals.score = retrievedAttempt.score;
+        res.locals.success = true;
+    }
+    catch (err) {
+        res.locals.success = false;
+    }
+    finally {
+        next();
+    }
+};
+
+const getAttempt = async (req, res, next) => {
+    try {
+        //Create the module key for the given attempt
+        let modKey = new Module_Key(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), req.params.currentSemester, parseInt(req.params.attemptNo));
+        let serialisedKey = JSON.stringify(modKey);
+
+        let exists = await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey);
+        //If the created key exists, than it is not the best attempt.
+        if (!exists) {
+            //Created key does not exists and hence it is the best attempt. Get the best attempt via the common method. Returning an object  
+            let retrievedAttempt = await retrieveBestAttempt(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), req.params.currentSemester);
+            //From the returned object return to the view the data needed
+            res.locals.questions = retrievedAttempt.questions;
+            res.locals.answersMap = retrievedAttempt.answersMap;
+            res.locals.providedAnswerMap = retrievedAttempt.providedAnswerMap;
+            res.locals.score = retrievedAttempt.score;
+        }
+        else {
+            //If the key exists than get that attempt number's hash
+            let hash = await blockchain.getHashFromContract(moduleContract, moduleTrackerContract, process.env.MICRO_MODULE_ADDRESS,
+                process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey);
+            //Get the module attempt object from IPFS with hash
+            let data = await ipfs.ipfsGetData(hash);
+
+            let deserialisedModule = JSON.parse(data);
+            //Get the data needed for that attempt with the common method. Returing an object.
+            let retrievedData = await retrieveAttemptData(deserialisedModule);
+            //From the returned object return to the view the data needed
+            res.locals.questions = retrievedData.questions;
+            res.locals.providedAnswerMap = retrievedData.providedAnswerMap;
+            res.locals.answersMap = retrievedData.answersMap;
+            res.locals.score = deserialisedModule._result;
+        }
+        res.locals.success = true;
+    }
+    catch (err) {
+        res.locals.success = false;
+    } finally {
+        next();
+    }
+};
+
 module.exports = {
     getModule,
     getModulesForStudent,
@@ -393,5 +518,7 @@ module.exports = {
     getModulesForStaff,
     unpublishModule,
     publishModule,
-    updateModuleNoOfQuestions
+    updateModuleNoOfQuestions,
+    getBestAttempt,
+    getAttempt
 };
