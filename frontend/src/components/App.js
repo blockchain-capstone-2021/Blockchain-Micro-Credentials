@@ -17,6 +17,7 @@ import Module from "./modules/Module";
 import StaffModuleManage from "./modules/StaffModuleManage";
 import StaffModuleEdit from "./modules/StaffModuleEdit";
 import Attempts from "./modules/ModuleAttempts";
+import ViewAttempt from "./modules/ViewAttempt";
 import Unit from "./units/Unit";
 
 import StaffQuestionManage from "./questions/StaffQuestionManage";
@@ -58,6 +59,7 @@ const App = () => {
         <Route path="/unit/:unitId" component={Unit} />
         <Route path="/module/edit/:moduleId" component={StaffModuleEdit} />
         <Route path="/module/attempts/:studentId/:courseId" component={Attempts} />
+        <Route path="/module/attempt/:studentId/:moduleId/:attemptNo" component={ViewAttempt} />
         <Route path="/module/:moduleId" component={Module} />
         <Route exact path="/" component={window.localStorage.getItem('isStaff') === 'true' ? () => <StaffDashboard key={getDate()} /> : () => <StudentDashboard key={getDate()} />} />
         </Switch>
