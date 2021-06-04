@@ -452,8 +452,9 @@ async function retrieveAttemptData(deserialisedModule) {
 //Method to get the best attempt to module
 const getBestAttempt = async (req, res, next) => {
     try {
+        let currentSemester = await utility.getCurrentSemester();
         //Call the common best attempt method. Returns an object with the data needed
-        let retrievedAttempt = await retrieveBestAttempt(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), req.params.currentSemester);
+        let retrievedAttempt = await retrieveBestAttempt(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), currentSemester);
         //From the returned object return to the view the data needed
         res.locals.questions = retrievedAttempt.questions;
         res.locals.answersMap = retrievedAttempt.answersMap;
@@ -471,15 +472,16 @@ const getBestAttempt = async (req, res, next) => {
 
 const getAttempt = async (req, res, next) => {
     try {
+        let currentSemester = await utility.getCurrentSemester();
         //Create the module key for the given attempt
-        let modKey = new Module_Key(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), req.params.currentSemester, parseInt(req.params.attemptNo));
+        let modKey = new Module_Key(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), currentSemester, parseInt(req.params.attemptNo));
         let serialisedKey = JSON.stringify(modKey);
 
         let exists = await blockchain.checkExists(moduleTrackerContract, process.env.MICRO_MODULE_TRACKER_ADDRESS, serialisedKey);
         //If the created key exists, than it is not the best attempt.
         if (!exists) {
             //Created key does not exists and hence it is the best attempt. Get the best attempt via the common method. Returning an object  
-            let retrievedAttempt = await retrieveBestAttempt(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), req.params.currentSemester);
+            let retrievedAttempt = await retrieveBestAttempt(req.params.studentId, req.params.unitId, parseInt(req.params.moduleId), currentSemester);
             //From the returned object return to the view the data needed
             res.locals.questions = retrievedAttempt.questions;
             res.locals.answersMap = retrievedAttempt.answersMap;

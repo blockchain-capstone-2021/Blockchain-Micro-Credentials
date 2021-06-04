@@ -105,7 +105,7 @@ const ModuleAttempts = (props) => {
                                 <h6>Best attempt: {modules[selectedModule-1].highestScore}</h6>
                             </td>
                             <td>
-                                <Link to={`/module/attempt/${student.studentId}/${selectedModule}/highest`} className="btn btn-primary">View</Link>
+                                <Link to={`/module/attempt/${student.studentId}/${props.match.params.courseId}/${selectedModule}/highest`} className="btn btn-primary">View</Link>
                             </td>
                         </tr>
 
@@ -134,7 +134,7 @@ const ModuleAttempts = (props) => {
                       <td className="d-flex">
                         <div className="align-button-right">
                         </div>
-                        <Link to={`/module/attempt/${student.studentId}/${selectedModule}/${_attempt.attemptNo}`} className="btn btn-primary">View</Link>
+                        <Link to={`/module/attempt/${student.studentId}/${props.match.params.courseId}/${selectedModule}/${_attempt.attemptNo}`} className="btn btn-primary">View</Link>
                       </td>
                   </tr>
                 )

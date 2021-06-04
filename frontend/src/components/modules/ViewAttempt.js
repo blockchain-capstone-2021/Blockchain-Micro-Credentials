@@ -6,7 +6,46 @@ import '../../style.css'
 
 const ViewAttempt = (props) => {
     // Set state variables for the component
+    const [questions, setQuestions] = useState();
+    const [answersMap, setAnswers] = useState();
+    const [providedAnswerMap, setProvidedAnswers] = useState();
+    const [score, setScore] = useState();
     
+
+    useEffect(() => {
+        async function getAttempt() {
+            if(props.match.params.attemptNo=="highest"){
+                await microcredapi
+                .get(`/module/attempt/${props.match.params.studentId}/${props.match.params.courseId}/${props.match.params.moduleId}`)
+                    .then(response => {
+                        console.log(response.data.questions);
+                        console.log(response.data.answersMap);
+                        console.log(response.data.providedAnswerMap);
+                        console.log(response.data.score);
+
+                        setQuestions(response.data.questions);
+                        setAnswers(response.data.answersMap);
+                        setProvidedAnswers(response.data.providedAnswerMap);
+                        setScore(response.data.score);
+                    })
+            }else{
+                await microcredapi
+                    .get(`/module/attempt/${props.match.params.studentId}/${props.match.params.courseId}/${props.match.params.moduleId}/${props.match.params.attemptNo}`)
+                    .then(response => {
+                        console.log(response.data.questions);
+                        console.log(response.data.answersMap);
+                        console.log(response.data.providedAnswerMap);
+                        console.log(response.data.score);
+
+                        setQuestions(response.data.questions);
+                        setAnswers(response.data.answersMap);
+                        setProvidedAnswers(response.data.providedAnswerMap);
+                        setScore(response.data.score);
+                    })
+            }
+        }
+        getAttempt()
+    }, [])
 
     // Render the page elements 
     return (
