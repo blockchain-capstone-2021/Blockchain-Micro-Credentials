@@ -99,10 +99,12 @@ const ViewAttempt = (props) => {
     }
 
     function renderScore(){
-        if(score && questions[0]){
+        if(score!=undefined && questions[0]){
             return(
                 <div> 
                     <h5>Score: {score}/{questions.length}</h5>
+                    {console.log("Score: ",score)}
+                    {console.log("Questions length: ",questions.length)}
                 </div>
             );
         }

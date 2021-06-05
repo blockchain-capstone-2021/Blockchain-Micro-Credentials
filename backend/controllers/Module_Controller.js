@@ -233,7 +233,12 @@ async function submitQAPairs(studentId, unitId, currentSemester, attemptNo, modu
         let qAData = qAList[i].toString().split("_");
         let isCorrect = qAData[2];
         let questionId = parseInt(qAData[0].substr(1, qAData[0].length - 1));
-        let answerId = parseInt(qAData[1].substr(1, qAData[1].length - 1));
+        let answerId = qAData[1].substr(1, qAData[1].length - 1);
+        if(answerId == "!"){
+            answerId = undefined; 
+        }else{
+            answerId = parseInt(answerId);
+        }
 
         let correctAnswer;
 
@@ -441,7 +446,11 @@ async function retrieveAttemptData(deserialisedModule) {
     for (const qAObject of qAObjects) {
         let question = await dbQuestionController.getQuestion(qAObject._question);
         questions.push(question);
-        providedAnswerMap.set(qAObject._question, qAObject._providedAnswer);
+        if(!qAObject._providedAnswer){
+            providedAnswerMap.set(qAObject._question, undefined);
+        }else{
+            providedAnswerMap.set(qAObject._question, qAObject._providedAnswer);
+        }
     }
     //For all the questions get all the associated answers
     let answersMap = await questionController.getAnswers(questions);
