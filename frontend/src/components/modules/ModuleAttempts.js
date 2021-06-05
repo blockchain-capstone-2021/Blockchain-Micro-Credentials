@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import microcredapi from '../../apis/microcredapi'
-import { v4 as uuidv4 } from 'uuid';
 import '../../style.css'
 
 const ModuleAttempts = (props) => {
@@ -88,7 +87,7 @@ const ModuleAttempts = (props) => {
                 defaultValue={0}
                 >
                 <option>Select a module</option>
-                {modules ? renderModuleOptions() : <option>Loading...</option>}
+                {modules ? renderModuleOptions() : <option disabled = {true}>Loading...</option>}
               </select>
             </div>
           </div>
@@ -119,7 +118,7 @@ const ModuleAttempts = (props) => {
         if(student){
             return(
                 <div> 
-                    <h6>Student: {student.studentId} - {student.studentName}</h6>
+                    <h5>Student: {student.studentId} - {student.studentName}</h5>
                 </div>
             );
         }
@@ -144,36 +143,35 @@ const ModuleAttempts = (props) => {
 
     // Render the page elements 
     return (
-      
-      <div className="jumbotron align-center">
-         <section>
-           <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 className="h1">Module Attempts</h1>
-           </div>
-           <h6>Course: {props.match.params.courseId}</h6>
-           {renderStudentDetails()}
-           <div className="my-4">
-            <h6>Module Selection</h6>
-                {renderUnitModuleInput()}
-            </div>
-            {renderBestAttempt()}
-            <div className="mt-4">
-            <div className="col-sm-12">
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Attempt Number</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {attempts && attempts.length > 0 ? renderAttempts() : <tr><td colSpan="6" className="p-5 text-center">No attempts for the selected module</td></tr>}
-                    </tbody>
-                </table>
-            </div>
-      </div>
-         </section>
-      </div>
+        <div className="jumbotron align-center">
+            <section>
+                <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 className="h1">Module Attempts</h1>
+                </div>
+                <h5>Course: {props.match.params.courseId}</h5>
+                {renderStudentDetails()}
+                <div className="my-4">
+                    <h6>Module Selection</h6>
+                    {renderUnitModuleInput()}
+                </div>
+                {renderBestAttempt()}
+                <div className="mt-4">
+                    <div className="col-sm-12">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Attempt Number</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {attempts && attempts.length > 0 ? renderAttempts() : <tr><td colSpan="6" className="p-5 text-center">No attempts for the selected module</td></tr>}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
     )
 }
 

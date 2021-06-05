@@ -107,8 +107,8 @@ router.get('/attempt/:studentId/:unitId/:moduleId/:attemptNo', getAttempt, async
         return res.status(200).send({
             success: res.locals.success,
             questions: res.locals.questions,
-            answersMap: res.locals.answersMap,
-            providedAnswerMap: res.locals.providedAnswerMap,
+            answersMap: Object.fromEntries(res.locals.answersMap),
+            providedAnswerMap: Object.fromEntries(res.locals.providedAnswerMap),
             score: res.locals.score
         })
     }
@@ -122,8 +122,8 @@ router.get('/attempt/:studentId/:unitId/:moduleId', getBestAttempt, async functi
         return res.status(200).send({
             success: res.locals.success,
             questions: res.locals.questions,
-            answersMap: res.locals.answersMap,
-            providedAnswerMap: res.locals.providedAnswerMap,
+            answersMap: Object.fromEntries(res.locals.answersMap),
+            providedAnswerMap: Object.fromEntries(res.locals.providedAnswerMap),
             score: res.locals.score
         })
     }
