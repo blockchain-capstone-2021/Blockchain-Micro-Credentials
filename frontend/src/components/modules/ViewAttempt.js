@@ -8,6 +8,7 @@ const ViewAttempt = (props) => {
     const [score, setScore] = useState();
 
     useEffect(() => {
+        //retrieve the attempt data
         async function getAttempt() {
             if(props.match.params.attemptNo=="highest"){
                 await microcredapi
@@ -23,6 +24,7 @@ const ViewAttempt = (props) => {
                     })
             }
         }
+        //set the retrieved attempt data to appropriate attributes
         function updateQuestions(questions, answersMap, providedAnswerMap, score) {
             const updatedQuestions = []
             for (let i = 0; i < questions.length; i++) {
@@ -44,19 +46,23 @@ const ViewAttempt = (props) => {
         getAttempt()
     }, [])
 
+    //render the questions
     function renderQuestions(){
         if(questions){
             return questions.map((question, key) => {
                 return (
                     <div className="py-3 border-top" key={question.questionId}>
+                        <div class={checkQuestionCorrect(question)} role="alert">
                             <h6>Question {key+1}: {question.content}</h6>
                             {question.answers ? renderAnswers(question) : 'Loading...'}
+                        </div>
                     </div>
                 )
             })
         }
     }
 
+    //render the answers for a given question
     function renderAnswers(question) {
         return question.answers.map(answer => {
           return (
@@ -70,6 +76,7 @@ const ViewAttempt = (props) => {
         })
     }
 
+    //return the appropriate alert class for a given answer
     function checkCorrectAnswer(question, answer){
         var correctAnswer
 
@@ -80,16 +87,16 @@ const ViewAttempt = (props) => {
         })
 
         var alert = "alert alert-light"
-        if(answer.answerId == correctAnswer){
+        if(answer.answerId == correctAnswer && !checkProvidedAnswer(question, answer)){
             alert = "alert alert-success"
         }else if(answer.answerId == question.providedAnswer){
-            alert = "alert alert-danger"
+            // alert = "alert alert-danger"
         }
 
         return alert
-
     }
 
+    //return true if the given answer is the student's provided answer for the given question
     function checkProvidedAnswer(question, answer){
         var checked = false
         if(answer.answerId == question.providedAnswer){
@@ -98,6 +105,25 @@ const ViewAttempt = (props) => {
         return checked
     }
 
+    //return the appropriate alert class for a given question
+    function checkQuestionCorrect(question){
+        var correctAnswer
+
+        question.answers.map(answer => {
+            if(answer.isCorrect){
+                correctAnswer = parseInt(answer.answerId)
+            }
+        })
+
+        var alert = "alert alert-danger"
+        if(question.providedAnswer == correctAnswer){
+            alert = "alert alert-success"
+        }
+
+        return alert
+    }
+
+    //render the overall score
     function renderScore(){
         if(score!=undefined && questions[0]){
             return(
