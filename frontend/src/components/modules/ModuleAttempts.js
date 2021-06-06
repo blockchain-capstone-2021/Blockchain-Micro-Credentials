@@ -51,12 +51,14 @@ const ModuleAttempts = (props) => {
     useEffect(() => {
         function getAttempts(){  
             const moduleAttempts = []
-            for(var i = 1; i <= modules[selectedModule-1].numAttempts; i++){
-                moduleAttempts.push(
-                    {
-                        "attemptNo": i
-                    }
-                )
+            if(selectedModule-1 >= 0){
+                for(var i = 1; i <= modules[selectedModule-1].numAttempts; i++){
+                    moduleAttempts.push(
+                        {
+                            "attemptNo": i
+                        }
+                    )
+                }
             }
             setAttempts(moduleAttempts)
         }
@@ -95,7 +97,7 @@ const ModuleAttempts = (props) => {
     }
 
     function renderBestAttempt(){
-        if(selectedModule){
+        if(selectedModule-1 >= 0){
             if(modules[selectedModule-1].numAttempts > 0){
                 return(
                     <div> 
