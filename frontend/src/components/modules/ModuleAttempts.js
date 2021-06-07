@@ -51,18 +51,16 @@ const ModuleAttempts = (props) => {
     useEffect(() => {
         function getAttempts(){  
             const moduleAttempts = []
-            if(selectedModule-1 >= 0){
-                for(var i = 1; i <= modules[selectedModule-1].numAttempts; i++){
-                    moduleAttempts.push(
-                        {
-                            "attemptNo": i
-                        }
-                    )
-                }
-            }
+            for(var i = 1; i <= modules[selectedModule-1].numAttempts; i++){
+                moduleAttempts.push(
+                    {
+                        "attemptNo": i
+                    }
+                )
+            }  
             setAttempts(moduleAttempts)
         }
-        if(selectedModule){getAttempts();}
+        if(modules && selectedModule-1 >= 0){getAttempts();}
     }, [selectedModule]);
 
     // Render modules as options in the dropdown of the search form
@@ -83,7 +81,7 @@ const ModuleAttempts = (props) => {
               <select className="form-select"
                 onChange={(e) =>
                     setSelectedModule(
-                      e.target.options[e.target.selectedIndex].value
+                      e.target.selectedIndex
                     )
                 }
                 defaultValue={0}
@@ -97,7 +95,7 @@ const ModuleAttempts = (props) => {
     }
 
     function renderBestAttempt(){
-        if(selectedModule-1 >= 0){
+        if(modules && selectedModule-1 >= 0){
             if(modules[selectedModule-1].numAttempts > 0){
                 return(
                     <div> 
@@ -106,7 +104,7 @@ const ModuleAttempts = (props) => {
                                 <h6>Best attempt: {modules[selectedModule-1].highestScore}</h6>
                             </td>
                             <td>
-                                <Link to={`/module/attempt/${student.studentId}/${props.match.params.courseId}/${selectedModule}/highest`} className="btn btn-primary">View</Link>
+                                <Link to={`/module/attempt/${student.studentId}/${props.match.params.courseId}/${modules[selectedModule-1].moduleId}/highest`} className="btn btn-primary">View</Link>
                             </td>
                         </tr>
 
@@ -135,7 +133,7 @@ const ModuleAttempts = (props) => {
                       <td className="d-flex">
                         <div className="align-button-right">
                         </div>
-                        <Link to={`/module/attempt/${student.studentId}/${props.match.params.courseId}/${selectedModule}/${_attempt.attemptNo}`} className="btn btn-primary">View</Link>
+                        <Link to={`/module/attempt/${student.studentId}/${props.match.params.courseId}/${modules[selectedModule-1].moduleId}/${_attempt.attemptNo}`} className="btn btn-primary">View</Link>
                       </td>
                   </tr>
                 )
