@@ -71,7 +71,7 @@ const Unit = (props) => {
         setSubmitting(true)
         const response = await microcredapi.post(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
         setSubmitting(false)
-        if (!response.data.success) {
+        if (!response.data.success || response.data.success==='false') {
             setError(response.data.message)
         }else{
             history.push('/')
