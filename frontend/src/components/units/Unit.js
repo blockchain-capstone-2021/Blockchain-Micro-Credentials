@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import microcredapi from '../../apis/microcredapi';
 import FlashMessage from 'react-flash-message'
+import  { Redirect } from 'react-router-dom'
 
 const Unit = (props) => {
 
@@ -70,10 +71,9 @@ const Unit = (props) => {
         setSubmitting(true)
         const response = await microcredapi.post(`unit/submit/${window.localStorage.getItem('userId')}/${window.localStorage.getItem('unitId')}/${window.localStorage.getItem('enrolmentPeriod')}`)
         setSubmitting(false)
-        if (response.data.success === 'false') {
+        if (!response.data.success) {
             setError(response.data.message)
-        }
-        if(response.data.success === 'true'){
+        }else{
             history.push('/')
         }
     }
