@@ -18,7 +18,12 @@ const StaffModuleEdit = (props) => {
 
     // Set noOFQuestion form input to state.
     function onQuestionCountChange(e){
-        setNewQuestionCount(e.target.value)
+        const value = e.target.value.replace(/[^\d]/,'');
+
+        if(parseInt(value) !== 0) {
+            setNewQuestionCount(value)
+        }
+        
     }
 
     // API call to change number of questions for a module.
