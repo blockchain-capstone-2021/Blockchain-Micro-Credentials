@@ -1,5 +1,5 @@
 const express = require('express')
-const { getModule, getModulesForStaff, submitModule, publishModule, unpublishModule, updateModuleNoOfQuestions } = require('../controllers/Module_Controller')
+const { getModule, getModulesForStaff, submitModule, publishModule, unpublishModule, updateModuleNoOfQuestions, getBestAttempt, getAttempt } = require('../controllers/Module_Controller')
 const { getRandomizedQuestions } = require('../controllers/Question_Controller')
 var router = express.Router()
 
@@ -95,6 +95,36 @@ router.post('/:moduleId/edit/:noOfQuestions', updateModuleNoOfQuestions, async f
     if(res.locals.success) {
         return res.status(200).send({
             success: res.locals.success
+        })
+    }
+    return res.status(400).send({
+        message: "That did not work. Try again."
+    })
+})
+
+router.get('/attempt/:studentId/:unitId/:moduleId/:attemptNo', getAttempt, async function (req, res, next){
+    if(res.locals.success) {
+        return res.status(200).send({
+            success: res.locals.success,
+            questions: res.locals.questions,
+            answersMap: Object.fromEntries(res.locals.answersMap),
+            providedAnswerMap: Object.fromEntries(res.locals.providedAnswerMap),
+            score: res.locals.score
+        })
+    }
+    return res.status(400).send({
+        message: "That did not work. Try again."
+    })
+})
+
+router.get('/attempt/:studentId/:unitId/:moduleId', getBestAttempt, async function (req, res, next){
+    if(res.locals.success) {
+        return res.status(200).send({
+            success: res.locals.success,
+            questions: res.locals.questions,
+            answersMap: Object.fromEntries(res.locals.answersMap),
+            providedAnswerMap: Object.fromEntries(res.locals.providedAnswerMap),
+            score: res.locals.score
         })
     }
     return res.status(400).send({

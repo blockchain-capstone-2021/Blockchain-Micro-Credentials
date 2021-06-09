@@ -74,11 +74,19 @@ const Module = (props) => {
         for (let index = 0; index < questions.length; index++) {
             const question = questions[index];
             const qa_pair = document.getElementsByName(`qid_${question.questionId}`)
+            var uncheckedCounter = 0
             for (let index = 0; index < qa_pair.length; index++) {
                 const element = qa_pair[index];
                 if (element.checked) {
                     qa_pair_list.push(element.id)
+                }else{
+                    uncheckedCounter++
                 }
+            }
+            //if question was unanswered (no answer was checked)
+            if(uncheckedCounter == qa_pair.length){
+                var elementId = `q${question.questionId}_a!_false`
+                qa_pair_list.push(elementId)
             }
         }
         return qa_pair_list

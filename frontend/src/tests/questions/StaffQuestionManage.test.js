@@ -8,7 +8,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 const wrapper = shallow(<StaffQuestionManage />);
 
-describe("testing Staff Module Manage component", () => {
+describe("testing Staff Question Manage component", () => {
 
     it('renders page header', () => {
         let container = wrapper.find("h1");
