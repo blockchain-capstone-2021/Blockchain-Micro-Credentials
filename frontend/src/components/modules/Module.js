@@ -92,6 +92,16 @@ const Module = (props) => {
         return qa_pair_list
     }
 
+    function renderSubmit(){
+        if(questions){
+            return(
+                <div className="d-flex">
+                            <button type="submit" className="btn btn-primary my-3 align-button-right" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
+                </div>
+            )
+        }
+    }
+
     return (
         <div className="row justify-content-center">
             {
@@ -101,9 +111,7 @@ const Module = (props) => {
                 <h1>Module Quiz</h1>
                 <h4>Attempt: #{props.location.state.attemptNumber+1}</h4>
                 {questions ? renderQuestions() : 'Loading'}
-                <div className="d-flex">
-                    <button type="submit" className="btn btn-primary my-3 align-button-right" onClick={questions ? (e) => {submitModule(e)} : ""}>Submit</button>
-                </div>
+                {renderSubmit()}
             </form>
             }
         </div>
