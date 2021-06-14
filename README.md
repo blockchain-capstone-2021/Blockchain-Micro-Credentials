@@ -1,127 +1,134 @@
 # Project Structure Overview
 
-## Backend
 
-All backend files are located in `/backend`
-
-Holds all files for:
- - NodeJS backend
- - Blockchain code
-
-Follows a modifed MVC structure where there is no visible module section in this folder. All frontend rendering will be handled by React, the source files for which are located in `/frontend/src`.
-
-Express will be set up as an API for the blockchain microcredential platform with apis calls being made to and from the frontend.
-
-### Database integration
-
-The application uses Microsoft SQL Server to store application data used for basic operation.
-Sequelize ORM is used to interact with the database from the backend to perform CRUD operations on all resources.
-
-Database files can be found in `/backend/db`:
-- `/config`
-    - Holds all database configuration variables
-- `/controllers`
-    - Holds all the business processing logic.
-- `/migrations`
-    - Holds all database migration files. Note manual editing is required in some cases.
-- `/models`
-    - Holds all database models - the basic building blocks for the objects used by sequelize.
-- `/seeders`
-    - Holds any seed files that will generate mock data for the database
-
-### Object Models 
-
-This folder holds the object models that will be used for serialization and deserialization. These models will be used in storing data to IPFS and creating the keys for our mappings in the tracker contracts 
-
-The folder is further divided into the below sub-directories:
-- `/ipfs`
-    - Holds all object models for IPFS storage configuration variables
-- `/blockchain`
-    - Holds all object models for the mapping keys.
-
-### Controllers 
-
-This directory holds all the controllers needed to pursue the Model-View-Framework our application. These controllers will be called from the express route file, which are triggered from the views.
-
-### Blockchain
-
-Blockchain specific files such as contract and build files will be stored here.
-
-The folder is further divided into the below sub-directories:
-- `/builds`
-    - Holds all the compiled JSON artifacts of the smart contracts 
-- `/contracts`
-    - Holds all the solidity smart contracts.
-- `/migrations`
-    - Holds all the migrations for the smart contracts.
-- `/test`
-	- Holds all the tests for the smart contracts.
-
-Any truffle configrations can be made in `./truffle-config.js`
-
-### Middleware
-
-Any logic making calls to third party libraries or apis should be stored here. This is done to provide some abstraction between application logic and the server's routing methods.
-
-These files are stored in `/backend/middleware`.
-
-
-### Routes
-
-These provide access to the API through a predefined set of urls.
-
-These are stored in `/backend/routes`.
-
-*Note: Make sure to pass data to controllers for processing, if required, before sending back a response. Look at `/backend/routes/questions.js` as an example.*
-
-## Frontend
-
-All backend files are located in `/frontend`
-
-### Components
-
-All components will be kept in `/frontend/src`. These will serve as building blocks to render the web application.
-
-#### Templates
-
-Any template files to be used repeatedly (i.e. headers and footers) will:
- - Stored in `/frontend/src/components/templates`
- - Files names are prefixed with a _ (underscore) symbol. E.g. `_header.js`
-
-
- 
 **Tree structure**
-
-*Note that the below is subject to change*
 
 ```bash
 .
+├── attachments
 ├── backend
-│   ├── bin
-│   ├── blockchain
-│   │   ├── build
-│   │   ├── contracts
-│   │   ├── migrations
-│   │   └── test
-│   ├── controllers
-│   ├── db
-│   │   ├── config
-│   │   ├── controllers
-│   │   ├── migrations
-│   │   └── models
-│   ├── middleware
-│   ├── object_models
-│   │   ├── blockchain
-│   │   └── ipfs
-│   └── routes
-└── frontend
-    ├── public
-    └── src
-        └── components
-            └── modules
+│   ├── attachments
+│   ├── bin
+│   ├── blockchain
+│   │   ├── build
+│   │   │   └── contracts
+│   │   ├── contracts
+│   │   ├── migrations
+│   │   └── test
+│   ├── controllers
+│   ├── db
+│   │   ├── config
+│   │   ├── controllers
+│   │   ├── migrations
+│   │   ├── models
+│   │   └── seeders
+│   ├── exceptions
+│   ├── middleware
+│   ├── node_modules
+│   ├── object_models
+│   │   ├── blockchain
+│   │   └── ipfs
+│   ├── routes
+│   ├── services
+│   ├── templates
+│   ├── test
+│   └── utilities
+├── frontend
+│   ├── node_modules
+│   ├── public
+│   └── src
+│       ├── apis
+│       ├── components
+│       │   ├── dashboards
+│       │   ├── login
+│       │   ├── modules
+│       │   ├── questions
+│       │   ├── student
+│       │   ├── templates
+│       │   └── units
+│       └── tests
+│           ├── dashboards
+│           ├── login
+│           ├── staff
+│           ├── student
+│           └── units
+└── node_modules
 ```
 
 
+## Backend
+
+All backend and routing files are located in `/backend`
+
+Follows a modifed MVC structure where there is no visible module section in this folder. All frontend rendering will be handled by React, the source files for which are located in `/frontend/src`. Communication between the two is via the Express API.
+
+#### `/attachments`
+Temporarily holds all attachments generated for the email service
+#### `/bin`
+Config folder for running the node app
+#### `/blockchain`
+Smart contracts and related code
+ - `/build/contracts` Compiled JSON smart contract artifacts
+ - `/contracts` Solidity smart contracts
+ - `/migrations` All contract migration and deployment code
+ - `/test` Smart contract tests
+#### `/controllers`
+The main application controllers supporting an MVC framework
+#### `/db`
+All code relevant to the mySQL database
+ - `/config` Contains the database config file
+ - `/controllers` Database controllers
+ - `/migrations` Database migration files
+ - `/models` Database models
+ - `/seeders` Database data seeding files
+#### `/exceptions`
+Custom exceptions
+#### `/middleware`
+Communication with external services (blockchain and IPFS)
+#### `/node_modules`
+NPM packages
+#### `/object_models`
+Object models to be serialised and deserialised
+ - `/blockchain` Key object models for blockchain tracker contracts
+ - `/ipfs` Object models for IPFS storage
+#### `/routes`
+Provide access to the API through a predefined set of urls.
+#### `/services`
+Email service functionality
+#### `/templates`
+ejs templates for email attachment generation
+#### `/test`
+Backend Node.js test code
+#### `/utilities`
+Helper methods
+
+
+## Frontend
+
+All front end files are located in `/frontend`
+
+#### `/node_modules`
+NPM packages
+#### `/public`
+Images and public CSS files
+#### `/src`
+Folder containing all Node source files
+ - `/apis` Creating connection to backend 
+ - `/components` React components
+     - `/dashboards` React components for dashboard pages 
+     - `/login` React components for login pages
+     - `/modules` React components for module pages
+     - `/questions` React components for question pages
+     - `/student` React components for student pages
+     - `/templates` React components for templates
+     - `/units` React components for unit pages
+ - `/tests` Frontend Node.js test code
+     - `/dashboards` Tests for dashboard components
+     - `/login` Tests for login components
+     - `/staff` Tests for module and question components
+     - `/student` Tests for student components
+     - `/units` Tests for unit components
+ 
 # Installation
 
 ## Packages
@@ -132,16 +139,4 @@ To install these, in the root folder run `npm install`. Also go into `/backend` 
 
 ## Running
 
-### Backend
-
-1. From root directory, cd into `/backend`.
-2. To run:
-    1. For mac users, run `npm run start-mac`
-    2. For windows users, run `npm run start-windows`
-
-### Frontend
-
-1. From root directory, cd into `/frontend`.
-2. run `npm run start`
-
-Your default browser should open with the index page of the web app.
+Please refer to the development guide documentation, and follow the included steps carefully.
