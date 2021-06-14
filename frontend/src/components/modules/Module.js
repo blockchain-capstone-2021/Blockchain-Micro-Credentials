@@ -36,7 +36,7 @@ const Module = (props) => {
     function renderQuestions() {
         return questions.map((question, key) => {
             return (
-                <div className="py-3 border-bottom" key={question.questionId}>
+                <div className="p-3 my-3" key={question.questionId} style={{border:'1.5px grey solid', borderRadius:'10px'}}>
                     <h6>#{key+1}: {question.content}</h6>
                     {question.answers ? <Answer answers={question.answers} /> : 'Loading'}
                 </div>
