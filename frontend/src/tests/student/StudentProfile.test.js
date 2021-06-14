@@ -9,7 +9,7 @@ Enzyme.configure({ adapter: new Adapter() });
 const wrapper = shallow(<StudentProfile />);
 
 describe("testing Student Profile component", () => {
-  it('renders with submit', () => {
+  it('should be defined on render', () => {
     expect(StudentProfile).toBeDefined();
   });
 

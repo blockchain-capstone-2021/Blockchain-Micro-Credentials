@@ -9,7 +9,7 @@ Enzyme.configure({ adapter: new Adapter() });
 const wrapper = shallow(<StaffStudentManage />);
 
 describe("testing Staff Student Manage component", () => {
-  it('renders with submit', () => {
+  it('should be defined on render', () => {
     expect(StaffStudentManage).toBeDefined();
   });
 
@@ -19,7 +19,7 @@ describe("testing Staff Student Manage component", () => {
     expect(container.text()).toEqual("Student Management");
   });
 
-  it('renders Table headers', () => {
+  it('renders 2 Table headers', () => {
     let container = wrapper.find("h2");
     expect(container).toHaveLength(2);
   });
